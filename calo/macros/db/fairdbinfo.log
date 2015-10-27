@@ -1,0 +1,226 @@
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::SetLoggingStreams():[446] $ FairDb Logging service: opened. 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::FairDbConnection():[46] $ Creating a DB connection
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Open():[221] $ Successfully opened connection to: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::FairDbConnection():[58] $ successfully opened connection to: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::FairDbConnection():[103] $  this client, and PostgreSQL server (postgres 9.3.4) does support prepared statements.
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select * from FAIRDBGLOBALSEQNO where 1=0
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select * from FAIRDBGLOBALSEQNO  where 1=0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select * from FAIRDBGLOBALSEQNO  where 1=0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Close():[261] $ closed connection: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::FairDbConnectionPool():[131] $ 
+
+                                   FairDbConnectionPool:: Server Status : 
+                                                          Status   URL: Closed (auth)  pgsql://localhost:5432/r3b
+
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::SetLoggingStreams():[446] $ FairDb Logging service: opened. 
+ [2014/10/15 14:33:43] -I- FairDb: FairParTSQLIo.cxx::SetShutdown():[319] $  Complete Shutdown is set.
+ [2014/10/15 14:33:43] -I- FairDb: FairParTSQLIo.cxx::open():[169] $ -I- FairParTSQLIo:.open() checking DB entry# 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select * from FAIRDBGLOBALSEQNO;
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Open():[221] $ Successfully opened connection to: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairParTSQLIo.cxx::open():[270] $  Meta-structure for DB entry# 0 looks OK ... continuing
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Close():[261] $ closed connection: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairParTSQLIo.cxx::open():[278] $  connected with DB Entries# 1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Open():[221] $ Successfully opened connection to: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::GetTableInterface():[236] $  create a FairDbTableInterface 0x7fff5280df10 proxyname# R3BCALOAPDPAR::R3BCaloAPDPar
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # R3BCALOAPDPARVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | ROW_ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | ID_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | VR_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VBREAKDOWN_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | DARKCURRENT_HAMAMATSU |  SQL_type: 5 |  SQL_type_def: DOUBLE |  DB_data_type: Double |  data_size: 8 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | ORIGIN |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | LOCATION |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 10 | OBSERVATION |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: R3BCALOAPDPARVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | TIMESTART |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TIMEEND |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | DETID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | DATAID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VERSION |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | COMPOSITEID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | TIMEINCR |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | TIMETRANS |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[61] $ created R3BCALOAPDPAR at 0x1e7b580 (table exists)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[66] $ Connected Table Row: 0x1e7b740
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::GetTableInterface():[236] $  create a FairDbTableInterface 0x7fff5280dd30 proxyname# R3BCALOAPDPAR::FairDbConfigData
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # R3BCALOAPDPARVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | ROW_ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | ID_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | VR_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VBREAKDOWN_HAMAMATSU |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | DARKCURRENT_HAMAMATSU |  SQL_type: 5 |  SQL_type_def: DOUBLE |  DB_data_type: Double |  data_size: 8 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | ORIGIN |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | LOCATION |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 10 | OBSERVATION |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: R3BCALOAPDPARVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | TIMESTART |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TIMEEND |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | DETID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | DATAID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VERSION |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | COMPOSITEID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | TIMEINCR |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | TIMETRANS |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[61] $ created R3BCALOAPDPAR at 0x1e7d9e0 (table exists)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[66] $ Connected Table Row: 0x1e7d900
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[495] $  tablename: FAIRDBGLOBALSEQNO query: select * from FAIRDBGLOBALSEQNO where TABLENAME = '*' or TABLENAME = 'R3BCALOAPDPAR' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select * from FAIRDBGLOBALSEQNO where TABLENAME = '*' or TABLENAME = 'R3BCALOAPDPAR' order by TABLENAME
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select * from FAIRDBGLOBALSEQNO  where TABLENAME = '*' or TABLENAME = 'R3BCALOAPDPAR' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select * from FAIRDBGLOBALSEQNO  where TABLENAME = '*' or TABLENAME = 'R3BCALOAPDPAR' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[514] $ query returned last generated seqno: 1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[528] $ Database: 0 max  SEQNO query: select max(SEQNO) from R3BCALOAPDPARVAL where SEQNO between 0 and 99999999
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select max(SEQNO) from R3BCALOAPDPARVAL where SEQNO between 0 and 99999999
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select max(SEQNO) from R3BCALOAPDPARVAL  where SEQNO between 0 and 99999999 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select max(SEQNO) from R3BCALOAPDPARVAL  where SEQNO between 0 and 99999999 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[557] $ SEQNO entry removal: delete from FAIRDBGLOBALSEQNO where TABLENAME='R3BCALOAPDPAR'
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: delete from FAIRDBGLOBALSEQNO where TABLENAME='R3BCALOAPDPAR'
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    delete from FAIRDBGLOBALSEQNO  where TABLENAME='R3BCALOAPDPAR' 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:delete from FAIRDBGLOBALSEQNO  where TABLENAME='R3BCALOAPDPAR' 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[567] $ SEQNO entry add: insert into  FAIRDBGLOBALSEQNO values('R3BCALOAPDPAR',2)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:insert into  FAIRDBGLOBALSEQNO values('R3BCALOAPDPAR',2)
+ [2014/10/15 14:33:43] -I- FairDb: FairDb.cxx::SetTimeWindow():[140] $ Set time window: 864000 for: R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDb.cxx::GetTimeWindow():[41] $  Return time window 864000 for R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDb.cxx::GetTimeWindow():[41] $  Return time window 864000 for R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::QueryValidity():[300] $ db_id: 0 SQL query: select * from R3BCALOAPDPARVAL where     TimeStart <= '2014-10-25 12:33:43' and TimeEnd    > '2014-10-05 12:33:43' and DETID & 1 and DATAID & 1 and  Version = 0 order by TIMEINCR desc;
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select * from R3BCALOAPDPARVAL where     TimeStart <= '2014-10-25 12:33:43' and TimeEnd    > '2014-10-05 12:33:43' and DETID & 1 and DATAID & 1 and  Version = 0 order by TIMEINCR desc;
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select * from R3BCALOAPDPARVAL  where TimeStart <= '2014-10-25 12:33:43' and TimeEnd > '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and Version = 0 order by TIMEINCR desc;
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select * from R3BCALOAPDPARVAL  where TimeStart <= '2014-10-25 12:33:43' and TimeEnd > '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and Version = 0 order by TIMEINCR desc;
+ [2014/10/15 14:33:43] -I- FairDb: FairDbValRecord.cxx::Fill():[166] $ FairDbValRecordord for row: 0: |det_id 0x0001|data_id 0x0001|
+	 2014-10-15 10:08:53.000000000Z
+	 2038-01-19 03:14:07.000000000Z
+	 origin: Added Conditions: seq_id: 1 combo_id: -2 version_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbResult.cxx::FairDbResultNonCombo():[1022] $ Created non composite Validity result set no. of rows: 1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[76] $ FindTimeLimits for table: R3BCALOAPDPAR context: [Califa|  Data|2014-10-15 12:33:43.000000000Z] version: 0 Earliest transaction date: 2014-10-15 10:08:53.000000000Z database: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDb.cxx::GetTimeWindow():[41] $  Return time window 864000 for R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[120] $   FindTimeLimits query id: 1 SQL:select min(TIMESTART) from R3BCALOAPDPARVAL where TIMESTART > '2014-10-25 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select min(TIMESTART) from R3BCALOAPDPARVAL where TIMESTART > '2014-10-25 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select min(TIMESTART) from R3BCALOAPDPARVAL  where TIMESTART > '2014-10-25 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select min(TIMESTART) from R3BCALOAPDPARVAL  where TIMESTART > '2014-10-25 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[120] $   FindTimeLimits query id: 2 SQL:select min(TIMEEND) from R3BCALOAPDPARVAL where TIMEEND > '2014-10-25 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select min(TIMEEND) from R3BCALOAPDPARVAL where TIMEEND > '2014-10-25 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select min(TIMEEND) from R3BCALOAPDPARVAL  where TIMEEND > '2014-10-25 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select min(TIMEEND) from R3BCALOAPDPARVAL  where TIMEEND > '2014-10-25 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[132] $   FindTimeLimits query result: 2038-01-19 03:14:07.000000000Z
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[120] $   FindTimeLimits query id: 3 SQL:select max(TIMESTART) from R3BCALOAPDPARVAL where TIMESTART < '2014-10-05 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select max(TIMESTART) from R3BCALOAPDPARVAL where TIMESTART < '2014-10-05 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select max(TIMESTART) from R3BCALOAPDPARVAL  where TIMESTART < '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select max(TIMESTART) from R3BCALOAPDPARVAL  where TIMESTART < '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[120] $   FindTimeLimits query id: 4 SQL:select max(TIMEEND) from R3BCALOAPDPARVAL where TIMEEND < '2014-10-05 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select max(TIMEEND) from R3BCALOAPDPARVAL where TIMEEND < '2014-10-05 12:33:43'  and DETID & 1 and DATAID & 1 and TIMEINCR >= '2014-10-15 10:08:53' and  VERSION = 0
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select max(TIMEEND) from R3BCALOAPDPARVAL  where TIMEEND < '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select max(TIMEEND) from R3BCALOAPDPARVAL  where TIMEEND < '2014-10-05 12:33:43' and  cast((DETID & 1) As Boolean)  and  cast((DATAID & 1) As Boolean)  and TIMEINCR >= '2014-10-15 10:08:53' and VERSION = 0 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::FindTimeLimits():[138] $ FindTimeLimits for table: R3BCALOAPDPAR found: 1970-01-01 00:00:00.000000000Z .. 2038-01-19 03:14:07.000000000Z
+ [2014/10/15 14:33:43] -I- FairDb: FairDbValRecordFactory.cxx::FairDbValRecordFactory():[140] $ Trimming validity records to 1970-01-01 00:00:00.000000000Z .. 2038-01-19 03:14:07.000000000Z
+ [2014/10/15 14:33:43] -I- FairDb: FairDbValRecordFactory.cxx::FairDbValRecordFactory():[161] $ FairDbValRecordFactory:
+ Query: [Califa|  Data|2014-10-15 12:33:43.000000000Z]
+ using associated DataType: Data for Data found 1 vrecs in database, for 2 composites:.
+ [2014/10/15 14:33:43] -I- FairDb: FairDbValRecordFactory.cxx::FairDbValRecordFactory():[172] $  0 -I- FairDbValRecord:: SeqNo: 0  ComboNo: -1  DbId: 0 (gap)  ValInterval: |0x1|0x1| 1970-01-01 00:00:00 .. 2038-01-19 03:14:07 from: Gap
+ [2014/10/15 14:33:43] -I- FairDb: FairDb.cxx::GetTimeWindow():[41] $  Return time window 864000 for R3BCALOAPDPAR
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::QueryOverlayCreationDate():[292] $ Looking for overlay creation date for: -I- FairDbValRecord:: SeqNo: 0  ComboNo: -2  DbId: 0  ValInterval: |0x1|0x1| 2014-10-15 12:33:43 .. 2038-01-19 03:14:07 from: Condition Meta Datafound it would overlap: -I- FairDbValRecord:: SeqNo: 1  ComboNo: -2  DbId: 0  ValInterval: |0x1|0x1| 2014-10-15 10:08:53 .. 2038-01-19 03:14:07 from: Added Conditions: so overlay creation date set to 2014-10-15 10:09:53
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:INSERT INTO R3BCALOAPDPARVAL VALUES (2,'2014-10-15 12:33:43','2038-01-19 03:14:07',1,1,0,-2,'2014-10-15 10:09:53','2014-10-15 12:33:43');
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:INSERT INTO R3BCALOAPDPAR VALUES (2,1,2,547,388,434,14,'Santiago','Santiago','');
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::GetTableInterface():[236] $  create a FairDbTableInterface 0x1e722d0 proxyname# FAIRDBLOGENTRY::FairDbLogEntry
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # FAIRDBLOGENTRY
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # FAIRDBLOGENTRYVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: FAIRDBLOGENTRY
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | ROW_ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TABLENAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | MIN_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | MAX_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | N_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | USERNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | PROCESS_ID |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | HOSTNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 10 | SERVERNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 11 | LOG_TITLE |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: FAIRDBLOGENTRYVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | TIMESTART |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TIMEEND |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | DETID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | DATAID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VERSION |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | COMPOSITEID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | TIMEINCR |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | TIMETRANS |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[61] $ created FAIRDBLOGENTRY at 0x1e7f070 (table exists)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[66] $ Connected Table Row: 0x1e7f1a0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[495] $  tablename: FAIRDBGLOBALSEQNO query: select * from FAIRDBGLOBALSEQNO where TABLENAME = '*' or TABLENAME = 'FAIRDBLOGENTRY' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select * from FAIRDBGLOBALSEQNO where TABLENAME = '*' or TABLENAME = 'FAIRDBLOGENTRY' order by TABLENAME
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select * from FAIRDBGLOBALSEQNO  where TABLENAME = '*' or TABLENAME = 'FAIRDBLOGENTRY' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select * from FAIRDBGLOBALSEQNO  where TABLENAME = '*' or TABLENAME = 'FAIRDBLOGENTRY' order by TABLENAME
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[514] $ query returned last generated seqno: 1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[528] $ Database: 0 max  SEQNO query: select max(SEQNO) from FAIRDBLOGENTRYVAL where SEQNO between 0 and 99999999
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: select max(SEQNO) from FAIRDBLOGENTRYVAL where SEQNO between 0 and 99999999
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    select max(SEQNO) from FAIRDBLOGENTRYVAL  where SEQNO between 0 and 99999999 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteQuery():[72] $ Server:r3b SQL:select max(SEQNO) from FAIRDBLOGENTRYVAL  where SEQNO between 0 and 99999999 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[557] $ SEQNO entry removal: delete from FAIRDBGLOBALSEQNO where TABLENAME='FAIRDBLOGENTRY'
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[373] $ TranslateSQL  sql: delete from FAIRDBGLOBALSEQNO where TABLENAME='FAIRDBLOGENTRY'
+translates to 1 statements:- 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::TranslateSQL():[377] $ TranslateSQL    delete from FAIRDBGLOBALSEQNO  where TABLENAME='FAIRDBLOGENTRY' 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:delete from FAIRDBGLOBALSEQNO  where TABLENAME='FAIRDBLOGENTRY' 
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnectionPool.cxx::ReserveNextSeqNo():[567] $ SEQNO entry add: insert into  FAIRDBGLOBALSEQNO values('FAIRDBLOGENTRY',2)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:insert into  FAIRDBGLOBALSEQNO values('FAIRDBLOGENTRY',2)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::GetTableInterface():[236] $  create a FairDbTableInterface 0x7fff5280d990 proxyname# FAIRDBLOGENTRY::FairDbConfigData
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # FAIRDBLOGENTRY
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableMetaData.cxx::FairDbTableMetaData():[35] $ create for table # FAIRDBLOGENTRYVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: FAIRDBLOGENTRY
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | ROW_ID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TABLENAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | MIN_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | MAX_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | N_SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | USERNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | PROCESS_ID |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | HOSTNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 10 | SERVERNAME |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 11 | LOG_TITLE |  SQL_type: 2 |  SQL_type_def: VARCHAR |  DB_data_type: String |  data_size: 65535 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[538] $ Create meta-data for table: FAIRDBLOGENTRYVAL
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[554] $ Meta-data query succeeded on db_id: 0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 1 | SEQNO |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 2 | TIMESTART |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 3 | TIMEEND |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 4 | DETID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 5 | DATAID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 6 | VERSION |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 7 | COMPOSITEID |  SQL_type: 3 |  SQL_type_def: INT |  DB_data_type: UInt |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 8 | TIMEINCR |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbProxy.cxx::CreateMetaData():[580] $ Column: 9 | TIMETRANS |  SQL_type: 8 |  SQL_type_def: TIMESTAMP |  DB_data_type: Date |  data_size: 4 |  col_length: -1
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[61] $ created FAIRDBLOGENTRY at 0x1e7e930 (table exists)
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterface.cxx::FairDbTableInterface():[66] $ Connected Table Row: 0x1e7e5c0
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:INSERT INTO FAIRDBLOGENTRYVAL VALUES (2,'2014-10-15 12:33:43','2014-10-15 12:33:43',1,1,0,-1,'2014-10-15 12:33:43','2014-10-15 12:33:43');
+ [2014/10/15 14:33:43] -I- FairDb: FairDbStatement.cxx::ExecuteUpdate():[114] $ ExecuteUpdate: executing  SQL stmts:r3b:INSERT INTO FAIRDBLOGENTRY VALUES (2,1,'R3BCALOAPDPAR',2,2,1,'ygonroz','root.exe_19853','fpmarlin','localhost','Califa APD Node Pars');
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::Close():[261] $ closed connection: pgsql://localhost:5432/r3b
+ [2014/10/15 14:33:43] -I- FairDb: FairDbConnection.cxx::~FairDbConnection():[156] $  Droping Connection
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::~FairDbTableInterfaceStore():[78] $  ... shutting down ...
+ [2014/10/15 14:33:43] -I- FairDb: FairDbTableInterfaceStore.cxx::~FairDbTableInterfaceStore():[98] $  Shutdown completed. 

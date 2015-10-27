@@ -1,0 +1,15 @@
+Set your preferences in runsim.C and run it:
+
+> root -l -q runsim.C
+
+runsim.C will call macro simall.C, and will create the output test.root with the TTree.
+
+
+After that, you can visualize your simulation. Just run evtvis.C:
+
+> root -l evtvis.C
+
+
+For a simple data analysis, you can take the example of macro checkResults.C. Just run that:
+
+> root -l checkResults.C
