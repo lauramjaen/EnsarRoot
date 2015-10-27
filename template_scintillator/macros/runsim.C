@@ -5,20 +5,15 @@
 // Author: <D.Bertini@gsi.de>
 // Adapted by: M.I.Cherciu <mcherciu@spacescience.ro>
 //
-// Last Update: 02/07/2014
+// Last Update: 27/10/2015 
 //
 //
 //--------------------------------------------------------------------
 
+#include "simall.C"
 
-Int_t runsim(){
+void runsim(){
 
-  
-  TString macro_all= getenv("PWD");
-  macro_all+="/simall.C"; 
-
-   // Load the Main Simulation macro
-    gROOT->LoadMacro(macro_all.Data());
 
    //-------------------------------------------------
    // Monte Carlo type     |    fMC        (TString)

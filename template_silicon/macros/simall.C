@@ -32,7 +32,7 @@ void simall(Int_t nEvents = 1,
 
 
   TString dir = getenv("VMCWORKDIR");
-  TString simdir = dir + "/macros";
+  TString simdir = dir + "/template_silicon/macros";
 
   TString sim_geomdir = dir + "/geometry";
   gSystem->Setenv("GEOMPATH",sim_geomdir.Data());
@@ -41,8 +41,8 @@ void simall(Int_t nEvents = 1,
   gSystem->Setenv("CONFIG_DIR",sim_confdir.Data());
 
 // Output files
-  TString OutFile = "simout.root";
-  TString ParFile = "simpar.root";
+  TString OutFile = "outfile.root";
+  TString ParFile = "parfile.root";
 
 
   // In general, the following parts need not be touched
@@ -57,26 +57,6 @@ void simall(Int_t nEvents = 1,
   timer.Start();
   // ------------------------------------------------------------------------
 
-  // ----  Load libraries   -------------------------------------------------
-  gROOT->LoadMacro("$VMCWORKDIR/gconfig/basiclibs.C");
-  basiclibs();
-
-  gSystem->Load("libGenVector");
-
-  gSystem->Load("libGeoBase");
-  gSystem->Load("libFairDB");
-  gSystem->Load("libParBase");
-  gSystem->Load("libBase");
-  gSystem->Load("libMCStack");
-  gSystem->Load("libField");
-  gSystem->Load("libGen");
-
-  //----  Load specific libraries ---------------------------------------
-  gSystem->Load("libEnsarbase");
-  gSystem->Load("libEnsarGen");
-  gSystem->Load("libEnsarData");
-  gSystem->Load("libEnsarSilicon");
-  
   // -----   Create simulation run   ----------------------------------------
   FairRunSim* run = new FairRunSim();
   run->SetName(fMC.Data());              // Transport engine

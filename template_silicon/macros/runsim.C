@@ -3,23 +3,18 @@
 // Define the simulation Setup
 // Steering macro to main simall.C
 // Author: <D.Bertini@gsi.de>
-// Adapted by: <pablo.cabanelas@usc.es)
+// Adapted by: <pablo.cabanelas@usc.es>
 //
-// Last Update: 18/09/12
+// Last Update: 27/10/15
 //
 //
 //--------------------------------------------------------------------
 
+#include "simall.C"
 
-Int_t runsim(){
+void runsim() {
 
   
-  TString macro_all= getenv("PWD");
-  macro_all+="/simall.C"; 
-
-   // Load the Main Simulation macro
-    gROOT->LoadMacro(macro_all.Data());
-
    //-------------------------------------------------
    // Monte Carlo type     |    fMC        (TString)
    //-------------------------------------------------
