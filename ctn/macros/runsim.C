@@ -2,22 +2,18 @@
 //
 // Define the CTN HPGe detector simulation Setup
 // Steering macro to main simall.C
-// Author: <pablo.cabanelas@usc.es
+// Author: <pablo.cabanelas@usc.es>
 //
-// Last Update: 18/06/15
+// Last Update: 27/10/15
 //
 //
 //--------------------------------------------------------------------
 
+#include "simall.C"
 
-Int_t runsim(){
+void runsim() {
 
   
-  TString macro_all= getenv("VMCWORKDIR");
-  macro_all+="/ctn/macros/simall.C"; 
-
-   // Load the Main Simulation macro
-    gROOT->LoadMacro(macro_all.Data());
 
    //-------------------------------------------------
    // Monte Carlo type     |    fMC        (TString)

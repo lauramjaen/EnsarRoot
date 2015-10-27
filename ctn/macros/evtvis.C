@@ -1,5 +1,4 @@
-evtvis()
-{
+void evtvis() {
 
   // -----   Reconstruction run   -------------------------------------------
   FairRunAna *fRun= new FairRunAna();
