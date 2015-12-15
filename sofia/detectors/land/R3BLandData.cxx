@@ -100,7 +100,8 @@ void R3BLandData::FillHisto1D(TLeaf* fleaf)
          Int_t len = fleaf->GetLen();
          for(Int_t j=0; j<len ; j++)
             {
-             H1->SetBit(TH1::kCanRebin);
+             //H1->SetBit(TH1::kCanRebin);  
+             // This method exists only for ROOT5; use SetCanExtend(kAllAxes) instead for ROOT6
              H1->Fill(fleaf->GetValue(j));
             }
             flaghisto1 = true;
@@ -109,7 +110,7 @@ void R3BLandData::FillHisto1D(TLeaf* fleaf)
          Int_t len = fleaf->GetLen();
          for(Int_t j=0; j<len ; j++)
             {
-             H1->SetBit(TH1::kCanRebin);
+             //H1->SetBit(TH1::kCanRebin);
              H1->Fill(fleaf->GetValue(j));
             }
             flaghisto1 = true;
@@ -125,7 +126,7 @@ void R3BLandData::FillHisto1D(TLeaf* h1leaf, Int_t bin, Double_t binmin, Double_
         Int_t len = h1leaf->GetLen();
         for(Int_t j=0; j<len ; j++)
            {
-            H1->SetBit(TH1::kCanRebin);
+            //H1->SetBit(TH1::kCanRebin);
             H1->Fill(h1leaf->GetValue(j));
            }
            flaghisto1 = true;
@@ -134,7 +135,7 @@ void R3BLandData::FillHisto1D(TLeaf* h1leaf, Int_t bin, Double_t binmin, Double_
         Int_t len = h1leaf->GetLen();
         for(Int_t j=0; j<len ; j++)
            {
-            H1->SetBit(TH1::kCanRebin);
+            //H1->SetBit(TH1::kCanRebin);
             H1->Fill(h1leaf->GetValue(j));
            }
            flaghisto1 = true;
@@ -153,7 +154,7 @@ void R3BLandData::FillHisto2D(TLeaf* h2leaf1, TLeaf* h2leaf2, Int_t bin1, Double
         if(len1 == len2){
                         for(Int_t j=0; j<len1 ; j++)
                            {
-                            H2->SetBit(TH1::kCanRebin);
+                            //H2->SetBit(TH1::kCanRebin);
                             H2->Fill(h2leaf1->GetValue(j),h2leaf2->GetValue(j));                            
                            }
                            flaghisto2 = true;
@@ -165,7 +166,7 @@ void R3BLandData::FillHisto2D(TLeaf* h2leaf1, TLeaf* h2leaf2, Int_t bin1, Double
          if(len1 == len2){
                         for(Int_t j=0; j<len1 ; j++)
                            {
-                            H2->SetBit(TH1::kCanRebin);
+                            //H2->SetBit(TH1::kCanRebin);
                             H2->Fill(h2leaf1->GetValue(j),h2leaf2->GetValue(j));                           
                            }
                            flaghisto2 = true;
@@ -187,7 +188,7 @@ void R3BLandData::FillHisto2D(TLeaf* h2leaf1, TLeaf* h2leaf2)
         if(len1 == len2){
                         for(Int_t j=0; j<len1 ; j++)
                            {
-                            H2->SetBit(TH1::kCanRebin);
+                            //H2->SetBit(TH1::kCanRebin);
                             H2->Fill(h2leaf1->GetValue(j),h2leaf2->GetValue(j));                            
                            }
                            flaghisto2 = true;
@@ -199,7 +200,7 @@ void R3BLandData::FillHisto2D(TLeaf* h2leaf1, TLeaf* h2leaf2)
          if(len1 == len2){
                         for(Int_t j=0; j<len1 ; j++)
                            {
-                            H2->SetBit(TH1::kCanRebin);
+                            //H2->SetBit(TH1::kCanRebin);
                             H2->Fill(h2leaf1->GetValue(j),h2leaf2->GetValue(j));                            
                            }
                            flaghisto2 = true;
