@@ -27,14 +27,14 @@ ${FAIRROOT_LIBRARY_DIR}
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
-R3BCave.cxx            
-R3BGeoCave.cxx        
+#R3BCave.cxx            
+#R3BGeoCave.cxx        
 R3BGeoMagnet.cxx            
-R3BGeoPassivePar.cxx        
+#R3BGeoPassivePar.cxx        
 R3BGladMagnet.cxx
 R3BMagnet.cxx    
 R3BPassiveContFact.cxx 
-R3BTarget.cxx    
+#R3BTarget.cxx    
 R3Btubehelium.cxx 
 R3Btubevacuum.cxx 
 )

@@ -7,11 +7,6 @@
 
 void tragsim() {
   
-  // Load the Main Simulation macro
-  TString macro_tragall = getenv("VMCWORKDIR");
-  macro_tragall += "/tragaldabas/macros/tragall.C";
-  gROOT->LoadMacro(macro_tragall.Data());
-  
   // Input files
   TString EventFile = "evt_file.dat";
 
@@ -58,7 +53,7 @@ void tragsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 50;
+   Int_t nEvents = 5;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

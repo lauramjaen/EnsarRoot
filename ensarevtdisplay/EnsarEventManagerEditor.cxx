@@ -37,7 +37,6 @@ EnsarEventManagerEditor::EnsarEventManagerEditor(const TGWindow* p, Int_t width,
   fMaxEnergy(0)
   
 {
-  cout << "Calling Fucking Ctor Event Editor" << endl;
   Init();
 }
 

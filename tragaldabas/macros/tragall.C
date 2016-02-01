@@ -1,32 +1,46 @@
 //  -------------------------------------------------------------------------
 //
-//   ----- General Macro for Tragaldabas simulation
+//   ----- General Macro for R3B simulation
+//
+//         Author: Denis Bertini <D.Bertini@gsi.de>
+//
+//         Last Update: 30/06/12 (marc Labiche)
+//
+//         Comments:
+//               - 30/06/12 Adding Vaccum Vessel and cooling for new Si tracker
+//               - 17/08/09 Adding R3BModule R3BDetector
+//                          for global positionning
+//               - 12/08/09 Adding R3B Special Physics List
+//               - 06/08/09 Adding R3B specific Event Generator
+//
 //
 //  -------------------------------------------------------------------------
 //
-//   Usage inside ROOT interpreter: 
+//   Usage inside ROOT interpreter:
 //        1) root -l
-//        2)[root] .L tragall.C 
-//                         
-//        3)[root] tragall( nevt,
-//                         fDetList,      // List of Detectors
-//                         Visualization, // kFalse or kTRUE   
-//                         fMC ,          // "TGeant3" or "TGeant4"   
-//                         fGenerator     // Generator type
+//        2)[root] .L r3ball.C
+//
+//        3)[root] r3ball( nevt,
+//                         fDetList,     // List of Detectors
+//                         TargetType,    // "LeadTarget"
+//                         Visualization, // kFalse or kTRUE
+//                         fMC ,        // "TGeant3" or "TGeant4"
+//                         fGenerator   // Generator type
 //
 //  -------------------------------------------------------------------------
 
-void tragall(Int_t nEvents = 1,            
-	    TMap* fDetList=NULL,
-            Bool_t fVis=kFALSE,
-	    TString fMC="TGeant3",
-	    TString fGenerator="box",
-	    Bool_t fUserPList= kFALSE,
+
+
+void tragall(Int_t nEvents = 1,
+            TMap* fDetList = NULL,
+            Bool_t fVis = kFALSE,
+            TString fMC = "TGeant3",
+            TString fGenerator = "box",
+            Bool_t fUserPList = kFALSE,
             TString OutFile = "tragsim.root",
             TString ParFile = "tragpar.root",
-            TString InFile = "evt_file.dat")
+            TString InFile = "evt_gen.dat")
 {
-
 
   TString dir = getenv("VMCWORKDIR");
   TString tragdir = dir + "/tragaldabas/macros";
@@ -37,38 +51,38 @@ void tragall(Int_t nEvents = 1,
   TString trag_confdir = dir + "gconfig";
   gSystem->Setenv("CONFIG_DIR",trag_confdir.Data());
 
+
   // In general, the following parts need not be touched
   // ========================================================================
-
+  
   // ----    Debug option   -------------------------------------------------
   gDebug = 0;
   // ------------------------------------------------------------------------
-
+  
   // -----   Timer   --------------------------------------------------------
   TStopwatch timer;
   timer.Start();
   // ------------------------------------------------------------------------
-
- 
+  
+  
   // -----   Create simulation run   ----------------------------------------
   FairRunSim* run = new FairRunSim();
-  run->SetName(fMC.Data());                  // Transport engine
-  run->SetOutputFile(OutFile.Data());        // Output file
+  run->SetName(fMC.Data());              // Transport engine
+  run->SetOutputFile(OutFile.Data());          // Output file
   FairRuntimeDb* rtdb = run->GetRuntimeDb();
-
-  //  Special Physics List in G4 case
+  
+  //  R3B Special Physics List in G4 case
   if ( (fUserPList  == kTRUE ) &&
-       (fMC.CompareTo("TGeant4")   == 0)
-      ){
-       run->SetUserConfig("g4Config.C");
-       run->SetUserCuts("SetCuts.C");
-   }
-
-
+      (fMC.CompareTo("TGeant4")   == 0)) {
+    run->SetUserConfig("g4Config.C");
+    run->SetUserCuts("SetCuts.C");
+  }
+  
+  
   // -----   Create media   -------------------------------------------------
   run->SetMaterials("media_ensar.geo");       // Materials
   
-
+  
   // Global Transformations
   //- Two ways for a Volume Rotation are supported
   //-- 1) Global Rotation (Euler Angles definition)
@@ -76,60 +90,55 @@ void tragall(Int_t nEvents = 1,
   //-- angle phi, then a rotation with theta about the rotated X axis, and
   //-- finally a rotation with psi about the new Z axis.
   Double_t phi,theta,psi;
-
+  
   //-- 2) Rotation in Ref. Frame of the Volume
   //-- Rotation is Using Local Ref. Frame axis angles
   Double_t thetaX,thetaY,thetaZ;
-
-
+  
   //- Global Translation  Lab. frame.
   Double_t tx,ty,tz;
-
-
+  
+  
   // -----   Create geometry --------------------------------------------
-
-  //Cave definition
+  //R3B Cave definition
   FairModule* cave= new R3BCave("CAVE");
   cave->SetGeometryFileName("r3b_cave.geo");
   run->AddModule(cave);
-
+  
   //Tragaldabas definition
   EnsarDetector* tragaldabas = new TraRPC("Rpc",kTRUE);
-  tragaldabas->SetGeometryFileName(((TObjString*)fDetList.GetValue("RPC"))->GetString().Data());
+  tragaldabas->SetGeometryFileName(((TObjString*)fDetList->GetValue("RPC"))->GetString().Data());
   run->AddModule(tragaldabas);
-
+   
+  
   // -----   Create PrimaryGenerator   --------------------------------------
-
   // 1 - Create the Main API class for the Generator
   FairPrimaryGenerator* primGen = new FairPrimaryGenerator();
-
+  
+  if (fGenerator.CompareTo("box") == 0  ) {
+    // 2- Define the BOX generator
+    Int_t pdgId = 211; // pion beam
+    Double32_t theta1 = 0.;  // polar angle distribution
+    Double32_t theta2 = 7.;
+    Double32_t momentum = 0.8;
+    FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId, 50);
+    boxGen->SetThetaRange(theta1, theta2);
+    boxGen->SetPRange(momentum, momentum*2.);
+    boxGen->SetPhiRange(0, 360);
+    boxGen->SetXYZ(0.0, 0.0, -1.5);
+//    boxGen->SetXYZ(0.0, 0.0, -300.);
+    // add the box generator
+    primGen->AddGenerator(boxGen);
+  }
+  
   if (fGenerator.CompareTo("ascii") == 0  ) {
     FairAsciiGenerator* gen = new FairAsciiGenerator((dir+"/input/"+InFile).Data());
     primGen->AddGenerator(gen);
   }
-
-  if (fGenerator.CompareTo("box") == 0  ) {
-	  // 2- Define the BOX generator
-	  //Double_t pdgId=22; // gamma emission
-	  Double_t pdgId=2212; // proton emission
-	  //Double_t pdgId=211; // pion beam
-	  Double_t theta1= 30.;  // polar angle distribution
-	  //Double_t theta2= 7.;
-	  Double_t theta2= 160.;
-	  Double_t momentum=.8; // 10 GeV/c
-	  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId, 10);
-	  boxGen->SetThetaRange (   theta1,   theta2);
-	  boxGen->SetPRange     (momentum,momentum*2.);
-	  boxGen->SetPhiRange   (0.,360.);
-	  //boxGen->SetXYZ(0.0,0.0,-1.5);
-	  boxGen->SetXYZ(0.0,0.0,0.0);
-	  // add the box generator
-	  primGen->AddGenerator(boxGen);
-  } 
-	
-
+  
   run->SetGenerator(primGen);
-
+  
+  
   //-------Set visualisation flag to true------------------------------------
   run->SetStoreTraj(fVis);
 
@@ -138,11 +147,14 @@ void tragall(Int_t nEvents = 1,
   // -----   Initialize simulation run   ------------------------------------
   run->Init();
 
-  // ------  Increase nb of step 
-  Int_t nSteps = -15000;
-  gMC->SetMaxNStep(nSteps);
   
   // -----   Runtime database   ---------------------------------------------
+  //R3BFieldPar* fieldPar = (R3BFieldPar*) rtdb->getContainer("R3BFieldPar");
+  //if(NULL != magField)
+  //{
+  //    fieldPar->SetParameters(magField);
+  //    fieldPar->setChanged();
+  //}
   Bool_t kParameterMerged = kTRUE;
   FairParRootFileIo* parOut = new FairParRootFileIo(kParameterMerged);
   parOut->open(ParFile.Data());
@@ -150,8 +162,12 @@ void tragall(Int_t nEvents = 1,
   rtdb->saveOutput();
   rtdb->print();
   
-// -----   Start run   ----------------------------------------------------
-  if (nEvents>0) run->Run(nEvents);
+  
+  // -----   Start run   ----------------------------------------------------
+  if(nEvents > 0) {
+    run->Run(nEvents);
+  }
+  
   
   // -----   Finish   -------------------------------------------------------
   timer.Stop();
@@ -161,13 +177,11 @@ void tragall(Int_t nEvents = 1,
   cout << "Macro finished succesfully." << endl;
   cout << "Output file is "    << OutFile << endl;
   cout << "Parameter file is " << ParFile << endl;
-  cout << "Real time " << rtime << " s, CPU time " << ctime 
-       << "s" << endl << endl;
+  cout << "Real time " << rtime << " s, CPU time " << ctime
+  << "s" << endl << endl;
   // ------------------------------------------------------------------------
 
+  
   cout << " Test passed" << endl;
   cout << " All ok " << endl;
-
 }
-
-

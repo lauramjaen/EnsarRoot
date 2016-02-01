@@ -32,8 +32,8 @@ ${FAIRROOT_LIBRARY_DIR}
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
-R3BMCStack.cxx
-R3BMCTrack.cxx
+#R3BMCStack.cxx
+#R3BMCTrack.cxx
 #caloData/R3BCaloCrystalHit.cxx
 #caloData/R3BCaloCrystalHitSim.cxx
 #caloData/R3BCaloHit.cxx

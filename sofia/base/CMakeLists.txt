@@ -28,8 +28,8 @@ link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
 #Put here your sourcefiles
-R3BDetector.cxx 
-R3BModule.cxx 
+#R3BDetector.cxx 
+#R3BModule.cxx 
 )
 
 # fill list of header files from list of source files

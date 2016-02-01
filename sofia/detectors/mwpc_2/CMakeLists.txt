@@ -35,8 +35,8 @@ ${FAIRROOT_LIBRARY_DIR}
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
-R3BGeoMWpc.cxx
-R3BGeoMWpcPar.cxx
+#R3BGeoMWpc.cxx
+#R3BGeoMWpcPar.cxx
 R3BMWpc2.cxx
 )
 

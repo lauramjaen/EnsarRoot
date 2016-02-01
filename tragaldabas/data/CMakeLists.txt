@@ -33,7 +33,8 @@ TraRPCPoint.cxx
 # fill list of header files from list of source files
 # by exchanging the file extension
 CHANGE_FILE_EXTENSION(*.cxx *.h HEADERS "${SRCS}")
-SET(HEADERS ${HEADERS} TraDetectorList.h )
+SET(HEADERS ${HEADERS} )
+#SET(HEADERS ${HEADERS} TraDetectorList.h )
 
 set(LINKDEF  TraDataLinkDef.h)
 set(LIBRARY_NAME TraRPCData)

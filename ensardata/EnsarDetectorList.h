@@ -13,7 +13,7 @@ enum DetectorId { kUNKNOWN, kMYDET, kTSCINTDET, kTSILIDET, kCAL, kCALIFA, kRPC, 
     
 /** Unique identifier for Point and Hit types **/
 
-enum fDetectorType { kUnknown, kMyDetPoint, kTScintiDet, kTSiliDet, kCalPoint, kCalifaPoint };
+enum fDetectorType { kUnknown, kMyDetPoint, kTScintiDet, kTSiliDet, kCalPoint, kCalifaPoint, kRPCPoint,kRPCHit };
 
 enum SensorSide { kTOP, kBOTTOM };
 

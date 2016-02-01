@@ -28,24 +28,18 @@ void Config()
    //cout << "-I- Ensar Config(): has been created..." << endl;
 
 
-  // Create Geant4 VMC
-  //  
-  TGeant4 *geant4 = 0;
-  if ( ! gMC ) {
+   // Create Geant4 VMC
+   //  
+    TGeant4 *geant4 = 0;
     TG4RunConfiguration* runConfiguration 
       = new TG4RunConfiguration("geomRoot", 
-                                "emStandard", 
-                                "specialCuts+stackPopper+stepLimiter+specialControls",
-                                 true);
+          "emStandard", 
+          "specialCuts+stackPopper+stepLimiter+specialControls",
+          true);
 
     geant4 = new TGeant4("TGeant4", "The Geant4 Monte Carlo", runConfiguration);
     cout << "-I- Ensar Config(): Geant4 with Ensar dedicated Physics list " << endl;
     cout << "-I- Ensar Config(): has been created..." << endl;
-  } 
-  else {
-    cout << "Monte Carlo has been already created." << endl;
-  }  
-
 
 
 /// create the Specific stack

@@ -25,8 +25,8 @@ ${FAIRROOT_LIBRARY_DIR}
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
-FairMCTrack.cxx
-FairStack.cxx 
+#FairMCTrack.cxx
+#FairStack.cxx 
 )
 
 # fill list of header files from list of source files
