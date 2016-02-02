@@ -101,7 +101,7 @@ void tragall(Int_t nEvents = 1,
   
   // -----   Create geometry --------------------------------------------
   //R3B Cave definition
-  FairModule* cave= new R3BCave("CAVE");
+  FairModule* cave= new FairCave("CAVE");
   cave->SetGeometryFileName("r3b_cave.geo");
   run->AddModule(cave);
   
