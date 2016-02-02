@@ -3,7 +3,6 @@
 # the project's entire directory structure.
 add_subdirectory (rpc)
 add_subdirectory (data)
+add_subdirectory (gen)
 #add_subdirectory (db)
-#add_subdirectory (gen)
 #add_subdirectory (passive)
-

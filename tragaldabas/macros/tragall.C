@@ -130,12 +130,35 @@ void tragall(Int_t nEvents = 1,
     // add the box generator
     primGen->AddGenerator(boxGen);
   }
-  
+
   if (fGenerator.CompareTo("ascii") == 0  ) {
     FairAsciiGenerator* gen = new FairAsciiGenerator((dir+"/input/"+InFile).Data());
     primGen->AddGenerator(gen);
   }
-  
+
+  if (fGenerator.CompareTo("tragbox") == 0  ) {
+
+    // 2- Define the Tragaldabas BOX generator
+    Double_t pdgId=13; // Muon emission
+    Double_t theta1= 180;  // polar angle distribution
+    Double_t theta2= 360;
+    Double_t muonmass=105.7; // Muonmass[MeV/c**2]
+    Double_t momentum=4;     //  GeV/c
+    Double_t energy =TMath::Sqrt((momentum*10**3)**2+muonmass**2);
+
+
+    TraBoxGenerator* tragalGen = new TraBoxGenerator(pdgId, 1);
+    tragalGen->SetThetaRange (   theta1,   theta2);
+    tragalGen->SetPRange     (momentum,2*momentum);
+    tragalGen->SetPhiRange   (0.,360.);
+    tragalGen->SetCosTheta();
+    tragalGen->SetXhRange(-140.,140.);
+    tragalGen->SetYhRange(-140.,140.);
+    tragalGen->SetXYZ();
+    // add the box generator
+    primGen->AddGenerator(tragalGen);
+  }
+
   run->SetGenerator(primGen);
   
   
