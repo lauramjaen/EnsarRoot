@@ -26,9 +26,10 @@ void tragsim() {
   // Primaries generation
   // Event Generator Type |   fGene       (TString)
   //-------------------------------------------------
-  // Box generator:             "box"
-  // CALIFA generator:          "gammas"
-  TString fGene="box";
+  // Box  generator:             "box"
+  // Ascii generator:          "ascii"
+  // TraBox generator:         "tragbox"
+  TString fGene="tragbox";
   
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -53,7 +54,7 @@ void tragsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 5;
+   Int_t nEvents = 1;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

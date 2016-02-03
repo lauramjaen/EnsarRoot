@@ -139,12 +139,12 @@ void tragall(Int_t nEvents = 1,
   if (fGenerator.CompareTo("tragbox") == 0  ) {
 
     // 2- Define the Tragaldabas BOX generator
-    Double_t pdgId=13; // Muon emission
-    Double_t theta1= 180;  // polar angle distribution
-    Double_t theta2= 360;
-    Double_t muonmass=105.7; // Muonmass[MeV/c**2]
-    Double_t momentum=4;     //  GeV/c
-    Double_t energy =TMath::Sqrt((momentum*10**3)**2+muonmass**2);
+    Double_t pdgId    = 13; // Muon emission
+    Double_t theta1   = 180;  // polar angle distribution
+    Double_t theta2   = 360;
+    Double_t muonmass = 105.7; // Muonmass[MeV/c**2]
+    Double_t momentum = 4.;     //  GeV/c
+    Double_t energy   = TMath::Sqrt((momentum*1000)*(momentum*1000)+muonmass*muonmass);
 
 
     TraBoxGenerator* tragalGen = new TraBoxGenerator(pdgId, 1);
