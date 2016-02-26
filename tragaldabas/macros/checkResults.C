@@ -39,6 +39,10 @@ void checkResults() {
 	
         Double_t charge = 0.0;
 
+        TVector3 momentum;
+        Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
+        TH1F *hxdif = new TH1F("hxdiff","hxdiff",500,-1,1);
+
 	//TREE ENTRIES	
 	Long64_t nevents = tree->GetEntries();
 
@@ -79,6 +83,32 @@ void checkResults() {
 			charge = rpcHit[h]->GetCharge();
 			h3->Fill(charge);
 		}
+
+                // --------------------------------------------------------------------------
+		//LOOP in MC mother tracks
+                for(Int_t h=0;h<MCtracksPerEvent;h++) {
+
+                  if(track[h]->GetMotherId()<0) { //Primary Particle is MotherId=-1
+
+                    track[h]->GetMomentum(momentum);
+
+                    for(Int_t r=0;r<rpcHitsPerEvent;r++) { //LOOP in rpcHits for each MCTrack
+                      if(rpcHit[r]->GetRPCId()>4000&&rpcHit[r]->GetRPCId()<5000)   X1 = momentum.X();
+                      if(rpcHit[r]->GetRPCId()>8000&&rpcHit[r]->GetRPCId()<9000)   X2 = momentum.X();
+                      if(rpcHit[r]->GetRPCId()>12000&&rpcHit[r]->GetRPCId()<13000) X3 = momentum.X();
+                      if(rpcHit[r]->GetRPCId()>13000)                              X4 = momentum.X();
+                    }
+
+                    Xup   = (X1+X2)/2;
+                    Xdown = (X3+X4)/2;
+
+                    hxdif->Fill(Xup-Xdown);
+
+                  }
+                
+                }
+                // --------------------------------------------------------------------------
+
 	}
 
 	TCanvas* c1 = new TCanvas("MCTrack","MCTrack",0,0,400,800);
