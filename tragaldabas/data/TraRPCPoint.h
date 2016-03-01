@@ -45,7 +45,7 @@ class TraRPCPoint : public FairMCPoint
   virtual ~TraRPCPoint();
 
   /** Accessors **/
-  Int_t GetRPCId()   const { return fRPCId; }
+  Int_t GetRPCId()   const { return fDetectorID; }
   Double_t GetXIn()   const { return fX; }
   Double_t GetYIn()   const { return fY; }
   Double_t GetZIn()   const { return fZ; }
