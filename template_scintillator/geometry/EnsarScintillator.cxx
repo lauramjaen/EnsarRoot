@@ -1,5 +1,5 @@
 /** --------------------------------- info ---------------------------------
-*              Author: M.I. Cherciu @ Institute of Space Science 
+*              Author: M.I. Cherciu @ Institute of Space Science
 *              E-mail: mcherciu@spacescience.ro
 *              Version: 1.0
 *              Submission Date:02.07.2014
@@ -51,12 +51,12 @@ using std::endl;
 
 
 EnsarScintillator::EnsarScintillator() : EnsarDetector("EnsarScintillator", kTRUE, kTSCINTDET)
-{    
+{
   ResetParameters();
   fEnsarScintillatorPointCollection = new TClonesArray("EnsarScintillatorPoint");
   kGeoSaved = kFALSE;
   fVerboseLevel = 1;
-  
+
 }
 
 EnsarScintillator::EnsarScintillator(const char* name, Bool_t active) : EnsarDetector(name, active, kTSCINTDET)
@@ -65,7 +65,7 @@ EnsarScintillator::EnsarScintillator(const char* name, Bool_t active) : EnsarDet
   fEnsarScintillatorPointCollection = new TClonesArray("EnsarScintillatorPoint");
   kGeoSaved = kFALSE;
   fVerboseLevel = 1;
-  
+
 }
 
 EnsarScintillator::~EnsarScintillator()
@@ -75,16 +75,16 @@ EnsarScintillator::~EnsarScintillator()
     fEnsarScintillatorPointCollection->Delete();
     delete fEnsarScintillatorPointCollection;
   }
-   
+
 }
 
 void EnsarScintillator::Initialize()
 {
- 
+
   FairDetector::Initialize();
   FairRuntimeDb* rtdb= FairRun::Instance()->GetRuntimeDb();
   EnsarScintillatorGeoPar* gpar =(EnsarScintillatorGeoPar*)(rtdb->getContainer("EnsarScintillatorGeoPar"));
-  
+
    //Check this
   // Initialise variables from Birk law
   Double_t dP = 1.032 ;
@@ -105,7 +105,7 @@ Bool_t  EnsarScintillator::ProcessHits(FairVolume* vol)
     gMC->TrackPosition(fPosIn);
     gMC->TrackMomentum(fMomIn);
     fEnergy = gMC->Etot()-fMass;
-    
+
   }
 
   // Sum energy loss for all steps in the active volume
@@ -117,7 +117,7 @@ Bool_t  EnsarScintillator::ProcessHits(FairVolume* vol)
   // Correction for all charge states
   if (gMC->TrackCharge()!=0) {
     Double_t birkC1Mod = 0;
-    
+
   // Apply correction for higher charge states
     if (fBirkC0==1){
       if (TMath::Abs(gMC->TrackCharge())>=2)
@@ -151,9 +151,9 @@ Bool_t  EnsarScintillator::ProcessHits(FairVolume* vol)
     fEnergy = gMC->Etot()-fMass;
 
     if (fELoss == 0. ) return kFALSE;
- 
+
   // Adding MonteCarlo Points in the PointColection stack
-    
+
     AddHit(fTrackID, fVolumeID, fTrackPID, fParentTrackID, fUniqueID,
            TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
            TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
@@ -164,7 +164,7 @@ Bool_t  EnsarScintillator::ProcessHits(FairVolume* vol)
     // Increment number of EnsarScintillator det points in TParticle
     FairStack* stack = (FairStack*) gMC->GetStack();
     stack->AddPoint(kTSCINTDET);
-   
+
     ResetParameters();
   }
 
@@ -174,7 +174,7 @@ Bool_t  EnsarScintillator::ProcessHits(FairVolume* vol)
 void EnsarScintillator::EndOfEvent()
 {
 
-  if (fVerboseLevel) Print();
+  if (fVerboseLevel) Print("");
   fEnsarScintillatorPointCollection->Clear();
   ResetParameters();
 }
@@ -216,9 +216,9 @@ void EnsarScintillator::ConstructGeometry()
   Double_t radl, absl;
   Int_t nel, numed;
   Double_t par[8];
- 
+
   // Definition of the Material, Mixture and Medium
-  
+
   // Vaccum
   TGeoMedium * VaccumMedium=NULL;
   if (gGeoManager->GetMedium("Vaccum") ) {
@@ -230,7 +230,7 @@ void EnsarScintillator::ConstructGeometry()
    radl    = 579553059467092293666734080.000000;
    absl    = 3511630811855104348084240384.000000;
    TGeoMaterial *VaccumMaterial = new TGeoMaterial("Vacuum", aMat,z,density,radl,absl);
-   VaccumMaterial->SetIndex(0);    
+   VaccumMaterial->SetIndex(0);
 
   // Vacuum parameters:
    numed   = 0;  // medium number
@@ -269,9 +269,9 @@ void EnsarScintillator::ConstructGeometry()
     par[7]  = 0.000000; // stmin
     AirMedium = new TGeoMedium("Air", numed, AirMaterial, par);
   }
-  
- // CsI  
-  
+
+ // CsI
+
   TGeoMedium * CsIMedium=NULL;
   if (gGeoManager->GetMedium("CsI") ) {
     CsIMedium=gGeoManager->GetMedium("CsI");
@@ -295,12 +295,12 @@ void EnsarScintillator::ConstructGeometry()
     par[7]  = 0.000000; // stmin
     CsIMedium = new TGeoMedium("CsIn", numed,CsIMaterial, par);
   }
-  
+
  // BC408
-  
+
   TGeoMedium * BC408Medium=NULL;
   if (gGeoManager->GetMedium("BC408") ) {
-    BC408Medium=gGeoManager->GetMedium("BC408");    
+    BC408Medium=gGeoManager->GetMedium("BC408");
   } else {
      nel    = 2;
      density = 1.032000;
@@ -322,7 +322,7 @@ void EnsarScintillator::ConstructGeometry()
    par[7]  = 0.000000; // stmin
    BC408Medium = new TGeoMedium("BC408", numed,mBC408,par);
   }
-  
+
   // Geometry Construction
   // Shape: Virtual World Volume
   // Type: TGeoBBox
@@ -333,11 +333,11 @@ void EnsarScintillator::ConstructGeometry()
    TGeoShape *WorldBox = new TGeoBBox("World", dx,dy,dz);
 // Volume: World
    TGeoVolume *WorldVol = new TGeoVolume("World",WorldBox, VaccumMedium);
-// or like this  
+// or like this
 //  TGeoVolume *top=gGeoManager->MakeBox("World",AirMedium,1000,1000,1000);
   gGeoManager->SetTopVolume(WorldVol);
   gGeoManager->SetTopVisible(kFALSE);
-  
+
   // Get world volume
   TGeoVolume *pAWorld  =  gGeoManager->GetTopVolume();
   //pAWorld->SetVisLeaves(kTRUE);
@@ -349,17 +349,17 @@ void EnsarScintillator::ConstructGeometry()
    dy = 500.000000;
    dz = 500.000000;
    TGeoShape *motherShape = new TGeoBBox("ScintiDetWorld", dx,dy,dz);
- 
+
 // Volume: ScintiDetLogWorld
    TGeoVolume *motherCave = new TGeoVolume("ScintiDetLogWorld",motherShape, AirMedium);
 //   motherCave->SetVisLeaves(kFALSE);
    TGeoCombiTrans *t0 = new TGeoCombiTrans();
    TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
-  
+
   // add the Mother Volume for all other geometries
    pAWorld->AddNodeOverlap(motherCave, 0, pGlobalc);
 
-   // Shape: Ensar Scintillation Detector Box 
+   // Shape: Ensar Scintillation Detector Box
    // Type: TGeoBBox
    // Material: BC408
 
@@ -370,18 +370,18 @@ void EnsarScintillator::ConstructGeometry()
    // Volume: ScintiDetLog
    TGeoVolume *ScintillatorVol = new TGeoVolume("ScintiDetLog",ScintillatorShape, BC408Medium);
    ScintillatorVol->SetVisLeaves(kTRUE);
-   AddSensitiveVolume(ScintillatorVol);  
+   AddSensitiveVolume(ScintillatorVol);
    motherCave->AddNode(ScintillatorVol,1,pos_rot);
-   
+
 
     FairRuntimeDb *rtdb= FairRun::Instance()->GetRuntimeDb();
     EnsarScintillatorDigiPar* dpar =(EnsarScintillatorDigiPar*)(rtdb->getContainer("EnsarScintillatorDigiPar"));
     dpar->SetScintillatorLength(2*ScintillatorShape->GetRmax());
     dpar->SetScintillatorHeight(2*ScintillatorShape->GetRmax());
     dpar->SetScintillatorDepth(2*ScintillatorShape->GetDz());
-    dpar->setChanged();   
+    dpar->setChanged();
 
-  
+
 }
 
 EnsarScintillatorPoint* EnsarScintillator::AddHit(Int_t trackID, Int_t volumeID,

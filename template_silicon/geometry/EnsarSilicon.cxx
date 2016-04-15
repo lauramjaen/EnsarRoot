@@ -21,7 +21,7 @@
 #include "FairDetectorList.h"
 #include "FairStack.h"
 
-// ROOT includes 
+// ROOT includes
 #include "TGeoManager.h"
 #include "TParticle.h"
 #include "TVirtualMC.h"
@@ -45,19 +45,19 @@
 #include "TObjArray.h"
 #include "TMCProcess.h"
 
-// C++ includes 
+// C++ includes
 #include <iostream>
 using std::cout;
 using std::endl;
 
 
 EnsarSilicon::EnsarSilicon() : EnsarDetector("EnsarSilicon", kTRUE, kTSILIDET)
-{    
+{
   ResetParameters();
   fEnsarSiliconPointCollection = new TClonesArray("EnsarSiliconPoint");
   kGeoSaved = kFALSE;
   fVerboseLevel = 1;
-  
+
 }
 
 EnsarSilicon::EnsarSilicon(const char* name, Bool_t active) : EnsarDetector(name, active, kTSILIDET)
@@ -66,7 +66,7 @@ EnsarSilicon::EnsarSilicon(const char* name, Bool_t active) : EnsarDetector(name
   fEnsarSiliconPointCollection = new TClonesArray("EnsarSiliconPoint");
   kGeoSaved = kFALSE;
   fVerboseLevel = 1;
-  
+
 }
 
 EnsarSilicon::~EnsarSilicon()
@@ -75,16 +75,16 @@ EnsarSilicon::~EnsarSilicon()
     fEnsarSiliconPointCollection->Delete();
     delete fEnsarSiliconPointCollection;
   }
-   
+
 }
 
 void EnsarSilicon::Initialize()
 {
- 
+
   FairDetector::Initialize();
   FairRuntimeDb* rtdb= FairRun::Instance()->GetRuntimeDb();
   EnsarSiliconGeoPar* gpar =(EnsarSiliconGeoPar*)(rtdb->getContainer("EnsarSiliconGeoPar"));
-  
+
 }
 
 Bool_t  EnsarSilicon::ProcessHits(FairVolume* vol)
@@ -93,11 +93,11 @@ Bool_t  EnsarSilicon::ProcessHits(FairVolume* vol)
     fELoss  = 0.;
     fTime   = gMC->TrackTime() * 1.0e09; // in seconds
     fLength = gMC->TrackLength();
-    fMass   = gMC->TrackMass();  
+    fMass   = gMC->TrackMass();
     gMC->TrackPosition(fPosIn);
     gMC->TrackMomentum(fMomIn);
     fEnergy = gMC->Etot()-fMass;
-    
+
   }
 
   // Sum energy loss for all steps in the active volume
@@ -121,20 +121,20 @@ Bool_t  EnsarSilicon::ProcessHits(FairVolume* vol)
     fEnergy = gMC->Etot()-fMass;
 
     if (fELoss == 0. ) return kFALSE;
- 
+
   // Adding MonteCarlo Points in the PointColection stack
-    
+
     AddHit(fTrackID, fVolumeID, fTrackPID, fParentTrackID, fUniqueID,
            TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
            TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
            TVector3(fMomIn.Px(),  fMomIn.Py(),  fMomIn.Pz()),
            TVector3(fMomOut.Px(), fMomOut.Py(), fMomOut.Pz()),
            fEnergy,fTime, fLength, fELoss);
-    
+
     // Increment number of EnsarSilicon det points in TParticle
     FairStack* stack = (FairStack*) gMC->GetStack();
     stack->AddPoint(kTSILIDET);
-   
+
     ResetParameters();
   }
 
@@ -144,7 +144,7 @@ Bool_t  EnsarSilicon::ProcessHits(FairVolume* vol)
 void EnsarSilicon::EndOfEvent()
 {
 
-  if (fVerboseLevel) Print();
+  if (fVerboseLevel) Print("");
   fEnsarSiliconPointCollection->Clear();
   ResetParameters();
 }
@@ -185,9 +185,9 @@ void EnsarSilicon::ConstructGeometry()
   Double_t radl, absl;
   Int_t nel, numed;
   Double_t par[8];
- 
+
 // Definition of the Material, Mixture and Medium
-  
+
   // Vaccum
   TGeoMedium * VaccumMedium=NULL;
   if (gGeoManager->GetMedium("Vaccum") ) {
@@ -199,7 +199,7 @@ void EnsarSilicon::ConstructGeometry()
    radl    = 579553059467092293666734080.000000;
    absl    = 3511630811855104348084240384.000000;
    TGeoMaterial *VaccumMaterial = new TGeoMaterial("Vacuum", aMat,z,density,radl,absl);
-   VaccumMaterial->SetIndex(0);    
+   VaccumMaterial->SetIndex(0);
 
 // Vacuum parameters:
    numed   = 0;  // medium number
@@ -238,9 +238,9 @@ void EnsarSilicon::ConstructGeometry()
     par[7]  = 0.000000; // stmin
     AirMedium = new TGeoMedium("Air", numed, AirMaterial, par);
   }
-  
-  // Silicon  
-  
+
+  // Silicon
+
   TGeoMedium* SiliconMedium = NULL;
   if (gGeoManager->GetMedium("Silicon") ) {
     SiliconMedium = gGeoManager->GetMedium("Silicon");
@@ -266,7 +266,7 @@ void EnsarSilicon::ConstructGeometry()
    par[7]  = 0.000000; // stmin
    SiliconMedium = new TGeoMedium("Silicon", numed, SiliconMaterial, par);
   }
-  
+
   // Geometry Construction
   // Shape: Virtual World Volume
   // Type: TGeoBBox
@@ -277,11 +277,11 @@ void EnsarSilicon::ConstructGeometry()
    TGeoShape *WorldBox = new TGeoBBox("World", dx,dy,dz);
 // Volume: World
    TGeoVolume *WorldVol = new TGeoVolume("World",WorldBox, VaccumMedium);
-// or like this  
+// or like this
 //  TGeoVolume *top=gGeoManager->MakeBox("World",AirMedium,1000,1000,1000);
   gGeoManager->SetTopVolume(WorldVol);
   gGeoManager->SetTopVisible(kFALSE);
-  
+
   // Get world volume
   TGeoVolume *pAWorld  =  gGeoManager->GetTopVolume();
   //pAWorld->SetVisLeaves(kTRUE);
@@ -293,17 +293,17 @@ void EnsarSilicon::ConstructGeometry()
    dy = 500.000000;
    dz = 500.000000;
    TGeoShape *motherShape = new TGeoBBox("SiliconDetectorWorld", dx,dy,dz);
- 
+
 // Volume: SiliconDetLogWorld
    TGeoVolume *motherCave = new TGeoVolume("SiliconDetLogWorld",motherShape, VaccumMedium);
 //   motherCave->SetVisLeaves(kFALSE);
    TGeoCombiTrans *t0 = new TGeoCombiTrans();
    TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
-  
+
   // add the Mother Volume for all other geometries
    pAWorld->AddNodeOverlap(motherCave, 0, pGlobalc);
 
-   // Shape: Ensar Silicon Detector Disk 
+   // Shape: Ensar Silicon Detector Disk
    // Type: TGeoTube
    // Material: Silicon
 
@@ -314,18 +314,18 @@ void EnsarSilicon::ConstructGeometry()
    // Volume: SiliconDetLog
    TGeoVolume *SiliconVol = new TGeoVolume("SiliconDetLog",SiliconShape, SiliconMedium);
    SiliconVol->SetVisLeaves(kTRUE);
-   AddSensitiveVolume(SiliconVol);  
+   AddSensitiveVolume(SiliconVol);
    motherCave->AddNode(SiliconVol,1,pos_rot);
-   
+
 
     FairRuntimeDb *rtdb= FairRun::Instance()->GetRuntimeDb();
     EnsarSiliconDigiPar* dpar =(EnsarSiliconDigiPar*)(rtdb->getContainer("EnsarSiliconDigiPar"));
     dpar->SetSiliconLength(2*SiliconShape->GetRmax());
     dpar->SetSiliconHeight(2*SiliconShape->GetRmax());
     dpar->SetSiliconDepth(2*SiliconShape->GetDz());
-    dpar->setChanged();   
+    dpar->setChanged();
 
-  
+
 }
 
 EnsarSiliconPoint* EnsarSilicon::AddHit(Int_t trackID, Int_t volumeID,
