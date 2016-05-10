@@ -4,7 +4,7 @@
 // -------------------------------------------------------------------------
 
 /**  TraRPCHit.h
- **  A RPC hit is the representation of the 
+ **  A RPC hit is the representation of the
  **  information obtained from each RPC.
  **/
 
@@ -14,7 +14,7 @@
 #include "TObject.h"
 #include "FairMultiLinkedData.h"
 
-class TraRPCHit : public FairMultiLinkedData 
+class TraRPCHit : public FairMultiLinkedData
 {
 public:
 
@@ -37,10 +37,22 @@ public:
   virtual ~TraRPCHit();
 
   /** Accessors **/
-  Int_t    GetRPCId()         const { return fRPCId; }
-  Double_t GetCharge()        const { return fCharge; }
-  Double_t GetTime()          const { return fTime; }
-	
+  // Hit: Fired cell with a charge value bigger than a given threshold.
+  // fRPCId decodes the plane number (0 to 3, 3 bits PPP),
+  // row (X direction, 0 to 11 in 4 bits RRRR),
+  // column (Y direction, 0 to 9, 4 bits TTTT)
+  // acording to 0PPP00RRRR00TTTT
+  // GetRPCId(), etc give the cell information in decimal format from the binary fRPCId
+
+  Int_t    GetRPCId()         const { return  fRPCId;   }
+  Int_t    GetCellColumn()    const { return  (((fRPCId & 960) >> 6) +1); }
+  Int_t    GetCellRow()       const { return  ((fRPCId & 15) +1); }
+  Int_t    GetPlane()         const { return  (((fRPCId & 28672) >> 12)+1);  }
+  Double_t GetCellXCenter()   const { return  69.3-(12-this->GetCellColumn())*12.6; }
+  Double_t GetCellYCenter()   const { return  55.35-(this->GetCellRow()-1)*12.30; }
+  Double_t GetCharge()        const { return  fCharge;  }
+  Double_t GetTime()          const { return  fTime;    }
+
   /** Modifiers **/
   void SetRPCId(Int_t id) { fRPCId = id; }
   void SetCharge(Double32_t charge){fCharge = charge;}
@@ -51,16 +63,12 @@ public:
   virtual void Print(const Option_t* opt) const;
 
 protected:
-  // Hit: Fired cell with a charge value bigger than a given threshold.
-  // fRPCId decodes the plane number (0 to 3, 3 bits PPP), 
-  // row (X direction, 0 to 11 in 4 bits RRRR),
-  // column (Y direction, 0 to 9, 4 bits TTTT) 
-  // acording to 0PPP00RRRR00TTTT
-
   Double32_t fCharge;   //total charge in the RPC
-  Double32_t fTime;    //TDC time 
+  Double32_t fTime;    //TDC time
   Int_t fRPCId;        //RPC unique identifier
 
+ Double32_t fRPCcol;
+// --------------------------
   ClassDef(TraRPCHit,1)
 };
 

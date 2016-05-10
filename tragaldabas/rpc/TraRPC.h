@@ -96,15 +96,15 @@ class TraRPC : public EnsarDetector
    ** Constructs the geometry
    **/
   virtual void ConstructGeometry();
-	
+
   virtual Bool_t CheckIfSensitive(std::string name);
-  
+
   /** Select the version of the geometry
    **
-   *@param version 
-   **/	
+   *@param version
+   **/
   void SelectGeometryVersion(Int_t version);
-  
+
   virtual void Initialize();
   virtual void SetSpecialPhysicsCuts() {}
 
@@ -129,19 +129,19 @@ class TraRPC : public EnsarDetector
 
     TClonesArray*  fRPCCollection;         //!  The points collection
     TClonesArray*  fRPCHitCollection;      //!  The hit collection
-	
-    // Selecting the geometry 
+
+    // Selecting the geometry
     Int_t fGeometryVersion;
-	
+
     /** Private method AddHit
      **
      ** Adds a RPCPoint to the HitCollection
      **/
-    TraRPCPoint* AddHit(Int_t trackID, Int_t detID, Int_t volid, 
-			 TVector3 posIn, TVector3 pos_out, TVector3 momIn, 
+    TraRPCPoint* AddHit(Int_t trackID, Int_t detID, Int_t volid,
+			 TVector3 posIn, TVector3 pos_out, TVector3 momIn,
 			 TVector3 momOut, Double_t time, Double_t length, Double_t eLoss);
 
-	
+
     /** Private method AddCrystalHit
      **
      ** Adds a RPCHit to the HitCollection
@@ -150,14 +150,14 @@ class TraRPC : public EnsarDetector
 					Int_t steps, Double_t einc,
 					Int_t trackid, Int_t volid, Int_t partrackid,
 					Int_t pdgid, Int_t uniqueid);
-	
-	
+
+
     /** Private method ResetParameters
      **
      ** Resets the private members for the track parameters
      **/
     void ResetParameters();
-	
+
     ClassDef(TraRPC,1);
 };
 
@@ -172,4 +172,4 @@ inline void TraRPC::ResetParameters() {
   fNSteps = 0;
 };
 
-#endif 
+#endif

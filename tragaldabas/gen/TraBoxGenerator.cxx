@@ -100,8 +100,6 @@ Bool_t TraBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
   // Generate particles
   for (Int_t k = 0; k < fMult; k++) {
     phi = gRandom->Uniform(fPhiMin,fPhiMax) * TMath::DegToRad();
-    
-   
 
     if      (fPRangeIsSet ) { pabs = gRandom->Uniform(fPMin,fPMax); }
     else if (fPtRangeIsSet) { pt   = gRandom->Uniform(fPtMin,fPtMax); }
@@ -131,11 +129,11 @@ Bool_t TraBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
       }
     }
 
-   
+
 
     //Parameters for the evaluation of the geometric efficiency
     //Events are generated in a plane located at a given distance above the RPC planes
-    
+
     DistPlanoGen=100.;                                 //Distance to the generator plane
     PlaneSelector=gRandom->Uniform();                 //Random selection of the RPC plane (only two planes are considered)
 
@@ -157,7 +155,7 @@ Bool_t TraBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
      }
 
    if (PlaneSelector > 0.5){                          //Hit definition in the upper plane and proyected to the generator plane
-    xup=gRandom->Uniform(fxMin,fxMax);     
+    xup=gRandom->Uniform(fxMin,fxMax);
     yup=gRandom->Uniform(fyMin,fyMax);
     zup=90;
 
@@ -170,11 +168,11 @@ Bool_t TraBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
            fY=ygen;
            fZ=zgen;
         }
-       
+
      }
 
-   
-   
+
+
     px = pt*TMath::Cos(phi);
     py = pt*TMath::Sin(phi);
 
@@ -182,15 +180,15 @@ Bool_t TraBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
       fX = gRandom->Uniform(fX1,fX2);
       fY = gRandom->Uniform(fY1,fY2);
     }
-    
 
-    
+
+
 
     if (fDebug)
       printf("BoxGen: kf=%d, p=(%.2f, %.2f, %.2f) GeV, x=(%.1f, %.1f, %.1f) cm\n",
              fPDGType, px, py, pz, fX, fY, fZ);
 
-    primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ, xgen, ygen, zgen, xup, yup); //12 arguments expected
+primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
   }
   return kTRUE;
 

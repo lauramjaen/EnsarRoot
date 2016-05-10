@@ -6,14 +6,14 @@
 #include "tragall.C"
 
 void tragsim() {
-  
+
   // Input files
   TString EventFile = "evt_file.dat";
 
   // Output files
   TString OutFile = "tragsim.root";
   TString ParFile = "tragpar.root";
-  
+
   //-------------------------------------------------
   // Monte Carlo type     |    fMC        (TString)
   //-------------------------------------------------
@@ -21,7 +21,7 @@ void tragsim() {
   //   Geant4:                 "TGeant4"
   //   Fluka :                 "TFluka"
   TString fMC ="TGeant4";
-  
+
   //-------------------------------------------------
   // Primaries generation
   // Event Generator Type |   fGene       (TString)
@@ -30,7 +30,7 @@ void tragsim() {
   // Ascii generator:          "ascii"
   // TraBox generator:         "tragbox"
   TString fGene="tragbox";
-  
+
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
   // R3B Spec. PhysicList |     fUserPList (Bool_t)
@@ -38,8 +38,8 @@ void tragsim() {
   //     VMC Standard           kFALSE
   //     R3B Special            kTRUE;
   Bool_t fUserPList= kTRUE;
-  
-  
+
+
   //-------------------------------------------------
   //- Geometrical Setup Definition
   //-  Non Sensitiv        |    fDetName (String)
@@ -47,14 +47,14 @@ void tragsim() {
 
   TMap detGeo;
   detGeo.Add(new TObjString("RPC"),
-  	     new TObjString("tragaldabas_test.geo.root"));
+  	     new TObjString("bloquePb_test.geo.root"));
 
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 1;
+   Int_t nEvents = 4;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)
@@ -65,7 +65,8 @@ void tragsim() {
 
    // Main Sim function call
    tragall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,
-	   OutFile, ParFile, EventFile);      
+	   OutFile, ParFile, EventFile);
 
 }
+
 
