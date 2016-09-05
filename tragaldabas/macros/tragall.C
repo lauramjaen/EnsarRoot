@@ -37,6 +37,7 @@ void tragall(Int_t nEvents = 1,
             TString fMC = "TGeant3",
             TString fGenerator = "box",
             Bool_t fUserPList = kFALSE,
+            Bool_t fHit2Saeta = kFALSE,
             TString OutFile = "tragsim.root",
             TString ParFile = "tragpar.root",
             TString InFile = "evt_gen.dat")
@@ -166,6 +167,14 @@ void tragall(Int_t nEvents = 1,
   run->SetStoreTraj(fVis);
 
   FairLogger::GetLogger()->SetLogVerbosityLevel("LOW");
+
+
+  // ----- Initialize TimTrack task: Hit to Saeta ---------------------------
+  if(fHit2Saeta) {
+    TraRPCHit2Saeta* hit2saeta = new TraRPCHit2Saeta();
+    run->AddTask(hit2saeta);
+  }
+
 
   // -----   Initialize simulation run   ------------------------------------
   run->Init();

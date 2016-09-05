@@ -27,6 +27,7 @@ link_directories( ${LINK_DIRECTORIES})
 set(SRCS
 TraRPCHit.cxx
 TraRPCPoint.cxx 
+TraRPCSaeta.cxx 
 )
 
 

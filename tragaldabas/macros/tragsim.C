@@ -39,6 +39,10 @@ void tragsim() {
   //     R3B Special            kTRUE;
   Bool_t fUserPList= kTRUE;
 
+  //-------------------------------------------------
+  // Activate the TimTrack task: Hit to Saeta
+  //-------------------------------------------------
+  Bool_t fHit2Saeta = kTRUE;
 
   //-------------------------------------------------
   //- Geometrical Setup Definition
@@ -64,7 +68,7 @@ void tragsim() {
    Bool_t fEventDisplay=kTRUE;
 
    // Main Sim function call
-   tragall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,
+   tragall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList, fHit2Saeta,
 	   OutFile, ParFile, EventFile);
 
 }

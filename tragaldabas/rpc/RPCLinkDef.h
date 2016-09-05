@@ -5,5 +5,6 @@
 #pragma link off all functions;
 
 #pragma link C++ class TraRPC+;
+#pragma link C++ class TraRPCHit2Saeta+;
 
 #endif
