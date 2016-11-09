@@ -113,6 +113,11 @@ void TraRPCHit2Saeta::Exec(Option_t* opt)
 
   AddSaeta(Xcoor,Xslope,Ycoor,Yslope,time,slowness);
 
+  Double_t z=2.0;
+  TMatrixD M(2,2);
+  M = creaMatriz(z);
+  M.Print();
+
 }
 
 
@@ -140,6 +145,19 @@ TraRPCSaeta* TraRPCHit2Saeta::AddSaeta(Double_t Xcoor,Double_t Xslope,Double_t Y
   TClonesArray& clref = *fTraSaetaCA;
   Int_t size = clref.GetEntriesFast();
   return new(clref[size]) TraRPCSaeta(Xcoor,Xslope,Ycoor,Yslope,time,slowness);
+
+}
+
+TMatrixD TraRPCHit2Saeta::creaMatriz(Double_t z) {
+
+  TMatrixD A(2,2);
+
+  A[0][0]=z;
+  A[0][1]=z*z;
+  A[1][0]=2*z;
+  A[1][1]=z+2;
+
+  return A;
 
 }
 

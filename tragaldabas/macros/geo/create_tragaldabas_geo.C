@@ -8,10 +8,11 @@ TGeoRotation *fGlobalRot = new TGeoRotation();
 
 // Create a null translation
 TGeoTranslation *fGlobalTrans = new TGeoTranslation();
-fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 TGeoRotation *fRefRot = NULL;
 
-TGeoManager*   gGeoMan           = NULL;
+TGeoManager* gGeoMan  = NULL;
+
+TGeoVolume* top;
 
 Double_t fThetaX = 0.;
 Double_t fThetaY = 0.;
@@ -25,9 +26,14 @@ Double_t fZ = 0.;
 Bool_t fLocalTrans = kFALSE;
 Bool_t fLabTrans = kFALSE;
 
+TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef);
+
 // -------   Main function for creating the geo   ------------------------------
 void create_tragaldabas_geo(const char* geoTag)
 {
+
+  fGlobalTrans->SetTranslation(0.0,0.0,0.0);
+
   // Usage: select the geoTag when calling the macro for a new CALIFA geo
   // Possible geoTag values: 
   // geoTag           - Short description 
@@ -107,7 +113,7 @@ void create_tragaldabas_geo(const char* geoTag)
   // --------------   Create geometry and top volume  -------------------------
   gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
   gGeoMan->SetName("TragaldabasGeom");
-  TGeoVolume* top = new TGeoVolumeAssembly("TRA_World");
+  top = new TGeoVolumeAssembly("TRA_World");
   gGeoMan->SetTopVolume(top);
   // --------------------------------------------------------------------------
 
@@ -231,7 +237,7 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
     Double_t yAxis[3] = { 0. , 1. , 0. };
     Double_t zAxis[3] = { 0. , 0. , 1. };
     // Reference Rotation
-    fRefRot = fRef;
+    fRefRot = fRef->GetRotation();
     
     if (fRefRot) {
       Double_t mX[3] = {0.,0.,0.};
@@ -286,7 +292,7 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
       TGeoCombiTrans c3;
       c3.SetRotation(pTmp->GetRotation());
       TGeoCombiTrans c4;
-      c4.SetRotation(fRefRot->GetRotation());
+      c4.SetRotation(fRefRot);
       
       TGeoCombiTrans ccc = c3 * c4;
       

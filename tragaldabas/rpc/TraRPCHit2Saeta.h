@@ -13,6 +13,7 @@
 #include "FairTask.h"
 
 #include "TraRPCSaeta.h"
+#include "TMatrixD.h"
 
 class TClonesArray;
 
@@ -62,6 +63,7 @@ class TraRPCHit2Saeta : public FairTask
     **/
     TraRPCSaeta* AddSaeta(Double_t Xcoor,Double_t Xslope,Double_t Ycoor,Double_t Yslope,Double_t time,Double_t slowness);
 
+    TMatrixD creaMatriz(Double_t z);
 
     ClassDef(TraRPCHit2Saeta,1);
 
