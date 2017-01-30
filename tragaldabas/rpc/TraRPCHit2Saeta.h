@@ -13,6 +13,7 @@
 #include "FairTask.h"
 
 #include "TraRPCSaeta.h"
+
 #include "TMatrixD.h"
 
 class TClonesArray;
@@ -53,7 +54,8 @@ class TraRPCHit2Saeta : public FairTask
 
     TClonesArray* fTraHitCA;
     TClonesArray* fTraSaetaCA;
-
+// los points
+    TClonesArray* fTraPointCA;
 
   private:
 
@@ -63,11 +65,16 @@ class TraRPCHit2Saeta : public FairTask
     **/
     TraRPCSaeta* AddSaeta(Double_t Xcoor,Double_t Xslope,Double_t Ycoor,Double_t Yslope,Double_t time,Double_t slowness);
 
-    TMatrixD creaMatriz(Double_t z);
 
-    ClassDef(TraRPCHit2Saeta,1);
-
+// voy a añadir el prototipo de la funcion creadora de matrices
+TMatrixD CreateKMatrix(Double_t);
+TMatrixD CreateAMatrix(Double_t, Double_t, Double_t, Double_t);
+void SetCoefficients(Double_t, Double_t, Double_t, Double_t,  Double_t, Double_t, Double_t, Double_t*); 
+TMatrixD CreateKRestMatrix(Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t );
+TMatrixD CreateARestMatrix(Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t);
+Double_t Mahalanobis(Double_t, Double_t, Double_t, Double_t, Double_t);
+TMatrixD Reduce(TMatrixD);
+ClassDef(TraRPCHit2Saeta,1);
 };
-
 
 #endif
