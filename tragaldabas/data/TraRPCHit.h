@@ -49,7 +49,7 @@ public:
   Int_t    GetCellRow()       const { return  ((fRPCId & 15) +1); }
   Int_t    GetPlane()         const { return  (((fRPCId & 28672) >> 12)+1);  }
   Double_t GetCellXCenter()   const { return  69.3-(12-this->GetCellColumn())*12.6; }
-  Double_t GetCellYCenter()   const { return  55.35-(this->GetCellRow()-1)*12.30; }
+  Double_t GetCellYCenter()   const { return  54.45-(this->GetCellRow()-1)*12.10; }
   Double_t GetCharge()        const { return  fCharge;  }
   Double_t GetTime()          const { return  fTime;    }
 
