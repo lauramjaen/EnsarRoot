@@ -159,6 +159,10 @@ class TraRPC : public EnsarDetector
     void ResetParameters();
 
     ClassDef(TraRPC,1);
+
+    // Private method IsInsideActiveZone dice si el hit cae dentro de la zona activa
+    // de la celda
+    Bool_t IsInsideActiveZone(Float_t , Float_t, Float_t , Float_t );
 };
 
 inline void TraRPC::ResetParameters() {
@@ -171,5 +175,6 @@ inline void TraRPC::ResetParameters() {
   fPosIndex = 0;
   fNSteps = 0;
 };
+
 
 #endif

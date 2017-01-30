@@ -116,6 +116,9 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
   Int_t volIdKIV=0; // KIV box volume Id
   Int_t cpKIV=0; // copy of KIV  box (from 0 to 3 in present Tragaldabas)
 
+  Float_t Xcenter=0, Ycenter=0;
+  Int_t Row=0;
+  Int_t Column=0;
   Int_t RPCId =0; //RPC WITH SIGNAL!!!
 
   // RPC readout
@@ -146,10 +149,6 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     // row (Y direction, 0 to 9, 4 bits RRRR)
     // acording to 0PPP00TTTT00CCCC
     // The numbers 12.6 and 12.3 come from our cell dimensions. The origin is placed at the center of the plane
-    gMC->TrackPosition(fPosIn);
-    RPCId = cpKIV*4096 + int((fPosIn.X()+6*12.6)/12.6)*64 + int((-fPosIn.Y()+5*12.3)/12.3);
-
-
   if ( gMC->IsTrackEntering() ) {
     fELoss  = 0.;
     fNSteps  = 0; // FIXME
@@ -218,6 +217,12 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
       fPosOut.SetZ(newpos[2]);
     }
 
+    RPCId = cpKIV*4096 + int((fPosIn.X()+6*11.6)/11.6)*64 + int((-fPosIn.Y()+5*11.3)/11.3);
+    Row = (RPCId & 15) +1;
+    Column = ((RPCId & 960) >> 6) +1;
+    Xcenter = 69.3-(12-Column)*12.6;
+    Ycenter = 54.45-(Row-1)*12.10;
+
     AddHit(fTrackID, fVolumeID, RPCId,
            TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
            TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
@@ -230,6 +235,8 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     stack->AddPoint(kTra);
 
     //Adding a RPCHIT support
+    // Si el impacto ocurre en la zona activa, añadimos el hit
+    if(IsInsideActiveZone(fPosIn.X(),fPosIn.Y(),Xcenter,Ycenter)){
     Int_t nHits = fRPCHitCollection->GetEntriesFast();
     Bool_t existHit = 0;
 
@@ -253,6 +260,8 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     }
 
     existHit=0;
+
+     }    //la llave acaba aqui
 
     ResetParameters();
   }
@@ -402,6 +411,29 @@ Bool_t TraRPC::CheckIfSensitive(std::string name)
   return kFALSE;
 }
 // ----------------------------------------------------------------------------
+
+
+// -----   Private method IsInsideActiveZone   ----------------------------------
+// Vemos si esta en la zona activa
+Bool_t TraRPC::IsInsideActiveZone(Float_t PosX, Float_t PosY, Float_t Xcenter, Float_t Ycenter)
+{
+// Definimos los limites de la zona activa, usando el centro de la celda y las dimensiones del pad
+Float_t XSup = Xcenter+5.8;
+Float_t XInf = Xcenter-5.8;
+Float_t YSup = Ycenter+5.55;
+Float_t YInf = Ycenter-5.55;
+	if( PosX<XSup && 
+	    PosX>XInf &&
+            PosY<YSup &&
+            PosY>YInf ){
+		return kTRUE;
+
+	} else {
+
+		return kFALSE;
+	}
+
+} 
 
 
 ClassImp(TraRPC)
