@@ -21,7 +21,7 @@ void checkResults() {
 	TH1F* h3   = new TH1F("h3","Rpc Charge",200,0,30e-06);
 	TH1F* h4   = new TH1F("h4","Theta",200,-2,2);
         TH1F *hx   = new TH1F("hx","X de impacto",1000,-100,100);
-	TH2F* hxy = new TH2F("hxy","Impactos", 500, -100, 100, 500, -100, 100);
+	TH2F* hxy  = new TH2F("hxy","Impactos", 500, -100, 100, 500, -100, 100);
 
 	//----   MCTrack (input)   -------------------------------------------------
 	TClonesArray* MCTrackCA;
@@ -34,7 +34,7 @@ void checkResults() {
 	TClonesArray* rpcHitCA;
 	TraRPCHit** rpcHit;
 	rpcHitCA = new TClonesArray("TraRPCHit",5);
-	TBranch *branchRpcHit = tree ->GetBranch("RPCHit");
+ 	TBranch *branchRpcHit = tree ->GetBranch("RPCHit");
 	branchRpcHit->SetAddress(&rpcHitCA );
 
 	TClonesArray* rpcPointCA;
@@ -50,7 +50,7 @@ void checkResults() {
 
         TVector3 momentum, vector3;
         Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
-        
+
         TH1F *hxdif = new TH1F("hxdiff","hxdiff",500,-100,100);
         TH1F *hydif = new TH1F("hydiff","hydiff",500,-100,100);
 
@@ -120,7 +120,7 @@ void checkResults() {
 				    hydif->Fill(rpcPoint[r]->GetYIn());
 				    rpcPoint[r]->PositionIn(vector3);
 				    cout << " ---- " << vector3.Theta() << endl ;
-			            h4->Fill(vector3.Phi());    
+			            h4->Fill(vector3.Phi());
 				   X1=rpcPoint[r]->GetXIn();
 				   hx->Fill(X1);
                                    X2=rpcPoint[r]->GetYIn();
@@ -130,8 +130,6 @@ void checkResults() {
                                   //  hy->Fill(rpcPoint[r]->GetXIn());
                                   //  hxy->Fill(rpcPoint[r]->GetXIn(),rpcPoint[r]->GetYIn());
                                    hxy->Fill(X1,X2);
-
-				   
 	}
                   //    if(rpcHit[r]->GetRPCId()>8000&&rpcHit[r]->GetRPCId()<9000)   X2 = momentum.X();
                      // if(rpcHit[r]->GetRPCId()>12000&&rpcHit[r]->GetRPCId()<13000) X3 = momentum.X();
@@ -151,7 +149,6 @@ void checkResults() {
 
                      Xup=hx->GetRMS();
                      cout << "RMS" << Xup << endl;
-
 
 	TCanvas* c1 = new TCanvas("MCTrack","MCTrack",0,0,400,800);
 	c1->Divide(1,2);

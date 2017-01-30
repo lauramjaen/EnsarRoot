@@ -29,7 +29,7 @@ void tragsim() {
   // Box  generator:             "box"
   // Ascii generator:          "ascii"
   // TraBox generator:         "tragbox"
-  TString fGene="tragbox";
+  TString fGene="box";
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -42,7 +42,7 @@ void tragsim() {
   //-------------------------------------------------
   // Activate the TimTrack task: Hit to Saeta
   //-------------------------------------------------
-  Bool_t fHit2Saeta = kTRUE;
+  Bool_t fHit2Saeta = kFALSE;
 
   //-------------------------------------------------
   //- Geometrical Setup Definition
@@ -51,14 +51,14 @@ void tragsim() {
 
   TMap detGeo;
   detGeo.Add(new TObjString("RPC"),
-  	     new TObjString("bloquePb_test.geo.root"));
+  	     new TObjString("tragaldabas_oficial.geo.root"));
 
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 4;
+   Int_t nEvents = 1000000;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

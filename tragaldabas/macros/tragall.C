@@ -118,15 +118,15 @@ void tragall(Int_t nEvents = 1,
 
   if (fGenerator.CompareTo("box") == 0  ) {
     // 2- Define the BOX generator
-    Int_t pdgId = 13; // pion beam
-    Double32_t theta1 = -30.0;  // polar angle distribution
-    Double32_t theta2 = 30.0;
-    Double32_t momentum = 2.18;
+    Int_t pdgId = 13; // electrons: 11, muons: 13, photons: 22 
+    Double32_t theta1 = 0.0;  // polar angle distribution
+    Double32_t theta2 = 8.58;
+    Double32_t momentum =2.1;
     FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId, 1);
     boxGen->SetThetaRange(theta1, theta2);
-    boxGen->SetPRange(momentum, momentum);
-    boxGen->SetPhiRange(-100., 100.);
-    boxGen->SetXYZ(0.0, 0.0, -2000.0);
+    boxGen->SetPRange(-momentum, -momentum);
+    boxGen->SetPhiRange(0., 360.);
+    boxGen->SetXYZ(0.0, 0.0, 326.1);
 //    boxGen->SetXYZ(0.0, 0.0, -300.);
     // add the box generator
     primGen->AddGenerator(boxGen);
@@ -142,9 +142,9 @@ void tragall(Int_t nEvents = 1,
     // 2- Define the Tragaldabas BOX generator
     Double_t pdgId    = 13; // Muon emission
     Double_t theta1   = 0;  // polar angle distribution
-    Double_t theta2   = 30;
+    Double_t theta2   = 10;
     Double_t muonmass = 105.7; // Muonmass[MeV/c**2]
-    Double_t momentum = 2.18;     //  GeV/c
+    Double_t momentum = 1.18243;     //  GeV/c
     Double_t energy   = TMath::Sqrt((momentum*1000)*(momentum*1000)+muonmass*muonmass);
 
     TraBoxGenerator* tragalGen = new TraBoxGenerator(pdgId, 1);
@@ -152,8 +152,8 @@ void tragall(Int_t nEvents = 1,
     tragalGen->SetPRange     (-momentum,-momentum);
     tragalGen->SetPhiRange   (0.,360.);
     tragalGen->SetCosTheta();
-    tragalGen->SetXhRange(-100.,100.);
-    tragalGen->SetYhRange(-100.,100.);
+    tragalGen->SetXhRange(-60.,60.);
+    tragalGen->SetYhRange(-60.,60.);
     tragalGen->SetXYZ();
     // add the box generator
     primGen->AddGenerator(tragalGen);

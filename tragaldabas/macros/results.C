@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// This macro reads a tragsim.root file and creates several histograms 
+// (charge, scattering angles, 2-D histograms in z, ...)
+// Last: 2.12.2016 Jose Cuenca 
+// Mail: josejavier.cuenca@usc.es
+// -----------------------------------------------------------------------
 void results() {
 
 
@@ -40,7 +46,7 @@ void results() {
           densityMap[i] = new TH2F(title1,title1,200,-100,100,200,-100,100);
         }
 
-	TH1F* htime    = new TH1F("htime","Time",200,0,10);
+	TH1F* htime    = new TH1F("htime","Time",200,-10,10);
 
 	//----   MCTrack (input)   -------------------------------------------------
 	TClonesArray* MCTrackCA;
@@ -138,6 +144,8 @@ void results() {
 		for(Int_t h=0;h<rpcHitsPerEvent;h++){
 			charge = rpcHit[h]->GetCharge();
 			hChar->Fill(charge);
+			time = rpcHit[h]->GetTime();
+			htime->Fill(time);
 			if(rpcHit[h]->GetPlane()==1){
 				for(Int_t j=0; j<rpcHitsPerEvent; j++){
 					if(rpcHit[j]->GetPlane()==2){
@@ -155,8 +163,6 @@ void results() {
 				Xhist=xrandom1+(xrandom1-xrandom2)/(-90.0)*zlevel*5;
 				Yhist=yrandom1+(yrandom1-yrandom2)/(-90.0)*zlevel*5;
 				densityMap[zlevel]->Fill(Xhist,Yhist);
-				time = rpcHit[j]->GetTime();
-				htime->Fill(time);
 
 				}
 			    }
@@ -204,7 +210,6 @@ vector <Int_t>Disc ;
 				   // If the y is <0 we define the "theta" angle as negative
                                     theta=TMath::ATan(x2/x3);
       			            hTheta->Fill(theta);
-
 // This "theta" is not the theta angle in polar coordinates. If we want the real theta angle:
 //     rpcPoint[r]->PositionIn(vector3); vector3.Theta();
 
@@ -240,7 +245,7 @@ vector <Int_t>Disc ;
 			    if(rpcPoint[r]->GetRPCId()==13) {
 				    x1=rpcPoint[r]->GetXIn();
 				    x2=rpcPoint[r]->GetYIn();
-  				    x3=rpcPoint[r]->GetZIn();
+				    x3=rpcPoint[r]->GetZIn();
 				    hxp->Fill(x1);
 				    hyp->Fill(x2);
 		                    hxyp->Fill(x1,x2);
@@ -256,7 +261,10 @@ vector <Int_t>Disc ;
 //-----------------------------------------------------------------------------------------------
 
 	}
-
+/*TFile* f = new TFile("test1.root","RECREATE");
+htime->Write();
+f->Close;
+*/
 	// Canvas definition
 	TCanvas* c1 = new TCanvas("Coordinates"," x and y coordinates of primaries",0,0,400,800);
 	c1->Divide(1,2);
