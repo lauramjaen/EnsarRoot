@@ -8,8 +8,8 @@
  **/
 
 
-#ifndef ENSARHPGEDETPOINT_H
-#define ENSARHPGEDETPOINT_H
+#ifndef EnsarHPGeDetPoint_H
+#define EnsarHPGeDetPoint_H
 
 
 #include "TObject.h"
@@ -22,18 +22,14 @@ class EnsarHPGeDetPoint : public FairMCPoint
 {
 
  public:
-
   /** Default constructor **/
   EnsarHPGeDetPoint();
 
 
   /** Constructor with arguments
    *@param trackID         Index of MCTrack
-   *@param volumeID        Active Volume ID
-   *@param fTrackPID;      particle identification
-   *@param fParentTrackID; parent track index
-   *@param fUniqueID;      particle unique id (e.g. if Delta electron, fUniqueID=9)
-   *@param posIn           Ccoordinates at entrance to active volume [cm]
+   *@param detID           Detector ID
+   *@param posIn           Coordinates at entrance to active volume [cm]
    *@param posOut          Coordinates at exit of active volume [cm]
    *@param momIn           Momentum of track at entrance [GeV]
    *@param momOut          Momentum of track at exit [GeV]
@@ -41,14 +37,15 @@ class EnsarHPGeDetPoint : public FairMCPoint
    *@param length          Track length since creation [cm]
    *@param eLoss           Energy deposit [GeV]
    **/
-  EnsarHPGeDetPoint(Int_t trackID, Int_t volumeID,
-              Int_t trackPID, Int_t parentTrackID, Int_t uniqueID, 
+  EnsarHPGeDetPoint(Int_t trackID, Int_t detID, Int_t volid,
               TVector3 posIn, TVector3 posOut, TVector3 momIn, TVector3 momOut,
 	      Double_t tof, Double_t length, Double_t eLoss);
 
 
   /** Copy constructor **/
-  EnsarHPGeDetPoint(const EnsarHPGeDetPoint& point) { *this = point; };
+  EnsarHPGeDetPoint(const EnsarHPGeDetPoint&);
+  
+  EnsarHPGeDetPoint& operator=(const EnsarHPGeDetPoint&) { return *this; }
 
 
   /** Destructor **/
@@ -56,15 +53,16 @@ class EnsarHPGeDetPoint : public FairMCPoint
 
 
   /** Accessors **/
-  Double_t GetXIn()   const { return fX; }
-  Double_t GetYIn()   const { return fY; }
-  Double_t GetZIn()   const { return fZ; }
-  Double_t GetXOut()  const { return fX_out; }
-  Double_t GetYOut()  const { return fY_out; }
-  Double_t GetZOut()  const { return fZ_out; }
-  Double_t GetPxOut() const { return fPx_out; }
-  Double_t GetPyOut() const { return fPy_out; }
-  Double_t GetPzOut() const { return fPz_out; }
+  Int_t    GetDetectorId() const { return fDetectorID; }
+  Double_t GetXIn()        const { return fX; }
+  Double_t GetYIn()        const { return fY; }
+  Double_t GetZIn()        const { return fZ; }
+  Double_t GetXOut()       const { return fX_out; }
+  Double_t GetYOut()       const { return fY_out; }
+  Double_t GetZOut()       const { return fZ_out; }
+  Double_t GetPxOut()      const { return fPx_out; }
+  Double_t GetPyOut()      const { return fPy_out; }
+  Double_t GetPzOut()      const { return fPz_out; }
   void PositionIn(TVector3& pos)  { pos.SetXYZ(fX, fY, fZ); }
   void PositionOut(TVector3& pos) { pos.SetXYZ(fX_out,fY_out,fZ_out); }
   void MomentumOut(TVector3& mom) { mom.SetXYZ(fPx_out,fPy_out,fPz_out); }
@@ -90,18 +88,11 @@ class EnsarHPGeDetPoint : public FairMCPoint
 
 
  protected:
-
   Double32_t fX_out,  fY_out,  fZ_out;
   Double32_t fPx_out, fPy_out, fPz_out;
+  Int_t fDetectorId;
 
-  Int_t fTrackID;        //track index
-  Int_t fVolumeID;       //volume index
-  Int_t fParentTrackID;  //parent track index
-  Int_t fTrackPID;       //particle identification
-  Int_t fTrackUniqueID;  //particle unique id
-
-  ClassDef(EnsarHPGeDetPoint,1)
-
+  ClassDef(EnsarHPGeDetPoint,2)  //se ha de canviar la version cada vez que se hace una modificacion grande
 };
 
 

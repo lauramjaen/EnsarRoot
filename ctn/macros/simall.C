@@ -22,27 +22,25 @@
 
 
 void simall(Int_t nEvents = 1,
-	    TObjArray& fDetList,
-            Bool_t fVis=kFALSE,
-            TString fMC="TGeant3",
-	    TString fGenerator="mygenerator",
-	    Bool_t fUserPList= kFALSE
-	   )
+            TMap* fDetList = NULL,
+            Bool_t fVis = kFALSE,
+            TString fMC = "TGeant3",
+            TString fGenerator = "box",
+            Bool_t fUserPList = kFALSE,
+            TString OutFile = "outsim.root",
+            TString ParFile = "outpar.root",
+            TString InFile = "evt_gen.dat")
 {
 
-
   TString dir = getenv("VMCWORKDIR");
-  TString simdir = dir + "/ctn/macros";
+  TString macrosdir = dir + "/ctn/macros/";
 
-  TString sim_geomdir = dir + "/geometry";
-  gSystem->Setenv("GEOMPATH",sim_geomdir.Data());
+  TString geomdir = dir + "/ctn/geometry/";
+  gSystem->Setenv("GEOMPATH",geomdir.Data());
 
-  TString sim_confdir = dir + "gconfig";
-  gSystem->Setenv("CONFIG_DIR",sim_confdir.Data());
+  TString confdir = dir + "gconfig";
+  gSystem->Setenv("CONFIG_DIR",confdir.Data());
 
-// Output files
-  TString OutFile = "outfile.root";
-  TString ParFile = "parfile.root";
 
 
   // In general, the following parts need not be touched
@@ -56,20 +54,24 @@ void simall(Int_t nEvents = 1,
   TStopwatch timer;
   timer.Start();
   // ------------------------------------------------------------------------
- 
+
+
   // -----   Create simulation run   ----------------------------------------
   FairRunSim* run = new FairRunSim();
-  run->SetName(fMC.Data());              // Transport engine
+  run->SetName(fMC.Data());                    // Transport engine
   run->SetOutputFile(OutFile.Data());          // Output file
   FairRuntimeDb* rtdb = run->GetRuntimeDb();
 
   //  R3B Special Physics List in G4 case
   if ( (fUserPList  == kTRUE ) &&
-       (fMC.CompareTo("TGeant4")   == 0)
-      ){
+       (fMC.CompareTo("TGeant4")   == 0)){
        run->SetUserConfig("g4Config.C");
        run->SetUserCuts("SetCuts.C");
    }
+
+
+  // -----   Create media   -------------------------------------------------
+  run->SetMaterials("media.geo");              // Materials
 
 
   // Global Transformations
@@ -91,26 +93,15 @@ void simall(Int_t nEvents = 1,
 
   // -----   Create geometry --------------------------------------------
 
-  if (fDetList.FindObject("HPGEDET") ) {
-      //My Detector definition
-      EnsarDetector* hpgedet = new EnsarHPGeDet("HPGeDet", kTRUE);
-      // Global position of the Module
-      phi   =  0.0; // (deg)
-      theta =  0.0; // (deg)
-      psi   =  0.0; // (deg)
-      // Rotation in Ref. Frame.
-      thetaX =  0.0; // (deg)
-      thetaY =  0.0; // (deg)
-      thetaZ =  0.0; // (deg)
-      // Global translation in Lab
-      tx    =  0.0; // (cm)
-      ty    =  0.0; // (cm)
-      tz    =  0.0; // (cm)
-      hpgedet->SetRotAnglesXYZ(thetaX,thetaY,thetaZ);
-      hpgedet->SetTranslation(tx,ty,tz);
-      ((EnsarHPGeDet*)hpgedet)->SetNonUniformity(0.5);
-      run->AddModule(hpgedet);
-  }
+  //R3B Cave definition
+  FairModule* cave= new FairCave("CAVE");
+  cave->SetGeometryFileName("cave.geo");
+  run->AddModule(cave);
+
+  //Detector definition
+  EnsarDetector* hpgedetector = new EnsarHPGeDet("EnsarHPGeDet",kTRUE);
+  hpgedetector->SetGeometryFileName(((TObjString*)fDetList->GetValue("HPGE"))->GetString().Data());
+  run->AddModule(hpgedetector);
 
 
   // -----   Create PrimaryGenerator   --------------------------------------
@@ -119,41 +110,41 @@ void simall(Int_t nEvents = 1,
   FairPrimaryGenerator* primGen = new FairPrimaryGenerator();
 
 
-  if (fGenerator.CompareTo("mygenerator") == 0  ) {
-  // 2- Define the generator
-  Double_t pdgId    = 22;   //geant particle id
-  Double_t theta1   = 0.;  // polar angle distribution (degrees)
-  Double_t theta2   = 180.;
-  Double_t momentum = 0.006068;  //  GeV/c 6048keV 
-  Int_t multiplicity = 1; // multiplicity (nb particles per event)
-  EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,multiplicity);
-  //boxGen->SetCosTheta   ();
+  if (fGenerator.CompareTo("box") == 0  ) {
+  // 2- Define the BOX generator
+  Int_t pdgId          = 22;              // geant particle id of the photon beam
+  Double32_t theta1    = 0.0;             // polar angle distribution (degrees)
+  Double32_t theta2    = 180.0;
+  Double32_t momentum  = 0.006068;        // GeV/c 6048keV energy of the beam
+  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,10);
   boxGen->SetThetaRange (theta1,theta2);
-  boxGen->SetPRange     (momentum,momentum);
-  boxGen->SetPhiRange   (0.,360.);
-  boxGen->SetXYZ(0.0,0.0,0.0);
+  boxGen->SetPRange     (0.001,0.01);// energy of the beam GeV/c
+  boxGen->SetPhiRange   (0.0,360.0);
+  boxGen->SetXYZ        (0.0,0.0,0.0);  // origin of the beam in the center
   //boxGen->SetRandomBeta(0.00,0.018);
   //boxGen->SetBeta(0.02);
+  
   // add the box generator
   primGen->AddGenerator(boxGen);
   } 
+  
+   if (fGenerator.CompareTo("ascii") == 0  ) {
+    FairAsciiGenerator* gen = new FairAsciiGenerator((dir+"/input/"+InFile).Data());
+    primGen->AddGenerator(gen);
+  }
   
   run->SetGenerator(primGen);
 
 
   //-------Set visualisation flag to true------------------------------------
-  if (fVis==kTRUE){
-     run->SetStoreTraj(kTRUE);
-  }else{
-     run->SetStoreTraj(kFALSE);
-  }   
+  run->SetStoreTraj(fVis);
+
+  FairLogger::GetLogger()->SetLogVerbosityLevel("LOW");
+
 
   // -----   Initialize simulation run   ------------------------------------
   run->Init();
 
-  // ------  Increase nb of step
-  Int_t nSteps = -15000;
-  gMC->SetMaxNStep(nSteps);
 
   // -----   Runtime database   ---------------------------------------------
   Bool_t kParameterMerged = kTRUE;
@@ -164,7 +155,9 @@ void simall(Int_t nEvents = 1,
   rtdb->print();
    
   // -----   Start run   ----------------------------------------------------
-  if (nEvents>0) run->Run(nEvents);
+   if(nEvents > 0) {
+    run->Run(nEvents);
+  }
   
   // -----   Finish   -------------------------------------------------------
   timer.Stop();

@@ -9,11 +9,11 @@
 #ifndef ENSARDETECTORLIST_H
 #define ENSARDETECTORLIST_H 1
 
-enum DetectorId { kUNKNOWN, kMYDET, kTSCINTDET, kTSILIDET, kCAL, kCALIFA, kRPC, kTra, kNAI };
+enum DetectorId { kUNKNOWN, kMYDET, kTSCINTDET, kTSILIDET, kCAL, kCALIFA, kRPC, kTra, kNAI, kHPGE };
     
 /** Unique identifier for Point and Hit types **/
 
-enum fDetectorType { kUnknown, kMyDetPoint, kTScintiDet, kTSiliDet, kCalPoint, kCalifaPoint, kRPCPoint, kRPCHit, kNAIPoint, kNAIHit };
+enum fDetectorType { kUnknown, kMyDetPoint, kTScintiDet, kTSiliDet, kCalPoint, kCalifaPoint, kRPCPoint, kRPCHit, kNAIPoint, kNAIHit, kHPGEPoint, kHPGEHit };
 
 enum SensorSide { kTOP, kBOTTOM };
 

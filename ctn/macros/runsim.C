@@ -13,73 +13,63 @@
 
 void runsim() {
 
-  
+  // Input files
+  TString EventFile = "evt_file.dat";
 
-   //-------------------------------------------------
-   // Monte Carlo type     |    fMC        (TString)
-   //-------------------------------------------------
-   //   Geant3:                 "TGeant3"
-   //   Geant4:                 "TGeant4"
-   //   Fluka :                 "TFluka"
+  // Output files
+  TString OutFile = "outsim.root";
+  TString ParFile = "outpar.root";
 
-   TString fMC ="TGeant4";
+  //-------------------------------------------------
+  // Monte Carlo type     |    fMC        (TString)
+  //-------------------------------------------------
+  //   Geant3:                 "TGeant3"
+  //   Geant4:                 "TGeant4"
+  //   Fluka :                 "TFluka"
+  TString fMC ="TGeant4";
 
-   //-------------------------------------------------
-   // Primaries generation
-   // Event Generator Type |   fGene       (TString)
-   //-------------------------------------------------
+  //-------------------------------------------------
+  // Primaries generation
+  // Event Generator Type |   fGene       (TString)
+  //-------------------------------------------------
+  // Box  generator:             "box"
+  // Ascii generator:          "ascii"
+  TString fGene="box";
 
-   TString fGene="mygenerator";
-
-   //-------------------------------------------------
-   // Secondaries  generation (G4 only)
-   // R3B Spec. PhysicList |     fUserPList (Bool_t)
-   // ----------------------------------------------
-   //     VMC Standard           kFALSE
-   //     R3B Special            kTRUE;
-
+  //-------------------------------------------------
+  // Secondaries  generation (G4 only)
+  // R3B Spec. PhysicList |     fUserPList (Bool_t)
+  // ----------------------------------------------
+  //     VMC Standard           kFALSE
+  //     R3B Special            kTRUE;
    Bool_t fUserPList= kTRUE;
 
 
-   //-------------------------------------------------
-   //- Geometrical Setup Definition
-   //-  Non Sensitive        |    fDetName (String)
-   //-------------------------------------------------
-   //   Target:                  
-   //   Magnet:                  
-   //-------------------------------------------------
-   //-  Sensitive            |    fDetName
-   //-------------------------------------------------
-   //   My Detector:                 MYDET
+  //-------------------------------------------------
+  //- Geometrical Setup Definition
+  //-  Non Sensitiv        |    fDetName (String)
+  //-------------------------------------------------
 
-    TObjString det0("HPGEDET");
-
-    TObjArray fDetList;
-    fDetList.Add(&det0);
+  TMap detGeo;
+  detGeo.Add(new TObjString("HPGE"),
+  	     new TObjString("HPGedetector_test.geo.root"));
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 1;
-   //Int_t nEvents = 1000;
+   Int_t nEvents = 10000;    //num de eventos que quieras
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-
    Bool_t fEventDisplay=kTRUE;
 
    // Main Sim function call
-   simall(  nEvents,
-            fDetList,
-	    fEventDisplay,
-	    fMC,
-	    fGene,
-	    fUserPList
-          );      
+   simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,
+	   OutFile, ParFile, EventFile);   // aqui se llama a la funcion simall.C    
 
 }
 

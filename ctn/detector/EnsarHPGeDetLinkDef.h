@@ -5,8 +5,6 @@
 #pragma link off all functions;
  
 #pragma link C++ class EnsarHPGeDet+;
-#pragma link C++ class EnsarHPGeDetPoint+;
-#pragma link C++ class EnsarHPGeDetHit+;
 
 #endif
 

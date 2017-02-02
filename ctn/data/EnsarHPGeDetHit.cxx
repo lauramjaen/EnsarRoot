@@ -12,41 +12,35 @@ using std::flush;
 
 
 // -----   Default constructor   -------------------------------------------
-EnsarHPGeDetHit::EnsarHPGeDetHit() : FairMultiLinkedData() {
-
-  fEnergy = -1;
-  fTime   = -1;
-  fEinc   = -1;
-  fNSteps = -1;
-
+EnsarHPGeDetHit::EnsarHPGeDetHit() 
+  : FairMultiLinkedData(),
+  fEnergy(-1.), fTime(-1.) 
+{
 }
 // -------------------------------------------------------------------------
 
 
 
 // -----   Standard constructor   ------------------------------------------
-EnsarHPGeDetHit::EnsarHPGeDetHit(Int_t trackID, Int_t volumeID,
-      Int_t trackPID, Int_t parentTrackID, Int_t uniqueID,
-      Double_t energy, Double_t time, Int_t steps, Double_t einc) 
-  : FairMultiLinkedData() {
-
-  fTrackID       = trackID;
-  fVolumeID      = volumeID;
-  fParentTrackID = parentTrackID; 
-  fTrackPID      = trackPID;
-  fTrackUniqueID = uniqueID;
-  fEnergy        = energy;
-  fTime          = time;
-  fEinc          = einc;
-  fNSteps        = steps;
-
+EnsarHPGeDetHit::EnsarHPGeDetHit(Double_t energy, Double_t time) 
+  : FairMultiLinkedData(),
+    fEnergy(energy), fTime(time)
+{
 }
 // -------------------------------------------------------------------------
 
+EnsarHPGeDetHit::EnsarHPGeDetHit(const EnsarHPGeDetHit& right)
+  : FairMultiLinkedData(right),
+    fEnergy(right.fEnergy), fTime(right.fTime)
+{
+}
+//--------------------------------------------------------------------------
 
 
 // -----   Destructor   ----------------------------------------------------
-EnsarHPGeDetHit::~EnsarHPGeDetHit() { }
+EnsarHPGeDetHit::~EnsarHPGeDetHit() 
+{
+}
 // -------------------------------------------------------------------------
 
 
@@ -54,12 +48,12 @@ EnsarHPGeDetHit::~EnsarHPGeDetHit() { }
 
 // -----   Public method Print   -------------------------------------------
 void EnsarHPGeDetHit::Print(const Option_t* opt) const {
-  cout << "-I- EnsarHPGeDetHit for track " << fTrackID 
-       << " in detector " << fVolumeID << endl;
-  cout << "    Time " << fTime << " ns, Energy loss " << fEnergy*1.0e06 << " keV" << endl;
+  cout << "-I- : EnsarHPGeDetHit a Hit in the HPGe detector with:" << endl;
+  cout << "    Energy = " << fEnergy << " GeV " << endl;
+  cout << "    Time =" << fTime << " ns  " << endl;
 }
 // -------------------------------------------------------------------------
 
 
-
 ClassImp(EnsarHPGeDetHit)
+

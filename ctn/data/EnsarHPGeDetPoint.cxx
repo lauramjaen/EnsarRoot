@@ -12,34 +12,32 @@ using std::flush;
 
 
 // -----   Default constructor   -------------------------------------------
-EnsarHPGeDetPoint::EnsarHPGeDetPoint() : FairMCPoint() {
-  fX_out      = fY_out  = fZ_out  = 0.;
-  fPx_out     = fPy_out = fPz_out = 0.;
-
+EnsarHPGeDetPoint::EnsarHPGeDetPoint() 
+: FairMCPoint(),
+ fX_out(0.), fY_out(0.), fZ_out(0.),
+ fPx_out(0.), fPy_out(0.), fPz_out(0.)
+{
 }
 // -------------------------------------------------------------------------
 
 
 
 // -----   Standard constructor   ------------------------------------------
-EnsarHPGeDetPoint::EnsarHPGeDetPoint(Int_t trackID, Int_t volumeID,
-                         Int_t trackPID, Int_t parentTrackID, Int_t uniqueID,
-                         TVector3 posIn,TVector3 posOut, TVector3 momIn, TVector3 momOut,
-			 Double_t tof, Double_t length, Double_t eLoss) 
-  : FairMCPoint(trackID, volumeID, posIn, momIn, tof, length, eLoss) {
-  fX_out  = posOut.X();
-  fY_out  = posOut.Y();
-  fZ_out  = posOut.Z();
-  fPx_out = momOut.Px();
-  fPy_out = momOut.Py();
-  fPz_out = momOut.Pz();
-  fTrackID       = trackID;
-  fVolumeID      = volumeID;
-  fParentTrackID = parentTrackID; 
-  fTrackPID      = trackPID;
-  fTrackUniqueID = uniqueID;
+EnsarHPGeDetPoint::EnsarHPGeDetPoint(Int_t trackID, Int_t detID, Int_t volid,
+  TVector3 posIn, TVector3 posOut, TVector3 momIn, TVector3 momOut,
+  Double_t tof, Double_t length, Double_t eLoss) 
+: FairMCPoint(trackID, detID, posIn, momIn, tof, length, eLoss),
+fX_out(posOut.X()), fY_out(posOut.Y()), fZ_out(posOut.Z()),
+fPx_out(momOut.Px()), fPy_out(momOut.Py()), fPz_out(momOut.Pz())
+{
+}
+// -------------------------------------------------------------------------
 
-
+EnsarHPGeDetPoint::EnsarHPGeDetPoint(const EnsarHPGeDetPoint& right)
+: FairMCPoint(right),
+fX_out(right.fX_out), fY_out(right.fY_out), fZ_out(right.fZ_out),
+fPx_out(right.fPx_out), fPy_out(right.fPy_out), fPz_out(right.fPz_out)
+{
 }
 // -------------------------------------------------------------------------
 
@@ -48,7 +46,6 @@ EnsarHPGeDetPoint::EnsarHPGeDetPoint(Int_t trackID, Int_t volumeID,
 // -----   Destructor   ----------------------------------------------------
 EnsarHPGeDetPoint::~EnsarHPGeDetPoint() { }
 // -------------------------------------------------------------------------
-
 
 
 
