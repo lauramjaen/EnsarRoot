@@ -217,12 +217,11 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
       fPosOut.SetZ(newpos[2]);
     }
 
-    RPCId = cpKIV*4096 + int((fPosIn.X()+6*11.6)/11.6)*64 + int((-fPosIn.Y()+5*11.3)/11.3);
+    RPCId = cpKIV*4096 + int((fPosIn.X()+6*12.6)/12.6)*64 + int((-fPosIn.Y()+5*12.1)/12.1);
     Row = (RPCId & 15) +1;
-    Column = ((RPCId & 960) >> 6) +1;
+    Column = ((RPCId & 960) >> 6)+1;
     Xcenter = 69.3-(12-Column)*12.6;
     Ycenter = 54.45-(Row-1)*12.10;
-
     AddHit(fTrackID, fVolumeID, RPCId,
            TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
            TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
