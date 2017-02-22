@@ -1,6 +1,7 @@
 # Create a library called "R3BCaloCal" which includes the source files given in
 # the array .
 # The extension is already found.  Any number of sources could be listed here.
+add_subdirectory (unpacker)
 
 Set(SYSTEM_INCLUDE_DIRECTORIES 
 ${SYSTEM_INCLUDE_DIRECTORIES}
@@ -45,14 +46,14 @@ unpack/R3BCaloRawHit.cxx
 unpack/R3BCaloUnpack.cxx
 unpack/R3BCaloUnpackPar.cxx
 unpack/R3BCaloRawAna.cxx
-unpack/R3BCaloCal.cxx
-unpack/R3BCaloCrystalAna.cxx
+#unpack/R3BCaloCal.cxx
+#unpack/R3BCaloCrystalAna.cxx
 )
 
 # fill list of header files from list of source files
 # by exchanging the file extension
 CHANGE_FILE_EXTENSION(*.cxx *.h HEADERS "${SRCS}")
-SET(HEADERS ${HEADERS} ${FAIRROOTPATH}/include/FairDbReader.h ${FAIRROOTPATH}/include/FairDbWriter.h)
+#SET(HEADERS ${HEADERS} ${FAIRROOTPATH}/include/FairDbReader.h ${FAIRROOTPATH}/include/FairDbWriter.h)
 
 set(LINKDEF R3BCaloCalLinkDef.h)
 set(LIBRARY_NAME R3BCaloCal)
