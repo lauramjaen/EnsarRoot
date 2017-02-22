@@ -49,7 +49,7 @@ void R3BCaloRawAna::Exec(Option_t *option)
     the->Fill(hit->GetEnergy());
     tht->Fill(hit->GetTime());
   }
-  if(0 == (fnEvents%100)) {
+  if(0 == (fnEvents%100) && false) {
     LOG(INFO) << fnEvents << " events, multiplicity:  " << nHits << FairLogger::endl;
   }
   fnEvents += 1;

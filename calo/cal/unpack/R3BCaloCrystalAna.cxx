@@ -50,7 +50,7 @@ void R3BCaloCrystalAna::Exec(Option_t *option)
     thNs->Fill(hit->GetNs());
     thTime->Fill(hit->GetTime());
   }
-  if(0 == (fnEvents%100)) {
+  if(0 == (fnEvents%100) && false) {
     LOG(INFO) << fnEvents << " events, multiplicity:  " << nHits << FairLogger::endl;
   }
   fnEvents += 1;

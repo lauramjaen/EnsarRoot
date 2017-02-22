@@ -30,15 +30,15 @@ set(LINK_DIRECTORIES
 ${ROOT_LIBRARY_DIR}
 ${FAIRROOT_LIBRARY_DIR}
 ) 
-
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
 #Put here your sourcefiles
 caloUnpack.cxx
+fixROOT.c
 )
 
 # fill list of header files from list of source files
 # by exchanging the file extension
 add_executable(caloUnpack ${SRCS} )
-target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl)
+target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl boost_program_options)

@@ -129,13 +129,17 @@ Bool_t R3BCaloUnpack::DoUnpack(Int_t *data, Int_t size) {
     
   ULong64_t rabbit0, rabbit1, rabbit2, rabbit3, rabbit4;
   ULong64_t check0, check1, check2, check3;
- 
-  l_s++; // skip first module id (should be 0x0300)
-  check0 = ( data[l_s] >> 16 ) & 0xffff;  rabbit1 =  data[l_s++] & 0xffff;
-  check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit2 =  data[l_s++] & 0xffff;
-  check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit3 =  data[l_s++] & 0xffff;
-  check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit4 =  data[l_s++] & 0xffff;
-  
+  uint16_t CALIFA_SYSTEM_ID=0x400;
+  while(data[l_s]==CALIFA_SYSTEM_ID)
+    {
+      LOG(DEBUG4)<<"system id="<<data[l_s]<< "\n";
+      l_s++; // skip first module id (should be 0x0300)
+      //      LOG(DEBUG4)<<"WRDATA" << data[l_s] << data[l_s+1] << data[l_s+2] << data[l_s+3]<< "\n";
+      check0 = ( data[l_s] >> 16 ) & 0xffff;  rabbit1 =  data[l_s++] & 0xffff;
+      check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit2 =  data[l_s++] & 0xffff;
+      check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit3 =  data[l_s++] & 0xffff;
+      check1 = ( data[l_s] >> 16 ) & 0xffff;  rabbit4 =  data[l_s++] & 0xffff;
+    }
   ULong64_t rabbitStamp = (rabbit4 << 48) | (rabbit3 << 32) | ( rabbit2 << 16 ) | rabbit1; 
  /* LOG(DEBUG) << "-------- EVENT ----------" << FairLogger::endl;
   LOG(DEBUG) << "whiteRabbit:" << rabbitStamp << FairLogger::endl;
@@ -180,10 +184,10 @@ Bool_t R3BCaloUnpack::DoUnpack(Int_t *data, Int_t size) {
 //      << "       data_size " << data_size << FairLogger::endl;
 
     
-    if(header_size != 0x34) {
-      LOG(WARNING) << "Wrong header size ( is " << header_size << ")" << FairLogger::endl;
-      break;
-    }
+    //  if(header_size != 0x35 ) {
+    //  LOG(WARNING) << "Wrong header size ( is " << header_size << ")" << FairLogger::endl;
+    //  break;
+    //}
     
     // Data reduction: size == 0 -> no more events
     if(data_size == 0) continue;
