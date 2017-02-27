@@ -112,17 +112,15 @@ void simall(Int_t nEvents = 1,
 
   if (fGenerator.CompareTo("box") == 0  ) {
   // 2- Define the BOX generator
-  Int_t pdgId          = 22;              // geant particle id of the photon beam
-  Double32_t theta1    = 0.0;             // polar angle distribution (degrees)
-  Double32_t theta2    = 180.0;
-  Double32_t momentum  = 0.006068;        // GeV/c 6048keV energy of the beam
-  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,10);
+  Int_t pdgId          = 22;            // geant particle id of the photon beam
+  Double32_t theta1    = 130.0;         // polar angle distribution (degrees)
+  Double32_t theta2    = 130.0;
+  Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
+  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,1);
   boxGen->SetThetaRange (theta1,theta2);
-  boxGen->SetPRange     (0.001,0.01);// energy of the beam GeV/c
-  boxGen->SetPhiRange   (0.0,360.0);
+  boxGen->SetPRange     (0.001,0.001);  // momentum of the beam GeV/c
+  boxGen->SetPhiRange   (90.0,90.0);
   boxGen->SetXYZ        (0.0,0.0,0.0);  // origin of the beam in the center
-  //boxGen->SetRandomBeta(0.00,0.018);
-  //boxGen->SetBeta(0.02);
   
   // add the box generator
   primGen->AddGenerator(boxGen);

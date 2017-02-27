@@ -374,7 +374,7 @@ void EnsarHPGeDet::ConstructGeometry()
 
 Bool_t EnsarHPGeDet::CheckIfSensitive(std::string name)
 {
-  if(TString(name).Contains("")) {
+  if(TString(name).Contains("GE_TUB")) {
     return kTRUE;
   }
   return kFALSE;

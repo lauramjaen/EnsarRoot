@@ -24,7 +24,7 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef);
 void ConstructGeometry(TGeoMedium *pMed, TGeoMedium *pMedAl, TGeoMedium *pMedSteel, TGeoMedium *pMedGe, TGeoMedium *pMedLi);// mirar be!!
 
 
-void create_test_geo(const char* geoTag = "test")
+void create_geo(const char* geoTag = "test")
 {
 	fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 
@@ -95,7 +95,7 @@ void create_test_geo(const char* geoTag = "test")
 	// --------------------------------------------------------------------------
 
 
-	if (0 == strncmp(geoTag, "test", 6))  ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi); 	
+	ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi); 	
 
 
 	// ---------------   Finish   ----------------------------------------------- OK
@@ -117,20 +117,6 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 	cout << "-I- R3BTest::ConstructGeometry() "<< endl;
 	cout << "-I- R3BTest  HPGe detector "<< endl;
 	cout << endl;
-
-
-
-
-	// ---------------------------------------------------------------------------------------------------------------------
-	/* Top Volume          ya esta creado arriba -> Create geometry and top volume
-	
-	TGeoVolume *top=gGeoManager->MakeBox("World",pMedVac,1000,1000,1000);
-	gGeoManager->SetTopVolume(top);
-	gGeoManager->SetTopVisible(0);
-	top->SetVisLeaves(kTRUE);*/
-	
-
-	// ----------------------------------------------
 
 	// ----------------------------------------------
 	// Auxiliar vacuum volume holding all important volumes as daugthers
@@ -195,12 +181,12 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 
 	// ----------------------------------------------
 	//Ge inactive layer: 2mm
-	TGeoVolume *ge_inac_tub1 = gGeoManager->MakeTube("GE_TUB1", pMedGe, 0.0, 3.2, 0.1);
+	TGeoVolume *ge_inac_tub1 = gGeoManager->MakeTube("GE_INAC_TUB1", pMedGe, 0.0, 3.13, 0.0875);
 	ge_inac_tub1->SetFillColor(50);
 	ge_inac_tub1->SetLineColor(50);
-	main_tube->AddNode(ge_inac_tub1,1,new TGeoTranslation(0,0,-2.68));
+	main_tube->AddNode(ge_inac_tub1,1,new TGeoTranslation(0,0,-2.6675));
 	ge_inac_tub1->SetVisLeaves(kTRUE);
-	TGeoVolume *ge_inac_tub2 = gGeoManager->MakeTube("GE_TUB2", pMedGe, 3.0, 3.2, 3.03);
+	TGeoVolume *ge_inac_tub2 = gGeoManager->MakeTube("GE_INAC_TUB2", pMedGe, 3.0, 3.13, 3.03);
 	ge_inac_tub2->SetFillColor(50);
 	ge_inac_tub2->SetLineColor(50);
 	main_tube->AddNode(ge_inac_tub2,1,new TGeoTranslation(0,0,0.475));
@@ -223,26 +209,11 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 
 
 	// ----------------------------------------------
-	// only linear translation
-	//top->AddNode(main_tube,1,new TGeoTranslation(0,0,8.855));
-	// ----------------------------------------------
-
-	// ----------------------------------------------
 	// detector at 130 degrees
 	TGeoRotation *rot     = new TGeoRotation("rot",0,220,0);
 	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",0,6.7833,-5.6919,rot);
-	gTop->AddNode(main_tube,1,comb);    //estamos añadiendo todos los tubos de ditintos materiales q estan dentro del main_tub dentro del volumen principal gtop
+	gTop->AddNode(main_tube,1,comb); 
 	// ----------------------------------------------
-
-
-	// ----------------------------------------------
-	// Adding sensitive volumes only de active region
-	//AddSensitiveVolume(ge_tub3);
-	//AddSensitiveVolume(ge_tub4);
-	// ----------------------------------------------
-
-
-	//--------------------------------------------------------------------------------------------------------------------
 
 
 

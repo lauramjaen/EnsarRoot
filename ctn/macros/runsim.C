@@ -4,7 +4,7 @@
 // Steering macro to main simall.C
 // Author: <pablo.cabanelas@usc.es>
 //
-// Last Update: 27/10/15
+// Last Update: 27/02/17
 //
 //
 //--------------------------------------------------------------------
@@ -52,13 +52,13 @@ void runsim() {
 
   TMap detGeo;
   detGeo.Add(new TObjString("HPGE"),
-  	     new TObjString("HPGedetector_test.geo.root"));
+  	     new TObjString("HPGedetector_single.geo.root"));
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 10000;    //num de eventos que quieras
+   Int_t nEvents = 100;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)
@@ -69,7 +69,7 @@ void runsim() {
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,
-	   OutFile, ParFile, EventFile);   // aqui se llama a la funcion simall.C    
+	   OutFile, ParFile, EventFile);
 
 }
 
