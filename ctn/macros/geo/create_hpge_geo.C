@@ -87,7 +87,7 @@ void create_geo(const char* geoTag = "test")
 
 	// --------------   Create geometry and top volume  ------------------------- OK
 	gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
-	gGeoMan->SetName("TARGETgeom");
+	gGeoMan->SetName("HPGEgeom");
 	gTop = new TGeoVolumeAssembly("TOP");
 	gGeoMan->SetTopVolume(gTop);
 	
@@ -114,14 +114,14 @@ void create_geo(const char* geoTag = "test")
 void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMedSteel, TGeoMedium *pMedGe, TGeoMedium *pMedLi)
 {
 	cout << endl;
-	cout << "-I- R3BTest::ConstructGeometry() "<< endl;
-	cout << "-I- R3BTest  HPGe detector "<< endl;
+	cout << "-I- Ensar::ConstructGeometry() "<< endl;
+	cout << "-I- Ensar  HPGe detector "<< endl;
 	cout << endl;
 
 	// ----------------------------------------------
 	// Auxiliar vacuum volume holding all important volumes as daugthers
 	// The easiest way to rotate all volumes to the final position
-	TGeoVolume *main_tube = gGeoManager->MakeTube("MAIN_TUBE",pMedVac,0.0,4.035,3.505);
+	TGeoVolume *main_tube = gGeoManager->MakeTube("CtnWorld",pMedVac,0.0,4.035,3.505);
 	main_tube->SetFillColor(5);
 	main_tube->SetLineColor(5);
 	main_tube->SetTransparency(70);

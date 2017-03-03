@@ -100,7 +100,7 @@ void EnsarHPGeDet::Initialize()
   LOG(INFO) << "HPGeDetector: initialisation" << FairLogger::endl;
   LOG(DEBUG) << "-I- HPGeDetector: Vol (McId) def" << FairLogger::endl;
 
-  TGeoVolume *vol = gGeoManager->GetVolume("MAIN_TUBE");
+  TGeoVolume *vol = gGeoManager->GetVolume("CtnWorld");
   vol->SetVisibility(kFALSE);
 }
 //-------------------------------------------------------------------------

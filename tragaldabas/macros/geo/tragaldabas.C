@@ -113,9 +113,6 @@ void tragaldabas(const char* geoTag = "")
   gGeoMan->SetTopVolume(top);
   // --------------------------------------------------------------------------
 
-  //WORLD
-  //TGeoVolume *pAWorld  =  top;
-  
   // Defintion of the Mother Volume (cube of 2.0 meters side)
   Double_t length = 400.;
   TGeoShape *pTragaShape = new TGeoBBox("Traga_boxOut",
@@ -136,10 +133,11 @@ void tragaldabas(const char* geoTag = "")
 
   TGeoRotation *rotUni = new TGeoRotation(); //unitary rotation  
 
-  pTragaWorld->AddNode(RPC_KeepInVolume,0,new TGeoCombiTrans(0.,0.,0.,rotUni)); 
-  pTragaWorld->AddNode(RPC_KeepInVolume,1,new TGeoCombiTrans(0.,0.,-52.2,rotUni)); 
-  pTragaWorld->AddNode(RPC_KeepInVolume,2,new TGeoCombiTrans(0.,0.,-90.2,rotUni)); 
-  pTragaWorld->AddNode(RPC_KeepInVolume,3,new TGeoCombiTrans(0.,0.,-173.9,rotUni)); 
+  //Origin of the ref system in the lab ground
+  pTragaWorld->AddNode(RPC_KeepInVolume,0,new TGeoCombiTrans(0.,0.,-187.3,rotUni)); 
+  pTragaWorld->AddNode(RPC_KeepInVolume,1,new TGeoCombiTrans(0.,0.,-134.8,rotUni)); 
+  pTragaWorld->AddNode(RPC_KeepInVolume,2,new TGeoCombiTrans(0.,0.,-96.9,rotUni)); 
+  pTragaWorld->AddNode(RPC_KeepInVolume,3,new TGeoCombiTrans(0.,0.,-13.2,rotUni)); 
 
   //Aluminum box containing the whole chamber, 3mm thick, laterals 5mm thick
   TGeoVolume *RPC_AluBox=gGeoManager->MakeBox("RPC_AluBox", pAluminiumMedium,
