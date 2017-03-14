@@ -42,6 +42,7 @@
 #include "TGeoArb8.h"
 #include "TGeoBoolNode.h"
 #include "TGeoCompositeShape.h"
+#include "TRandom3.h"
 
 using std::cout;
 using std::cerr;
@@ -234,10 +235,20 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     stack->AddPoint(kTra);
 
     //Adding a RPCHIT support
-    // Si el impacto ocurre en la zona activa, añadimos el hit
+    // If the impact occurs in the active zone, we create a hit
     if(IsInsideActiveZone(fPosIn.X(),fPosIn.Y(),Xcenter,Ycenter)){
     Int_t nHits = fRPCHitCollection->GetEntriesFast();
     Bool_t existHit = 0;
+
+    // Time correction: TimeMC+TimeInsidePad+Smearing
+    Double_t const c=30.0; // speed of light,c, in cm/ns 
+    Double_t const percentage = 0.6;  
+    Double_t vel=percentage*c; // signal velocity
+    Double_t sigT=0.05; // sigma in time (ns) 
+    // random variable for smearing
+    TRandom3 random; 
+    random.SetSeed(0);
+    fTime = fTime+TMath::Sqrt(fPosIn.X()*fPosIn.X()+fPosIn.Y()*fPosIn.Y())/vel+random.Gaus(0,sigT);
 
     if (nHits==0) AddRPCHit(RPCId, fELoss, fTime, fNSteps,
 				       fEinc, fTrackID, fVolumeID,
@@ -260,7 +271,7 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
 
     existHit=0;
 
-     }    //la llave acaba aqui
+     }    // active zone condition ends here
 
     ResetParameters();
   }
@@ -413,10 +424,9 @@ Bool_t TraRPC::CheckIfSensitive(std::string name)
 
 
 // -----   Private method IsInsideActiveZone   ----------------------------------
-// Vemos si esta en la zona activa
 Bool_t TraRPC::IsInsideActiveZone(Float_t PosX, Float_t PosY, Float_t Xcenter, Float_t Ycenter)
 {
-// Definimos los limites de la zona activa, usando el centro de la celda y las dimensiones del pad
+// We define the cell limits according to our dimmensions
 Float_t XSup = Xcenter+5.8;
 Float_t XInf = Xcenter-5.8;
 Float_t YSup = Ycenter+5.55;

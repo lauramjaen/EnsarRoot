@@ -98,10 +98,19 @@ void simall(Int_t nEvents = 1,
   cave->SetGeometryFileName("cave.geo");
   run->AddModule(cave);
 
-  //Detector definition
+  //HPGe Detector and chamber definition
   EnsarDetector* hpgedetector = new EnsarHPGeDet("EnsarHPGeDet",kTRUE);
   hpgedetector->SetGeometryFileName(((TObjString*)fDetList->GetValue("HPGE"))->GetString().Data());
   run->AddModule(hpgedetector);
+
+  // CALIFA definition
+  EnsarDetector* calo = new R3BCalo("Califa", kTRUE);
+  ((R3BCalo *)calo)->SelectGeometryVersion(10);
+  //Selecting the Non-uniformity of the crystals (1 means +-1% max deviation)
+  ((R3BCalo *)calo)->SetNonUniformity(1.0);
+  calo->SetGeometryFileName(((TObjString*)fDetList->GetValue("CALIFA"))->GetString().Data());
+  run->AddModule(calo);
+
 
 
   // -----   Create PrimaryGenerator   --------------------------------------

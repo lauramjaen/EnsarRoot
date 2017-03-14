@@ -41,4 +41,4 @@ fixROOT.c
 # fill list of header files from list of source files
 # by exchanging the file extension
 add_executable(caloUnpack ${SRCS} )
-target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl boost_program_options)
+target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl ${Boost_LIBRARIES})
