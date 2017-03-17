@@ -16,7 +16,7 @@
 #include "FairRunAna.h"
 #include "FairRuntimeDb.h"
 #include "FairLogger.h"
-
+#include <stdint.h>
 #include <iomanip>
 
 //Califa headers
@@ -24,12 +24,11 @@
 #include "R3BCaloUnpack.h"
 
 
-
 //------------------------
 /**
  * Constructor
  */
-R3BCaloUnpack::R3BCaloUnpack(char *strCalDir,
+R3BCaloUnpack::R3BCaloUnpack(const char *strCalDir,
                              Short_t type, Short_t subType,
                              Short_t procId,
                              Short_t subCrate, Short_t control)
@@ -38,6 +37,7 @@ R3BCaloUnpack::R3BCaloUnpack(char *strCalDir,
     fNHits(0),fCaloUnpackPar(0), nEvents(0)
 {
    LOG(DEBUG2) << "R3BCaloUnpack::ctor()" << FairLogger::endl;
+   LOG(INFO) << type <<", "<<subType  <<", "<<procId<<", "<<subCrate <<", "<<control << FairLogger::endl;
 }
 
 

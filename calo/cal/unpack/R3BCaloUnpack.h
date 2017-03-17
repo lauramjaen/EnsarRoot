@@ -39,7 +39,7 @@ static const int kTrace_head_t_size = 8;   // size of the header for the trace o
 class R3BCaloUnpack : public FairUnpack {
    public:
     //Constructor
-    R3BCaloUnpack(char *strCalDir,
+    R3BCaloUnpack(const char *strCalDir,
                   Short_t type = 10, Short_t subType = 1,
                   Short_t procId = 1,
                   Short_t subCrate = 0, Short_t control = 9);
