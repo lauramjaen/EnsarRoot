@@ -47,7 +47,7 @@ void R3BCaloRawAna::Exec(Option_t *option)
     hit = (R3BCaloRawHit*) fRawData->At(i);
     thc->Fill(hit->GetCrystalId());
     the->Fill(hit->GetEnergy());
-    tht->Fill(hit->GetTime());
+    tht->Fill(hit->GetWRTS());
   }
   if(0 == (fnEvents%100) && false) {
     LOG(INFO) << fnEvents << " events, multiplicity:  " << nHits << FairLogger::endl;
