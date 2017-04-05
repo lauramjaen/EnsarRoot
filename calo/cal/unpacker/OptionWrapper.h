@@ -158,10 +158,9 @@ struct SimpleWrapOuter
   //using TrivialWrap=SimpleWrapOuter<T>::SimpleWrap<>;
 template<class T>
 using TrivialWrap = typename SimpleWrapOuter<T>::template SimpleWrap<>;
+#define BOOST_PP_VARIADICS 1
 #include <boost/preprocessor/config/config.hpp>
 //#undef BOOST_PP_VARIADICS
-//#define BOOST_PP_VARIADICS 1
-
 
 #include <boost/preprocessor/tuple/to_list.hpp>
 #include <boost/preprocessor/list/transform.hpp>

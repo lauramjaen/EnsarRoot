@@ -92,7 +92,7 @@ public:
 
 
 template <class wrapped, class... stuff>
-struct Wrapper {};
+struct Wrapper; // no definition given, template specialize me!
 
 struct Global 
 {
@@ -224,9 +224,7 @@ template <>
 struct Wrapper<R3BCaloRawAna>: public TrivialWrap<R3BCaloRawAna> {};
 
 
-template <>
-struct Wrapper<R3BCaloCalibParFinder>: public TrivialWrap<R3BCaloCalibParFinder> {};
-
+//template <> struct Wrapper<R3BCaloCalibParFinder>: public TrivialWrap<R3BCaloCalibParFinder> {};
 
 template<class, class Enable=void>
 class RecursiveWrap;
