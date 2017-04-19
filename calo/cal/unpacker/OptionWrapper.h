@@ -7,8 +7,8 @@ template<class T>
 const std::basic_string<char> getName()
 {
   std::string s=std::string(__PRETTY_FUNCTION__);
-  int start=s.find("T =");
-  int end=s.find("]");
+  unsigned int start=s.find("T =");
+  unsigned int end=s.find("]");
   if (start!=std::string::npos && end!=std::string::npos)
     {
       start+=4; //"T = "

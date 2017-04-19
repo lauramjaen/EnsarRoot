@@ -106,7 +106,8 @@
 #include "R3BCaloCrystalHit.h"
 #include "R3BCaloCrystalHitSim.h"
 #include "R3BGeoCaloPar.h"
-#include "R3BMCStack.h"
+
+#include "EnsarMCStack.h"
 
 #include "FairGeoInterface.h"
 #include "FairGeoLoader.h"
@@ -816,7 +817,7 @@ Bool_t R3BCalo::ProcessHits(FairVolume* vol)
            fTime, fLength, fELoss, fNf, fNs);
     
     // Increment number of CaloPoints for this track
-    R3BStack* stack = (R3BStack*) gMC->GetStack();
+    EnsarMCStack* stack = (EnsarMCStack*) gMC->GetStack();
     stack->AddPoint(kCALIFA);
     
     //Adding a crystalHit support

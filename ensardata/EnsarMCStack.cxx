@@ -9,7 +9,7 @@
 #include "EnsarMCTrack.h"
 #include "FairRootManager.h"
 
-#include "R3BCaloCrystalHitSim.h"
+#include "../calo/data/R3BCaloCrystalHitSim.h"
 
 #include "TError.h"
 #include "TLorentzVector.h"
@@ -271,7 +271,7 @@ void EnsarMCStack::FillTrackArray() {
 void EnsarMCStack::UpdateTrackIndex(TRefArray* detList) {
   
   if ( fMinPoints == 0 ) return;
-  LOG(INFO) << "R3BStack: Updating track indizes...";
+  LOG(INFO) << "EnsarStack: Updating track indizes...";
   Int_t nColl = 0;
   
   // First update mother ID in MCTracks
@@ -280,7 +280,7 @@ void EnsarMCStack::UpdateTrackIndex(TRefArray* detList) {
     Int_t iMotherOld = track->GetMotherId();
     fIndexIter = fIndexMap.find(iMotherOld);
     if (fIndexIter == fIndexMap.end()) {
-      LOG(FATAL) << "R3BStack: Particle index " << iMotherOld
+      LOG(FATAL) << "EnsarStack: Particle index " << iMotherOld
       << " not found in dex map! " << FairLogger::endl;
     }
     track->SetMotherId( (*fIndexIter).second );
@@ -304,14 +304,14 @@ void EnsarMCStack::UpdateTrackIndex(TRefArray* detList) {
         FairMCPoint* point = (FairMCPoint*)hitArray->At(iPoint);
         Int_t iTrack = point->GetTrackID();
         
-        LOG(DEBUG) << "R3BMCStack TrackID Get : " << iTrack << FairLogger::endl;
+        LOG(DEBUG) << "EnsarMCStack TrackID Get : " << iTrack << FairLogger::endl;
         
         fIndexIter = fIndexMap.find(iTrack);
         if (fIndexIter == fIndexMap.end()) {
-          LOG(FATAL) << "R3BStack: Particle index " << iTrack
+          LOG(FATAL) << "EnsarStack: Particle index " << iTrack
           << " not found in index map! " << FairLogger::endl;
         }
-        LOG(DEBUG) << "R3BMCStack TrackID Set : " << (*fIndexIter).second << FairLogger::endl;
+        LOG(DEBUG) << "EnsarMCStack TrackID Set : " << (*fIndexIter).second << FairLogger::endl;
         //	if ( ((*fIndexIter).second ) < 0 ) {
         //	   point->SetTrackID(iTrack);
         //	}else{
@@ -333,7 +333,7 @@ void EnsarMCStack::UpdateTrackIndex(TRefArray* detList) {
         
         fIndexIter = fIndexMap.find(iTrack);
         if (fIndexIter == fIndexMap.end()) {
-          LOG(FATAL) << "R3BStack: Particle index " << iTrack
+          LOG(FATAL) << "EnsarStack: Particle index " << iTrack
           << " not found in index map! " << FairLogger::endl;
         }
         //	if ( ((*fIndexIter).second ) < 0 ) {

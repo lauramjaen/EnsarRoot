@@ -11,8 +11,8 @@ set(INCLUDE_DIRECTORIES
 ${ROOT_INCLUDE_DIR}
 ${PLUTO_INCLUDE_DIR} 
 ${BASE_INCLUDE_DIRECTORIES}
+${ENSARROOT_SOURCE_DIR}/ensardata  
 ${ENSARROOT_SOURCE_DIR}/calo/data  
-${ENSARROOT_SOURCE_DIR}/calo/data/caloData  
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})
@@ -26,20 +26,17 @@ ${FAIRROOT_LIBRARY_DIR}
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
-R3BMCStack.cxx
-R3BMCTrack.cxx
-caloData/R3BCaloCrystalHit.cxx
-caloData/R3BCaloCrystalHitSim.cxx
-caloData/R3BCaloHit.cxx
-caloData/R3BCaloHitSim.cxx
-caloData/R3BCaloPoint.cxx 
+R3BCaloCrystalHit.cxx
+R3BCaloCrystalHitSim.cxx
+R3BCaloHit.cxx
+R3BCaloHitSim.cxx
+R3BCaloPoint.cxx 
 )
 
 
 # fill list of header files from list of source files
 # by exchanging the file extension
 CHANGE_FILE_EXTENSION(*.cxx *.h HEADERS "${SRCS}")
-SET(HEADERS ${HEADERS} R3BDetectorList.h )
 
 set(LINKDEF  R3BDataLinkDef.h)
 set(LIBRARY_NAME R3BCaloData)

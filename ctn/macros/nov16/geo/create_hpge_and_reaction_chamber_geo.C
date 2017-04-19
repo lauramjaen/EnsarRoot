@@ -134,7 +134,7 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 	
 	
         // Defintion of the Mother Volume
-        Double_t length = 200.;
+        Double_t length = 40.;
         TGeoShape *pCtnWorld = new TGeoBBox("CtnWorldBox",length/2.0,length/2.0,length/2.0);
         TGeoVolume* pWorld = new TGeoVolume("CtnWorld", pCtnWorld, pMedAir);
         TGeoCombiTrans *t0 = new TGeoCombiTrans();

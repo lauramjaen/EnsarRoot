@@ -14,8 +14,8 @@ ${ROOT_INCLUDE_DIR}
 #put here all directories where header files are located
 ${ENSARROOT_SOURCE_DIR}/calo/cal
 ${ENSARROOT_SOURCE_DIR}/calo/cal/unpack
+${ENSARROOT_SOURCE_DIR}/calo/cal/unpacker
 ${ENSARROOT_SOURCE_DIR}/calo/data
-${ENSARROOT_SOURCE_DIR}/calo/data/caloData
 ${ENSARROOT_SOURCE_DIR}/calo/db
 ${ENSARROOT_SOURCE_DIR}/calo/commondb
 ${ENSARROOT_SOURCE_DIR}/calo/passive 

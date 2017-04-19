@@ -15,6 +15,7 @@
 #include "FairRunAna.h"
 #include "FairRuntimeDb.h"
 #include "FairLogger.h"
+#include "FairRunOnline.h"
 
 #include "TGeoManager.h"
 

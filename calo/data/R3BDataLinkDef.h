@@ -6,9 +6,6 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class R3BStack+;
-#pragma link C++ class R3BMCTrack+;
-
 #pragma link C++ class R3BCaloCrystalHit+;
 #pragma link C++ class R3BCaloCrystalHitSim+;
 #pragma link C++ class R3BCaloHit+;
