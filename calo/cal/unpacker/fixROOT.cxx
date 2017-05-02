@@ -6,7 +6,9 @@
  Yes, this is messy. Clean, ROOT, working. Pick two. 
 */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #include <dlfcn.h>
 //#define _FCNTL_H
 //#include <bits/fcntl.h>
