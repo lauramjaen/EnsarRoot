@@ -10,18 +10,7 @@
 #define _GNU_SOURCE
 #endif
 #include <dlfcn.h>
-//#define _FCNTL_H
-//#include <bits/fcntl.h>
-#define _SIGNAL_H
-typedef int __pid_t;
-typedef unsigned int __uid_t;
-typedef long int __clock_t;
-#include <bits/sigset.h>
-#include <bits/siginfo.h>
-#include <asm-generic/signal-defs.h>
-#include <bits/sigaction.h>
-#include <bits/signum.h>
-
+#include <signal.h>
 
 int sigaction(int signum, const struct sigaction *act,
                      struct sigaction *oldact)
