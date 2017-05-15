@@ -41,7 +41,7 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef);
 // sectors 1 and 4 and a double petal in sector 3 (sectors start at zero).
 // --------------------------------------------------------------------------
 //Int_t petals[6]={2,0,1,1,1,0};
-Int_t petals[6]={0,0,0,0,1,1};
+Int_t petals[6]={0,0,0,0,1,0};
 // --------------------------------------------------------------------------
 // The Demonstrator stand permits a flexible positioning of the petals.
 // A rotation and translation PER PETAL can be defined. This transformation
@@ -55,9 +55,8 @@ TGeoCombiTrans matDemo_1(0., 0., 0., new TGeoRotation("rotDemo_1", 0., 0., 0.));
 TGeoCombiTrans matDemo_2(0., 0., 0., new TGeoRotation("rotDemo_2", 0., 0., 0.));
 TGeoCombiTrans matDemo_3(0., 0., 0., new TGeoRotation("rotDemo_3", 0., 0., 0.));
 TGeoCombiTrans matDemo_4(0., 0., 0., new TGeoRotation("rotDemo_4", 0., 0., 0.));
-
-TGeoCombiTrans matDemo_5(-17.78, 3., -5., new TGeoRotation("rotDemo_5", -90., 150., 0.)); //specific orientation to Petal 5 exp Nov.16 Lisbon 
-TGeoCombiTrans matDemo_6(-3., 3., 6.38, new TGeoRotation("rotDemo_6", 270., 65., 0.));    //specific orientation to Petal 6 exp Nov.16 Lisbon 
+TGeoCombiTrans matDemo_5(0.6, 25., -47., new TGeoRotation("rotDemo_5", 0., 90., 7.));  //specific orientation to Petal inside his BOX
+TGeoCombiTrans matDemo_6(0., 0., 0., new TGeoRotation("rotDemo_6", 0., 0., 0.));
 
 /*
 // EXAMPLE: S438B 
@@ -138,6 +137,18 @@ void create_califa_geo(const char* geoTag)
   geoBuild->createMedium(mAl);
   TGeoMedium* pAlHousing = gGeoMan->GetMedium("aluminium");
   if ( ! pAlHousing ) Fatal("Main", "Medium aluminium not found");
+  
+  FairGeoMedium* mAl_5083      = geoMedia->getMedium("Al5083");
+  if ( ! mAl_5083 ) Fatal("Main", "FairMedium Al5083 not found");
+  geoBuild->createMedium(mAl_5083);
+  TGeoMedium* pAl_5083 = gGeoMan->GetMedium("Al5083");
+  if ( ! pAl_5083 ) Fatal("Main", "Medium Al5083 not found");
+  
+  FairGeoMedium* mmylar      = geoMedia->getMedium("mylar");
+  if ( ! mmylar ) Fatal("Main", "FairMedium mylar not found");
+  geoBuild->createMedium(mmylar);
+  TGeoMedium* pmylar = gGeoMan->GetMedium("mylar");
+  if ( ! pmylar ) Fatal("Main", "Medium mylar not found");
   // --------------------------------------------------------------------------
   
   
@@ -156,36 +167,159 @@ void create_califa_geo(const char* geoTag)
 					length/2.0,
 					length/2.0,
 					length/2.0);
+					
+  TGeoShape *middle = new TGeoBBox("Califa_middle", 19., 19., 19.);
   
+  TGeoCombiTrans *middle_part = new TGeoCombiTrans("middle_part",0.,0.,0.,fRefRot);
+  middle_part->RegisterYourself();
   
-  TGeoShape *pCBWorldIn1 = new TGeoTube("Califa_Centerpart1",  // hole to accommodate the tracker
-					0.,  // Rmin
-					26.4, // Rmax
-					100./2.0);  // half length shortened by 5cm
-  
-  TGeoCombiTrans *t_part1 = new TGeoCombiTrans("t_part1",0.,0.,-50,fRefRot);
-  t_part1->RegisterYourself();
-  
-  TGeoShape *pCBCone = new TGeoCone("Califa_Cone",20.,0.,26.4,0.,3.2);
-  TGeoCombiTrans *t_cone = new TGeoCombiTrans("t_cone",0.,0.,20,fRefRot);
-  t_cone->RegisterYourself();
-  
-  TGeoShape *pCBWorldIn2 = new TGeoTube("Califa_Centerpart2",  // hole to accommodate the pipe through the end-cap
-					0.,  // Rmin
-					3.2,  // Rmax
-					60./2.0);  // half length
-  TGeoCombiTrans *t_part2 = new TGeoCombiTrans("t_part2",0.,0.,70,fRefRot);
-  t_part2->RegisterYourself();
-  
-  TGeoCompositeShape *pCBWorld = new TGeoCompositeShape("Califa_box", " Califa_boxOut - (Califa_Centerpart1:t_part1 + Califa_Centerpart2:t_part2 + Califa_Cone:t_cone)");
+  TGeoCompositeShape *pCBWorld = new TGeoCompositeShape("Califa_box", " Califa_boxOut - Califa_middle:middle_part");
   
   TGeoVolume* pWorld = new TGeoVolume("CalifaWorld", pCBWorld, pAirMedium);
+   
+  
+  //-------------------------------------------------------------------------------------
+  // BOX PETALS --- Box as TRAPEZOID shape
+ 
+  //-------------------------------
+  //Trapezoid outer 
+  TGeoVolume *trap_out = gGeoManager->MakeArb8("trap_out", pAl_5083, 18.15);
+   trap_out->SetFillColor(kRed);
+   trap_out->SetLineColor(kRed);
+   TGeoArb8 *arb_out = (TGeoArb8*)trap_out->GetShape();
+   arb_out->SetVertex(0, 7.,-27.5);
+   arb_out->SetVertex(1, -7.,-27.5);
+   arb_out->SetVertex(2, -7.,27.5);
+   arb_out->SetVertex(3, 7., 27.5);
+   arb_out->SetVertex(4, 14.25,-27.5);
+   arb_out->SetVertex(5, -14.25,-27.5);
+   arb_out->SetVertex(6, -14.25,27.5);
+   arb_out->SetVertex(7, 14.25,27.5);
+  //--------------------------------
+   
+  //Trapezoid inner --Air
+   TGeoVolume *trap_in = gGeoManager->MakeArb8("trap_in", pAirMedium, 18.15);
+   trap_in->SetFillColor(kBlue);
+   trap_in->SetLineColor(kBlue);
+   TGeoArb8 *arb_in = (TGeoArb8*)trap_in->GetShape();
+   arb_in->SetVertex(0, 6.5,-27.);
+   arb_in->SetVertex(1, -6.5,-27.);
+   arb_in->SetVertex(2, -6.5,27.);
+   arb_in->SetVertex(3, 6.5, 27.);
+   arb_in->SetVertex(4, 13.75,-27.);
+   arb_in->SetVertex(5, -13.75,-27.);
+   arb_in->SetVertex(6, -13.75,27.);
+   arb_in->SetVertex(7, 13.75,27.);
+  //--------------------------------
+   
+  
+  //down BASE of mylar
+   TGeoVolume* base_mylar = gGeoManager->MakeBox("base_mylar", pmylar, 6., 27., 0.00015);
+   base_mylar->SetFillColor(5);
+   base_mylar->SetLineColor(5);
+  
+   TGeoTranslation *trans_base_mylar = new TGeoTranslation(0.,0.,-18.14985);
+   trap_in->AddNode(base_mylar,1,trans_base_mylar);
+   base_mylar->SetVisLeaves(kTRUE);
+  //--------------------------------
+ 
+ 
+  //upper BASE of 5083-Aluminium as trapezoid
+   TGeoVolume *base_al = gGeoManager->MakeArb8("base_al", pAl_5083, 3.);
+   base_al->SetFillColor(kRed);
+   base_al->SetLineColor(kRed);
+   TGeoArb8 *arb_base_al = (TGeoArb8*)base_al->GetShape();
+   arb_base_al->SetVertex(0, 12.,-27.);
+   arb_base_al->SetVertex(1, -12.,-27.);
+   arb_base_al->SetVertex(2, -12.,27.);
+   arb_base_al->SetVertex(3, 12.,27.);
+   arb_base_al->SetVertex(4, 13.,-27.);
+   arb_base_al->SetVertex(5, -13.,-27.);
+   arb_base_al->SetVertex(6, -13.,27.);
+   arb_base_al->SetVertex(7, 13.,27.);
+  //--------------------------------
+   
+  
+   //BOX air 1 with TAP of Steel 
+   TGeoVolume* hole_air = gGeoManager->MakeBox("hole_air", pAirMedium, 10.5, 9.75, 2);
+   hole_air->SetFillColor(18);
+   hole_air->SetLineColor(18);
+  
+   TGeoVolume* tap = gGeoManager->MakeBox("tap", pAl_5083, 7.8, 7.8, 0.15);
+   tap->SetFillColor(16);
+   tap->SetLineColor(16);
+   TGeoTranslation *trans_tap = new TGeoTranslation(0,0,-1.85);
+   hole_air->AddNode(tap,1,trans_tap);
+   tap->SetVisLeaves(kTRUE);
+  
+   TGeoTranslation *trans_hole_1 = new TGeoTranslation(0,-11.75,1);
+   TGeoTranslation *trans_hole_2 = new TGeoTranslation(0,11.75,1);
+   base_al->AddNode(hole_air,1,trans_hole_1);
+   base_al->AddNode(hole_air,2,trans_hole_2);
+   hole_air->SetVisLeaves(kTRUE);
+  //--------------------------------
+  
+  //BOX air 2 (down)
+   TGeoVolume* hole_air_down = gGeoManager->MakeBox("hole_air_down", pAirMedium, 6.1, 6.1, 1);
+   hole_air_down->SetFillColor(18);
+   hole_air_down->SetLineColor(18);
+  
+   TGeoTranslation *trans_hole_down_1 = new TGeoTranslation(0,-11.75,-2);
+   TGeoTranslation *trans_hole_down_2 = new TGeoTranslation(0,11.75,-2);
+   base_al->AddNode(hole_air_down,1,trans_hole_down_1);
+   base_al->AddNode(hole_air_down,2,trans_hole_down_2);
+   hole_air_down->SetVisLeaves(kTRUE);
+  //--------------------------------
+   
+   TGeoTranslation *trans_base_al = new TGeoTranslation(0.,0.,15.15);
+   trap_in->AddNode(base_al,1,trans_base_al);
+   base_al->SetVisLeaves(kTRUE);
+  //--------------------------------
+  
+  //BAR of the corners 
+   TGeoVolume *trap_bar = gGeoManager->MakeArb8("trap_bar", pAl_5083, 15.15);
+   trap_bar->SetFillColor(kRed);
+   trap_bar->SetLineColor(kRed);
+   TGeoArb8 *arb_bar = (TGeoArb8*)trap_bar->GetShape();
+   arb_bar->SetVertex(0, 1.875,1.);
+   arb_bar->SetVertex(1, 1.875,-1.);
+   arb_bar->SetVertex(2, 4.375,-1.);
+   arb_bar->SetVertex(3, 4.375,1.);
+   arb_bar->SetVertex(4, -4.375,1.);
+   arb_bar->SetVertex(5, -4.375,-1.);
+   arb_bar->SetVertex(6, -1.875,-1.);
+   arb_bar->SetVertex(7, -1.875,1.);
+   
+   TGeoVolume *trap_bar_rot = gGeoManager->MakeArb8("trap_bar_rot", pAl_5083, 15.15);
+   trap_bar_rot->SetFillColor(kRed);
+   trap_bar_rot->SetLineColor(kRed);
+   TGeoArb8 *arb_bar_rot = (TGeoArb8*)trap_bar_rot->GetShape();
+   arb_bar_rot->SetVertex(0, -1.875,1.);
+   arb_bar_rot->SetVertex(1, -1.875,-1.);
+   arb_bar_rot->SetVertex(2, -4.375,-1.);
+   arb_bar_rot->SetVertex(3, -4.375,1.);
+   arb_bar_rot->SetVertex(4, 4.375,1.);
+   arb_bar_rot->SetVertex(5, 4.375,-1.);
+   arb_bar_rot->SetVertex(6, 1.875,-1.);
+   arb_bar_rot->SetVertex(7, 1.875,1.);
+   
+   trap_in->AddNode(trap_bar_rot,1,new TGeoTranslation(8.175,26.,-3.));//A
+   trap_in->AddNode(trap_bar_rot,2,new TGeoTranslation(8.175,-26.,-3.));//D
+   trap_bar_rot->SetVisLeaves(kTRUE);
+   trap_in->AddNode(trap_bar,1,new TGeoTranslation(-8.175,26.,-3.));//B
+   trap_in->AddNode(trap_bar,2,new TGeoTranslation(-8.175,-26.,-3.));//C
+   trap_bar->SetVisLeaves(kTRUE);
+   //--------------------------------
+  
+  
+  //-------------------------------------------------------------------------------------
+  
   
   TGeoCombiTrans *t0 = new TGeoCombiTrans();
   TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
   
   // add the sphere as Mother Volume
-  top->AddNode(pWorld, 0, pGlobalc);
+  top->AddNode(pWorld, 0, pGlobalc); 
   
   
   //Color of endcap in visualization
@@ -682,121 +816,15 @@ void create_califa_geo(const char* geoTag)
   //Positioning in space of alveoli
   Double_t phiEuler=0; Double_t thetaEuler=0; Double_t psiEuler=0;
   Double_t rotAngle=0;
-  phiEuler = 180;
+  phiEuler = 180.;
   thetaEuler = 180.*TMath::ATan2(-0.1275567287250409800,0.9918312764563167500)/TMath::Pi();
   psiEuler = -180;
+  
 
   TGeoRotation *rotAlv_9 = new TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler);
   TGeoCombiTrans *transAlvBase = new TGeoCombiTrans();
   TGeoRotation *rotPlace_9 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_9_0 = new TGeoCombiTrans(-2.98999999999993,30.3953961794098,4.44438599416416,rotAlv_9);
-    *transAlvBase =  (*transAlv_9_0) * (*transDef) ;
-    rotPlace_9->SetAngles(0., 0., 0.);
-    *transAlv_9_0 =  (*rotPlace_9) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,0,transAlv_9_0);
-    TGeoCombiTrans* transAlv_9_1 = new TGeoCombiTrans();
-    rotAlv_9->SetAngles(-11.25, 0., 0.);
-    *transAlv_9_1 = (*rotPlace_9) * matDemo_1 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,1,transAlv_9_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_9_2 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_9_2 = (*rotPlace_9) * matDemo_1 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,2,transAlv_9_2); 
-      TGeoCombiTrans* transAlv_9_3 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_9_3 = (*rotPlace_9) * matDemo_1 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,3,transAlv_9_3); 
-    }
-  }
-  
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector	 
-    *rotAlv_9 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_9_4 = new TGeoCombiTrans(-2.98999999999993,30.3953961794098,4.44438599416416,rotAlv_9);    
-    rotPlace_9->SetAngles(0., 0., 0.);
-    *transAlvBase = (*transAlv_9_4) * (*transDef) ;
-    *transAlv_9_4 =  (*rotPlace_9) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,4,transAlv_9_4);
-    TGeoCombiTrans* transAlv_9_5 = new TGeoCombiTrans();
-    rotAlv_9->SetAngles(-11.25, 0., 0.);
-    *transAlv_9_5 = (*rotPlace_9) * matDemo_2 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,5,transAlv_9_5);
-    if(petals[1]>1){
-      //second half of double petal in second sector
-      TGeoCombiTrans* transAlv_9_6 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_9_6 = (*rotPlace_9) * matDemo_2 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,6,transAlv_9_6); 
-      
-      TGeoCombiTrans* transAlv_9_7 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_9_7 = (*rotPlace_9) * matDemo_2 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,7,transAlv_9_7); 
-    }
-  }
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_9 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler);
-    TGeoCombiTrans* transAlv_9_8 = new TGeoCombiTrans(-2.98999999999993,30.3953961794098,4.44438599416416,rotAlv_9);
-    *transAlvBase =  (*transAlv_9_8) * (*transDef) ;
-    rotPlace_9->SetAngles(0., 0., 0.);
-    *transAlv_9_8 =  (*rotPlace_9) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,8,transAlv_9_8);
-    
-    TGeoCombiTrans* transAlv_9_9 = new TGeoCombiTrans();
-    rotAlv_9->SetAngles(-11.25, 0., 0.);
-    *transAlv_9_9 = (*rotPlace_9) * matDemo_3 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,9,transAlv_9_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_9_10 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_9_10 = (*rotPlace_9) * matDemo_3 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,10,transAlv_9_10); 
-      
-      TGeoCombiTrans* transAlv_9_11 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_9_11 = (*rotPlace_9) * matDemo_3 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,11,transAlv_9_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_9 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_9_12 = new TGeoCombiTrans(-2.98999999999993,30.3953961794098,4.44438599416416,rotAlv_9);
-    *transAlvBase =  (*transAlv_9_12) * (*transDef) ;
-    rotPlace_9->SetAngles(0., 0., 0.);
-    *transAlv_9_12 =  (*rotPlace_9) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,12,transAlv_9_12);
-    
-    TGeoCombiTrans* transAlv_9_13 = new TGeoCombiTrans();
-    rotAlv_9->SetAngles(-11.25, 0., 0.);
-    *transAlv_9_13 = (*rotPlace_9) * matDemo_4 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,13,transAlv_9_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_9_14 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_9_14 = (*rotPlace_9) * matDemo_4 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,14,transAlv_9_14); 
-      
-      TGeoCombiTrans* transAlv_9_15 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_9_15 = (*rotPlace_9) * matDemo_4 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,15,transAlv_9_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -806,12 +834,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_9_16) * (*transDef) ;
     rotPlace_9->SetAngles(0., 0., 0.);
     *transAlv_9_16 =  (*rotPlace_9) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,16,transAlv_9_16);
+    //pWorld->AddNode(Alveolus_9,16,transAlv_9_16);
+    trap_in->AddNode(Alveolus_9,16, transAlv_9_16);
     
     TGeoCombiTrans* transAlv_9_17 = new TGeoCombiTrans();
     rotAlv_9->SetAngles(-11.25, 0., 0.);
     *transAlv_9_17 = (*rotPlace_9) * matDemo_5 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,17,transAlv_9_17);
+    //pWorld->AddNode(Alveolus_9,17,transAlv_9_17);
+    trap_in->AddNode(Alveolus_9,17,transAlv_9_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_9_18 = new TGeoCombiTrans();
@@ -826,34 +856,6 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_9 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_9_20 = new TGeoCombiTrans(-2.98999999999993,30.3953961794098,4.44438599416416,rotAlv_9);
-    *transAlvBase =  (*transAlv_9_20) * (*transDef) ;
-    rotPlace_9->SetAngles(0., 0., 0.);
-    *transAlv_9_20 =  (*rotPlace_9) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,20,transAlv_9_20);
-    
-    TGeoCombiTrans* transAlv_9_21 = new TGeoCombiTrans();
-    rotAlv_9->SetAngles(-11.25, 0., 0.);
-    *transAlv_9_21 = (*rotPlace_9) * matDemo_6 * (*rotAlv_9) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_9,21,transAlv_9_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_9_22 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_9_22 = (*rotPlace_9) * matDemo_6 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,22,transAlv_9_22); 
-      
-      TGeoCombiTrans* transAlv_9_23 = new TGeoCombiTrans();
-      rotAlv_9->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_9_23 = (*rotPlace_9) * matDemo_6 * (*rotAlv_9) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_9,23,transAlv_9_23); 
-    }
-  }
-  
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.2131210329617397300,0.9770258058563863200)/TMath::Pi();
   psiEuler = -180;
@@ -861,113 +863,6 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_10 = new TGeoRotation("rotAlv10",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_10 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_10_0 = new TGeoCombiTrans(-3.01649999999993,30.6605329493663,7.63929090825073,rotAlv_10);
-    *transAlvBase =  (*transAlv_10_0) * (*transDef) ;
-    rotPlace_10->SetAngles(0., 0., 0.);
-    *transAlv_10_0 =  (*rotPlace_10) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,0,transAlv_10_0);
-    TGeoCombiTrans* transAlv_10_1 = new TGeoCombiTrans();
-    rotAlv_10->SetAngles(-11.25, 0., 0.);
-    *transAlv_10_1 = (*rotPlace_10) * matDemo_1 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,1,transAlv_10_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_10_2 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_10_2 = (*rotPlace_10) * matDemo_1 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,2,transAlv_10_2); 
-      TGeoCombiTrans* transAlv_10_3 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_10_3 = (*rotPlace_10) * matDemo_1 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,3,transAlv_10_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_10 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_10_4 = new TGeoCombiTrans(-3.01649999999993,30.6605329493663,7.63929090825073,rotAlv_10);
-    *transAlvBase =  (*transAlv_10_4) * (*transDef) ;
-    rotPlace_10->SetAngles(0., 0., 0.);
-    *transAlv_10_4 =  (*rotPlace_10) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,4,transAlv_10_4);
-    TGeoCombiTrans* transAlv_10_5 = new TGeoCombiTrans();
-    rotAlv_10->SetAngles(-11.25, 0., 0.);
-    *transAlv_10_5 = (*rotPlace_10) * matDemo_2 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,5,transAlv_10_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_10_6 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_10_6 = (*rotPlace_10) * matDemo_2 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,6,transAlv_10_6); 
-      TGeoCombiTrans* transAlv_10_7 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_10_7 = (*rotPlace_10) * matDemo_2 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,7,transAlv_10_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_10 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_10_8 = new TGeoCombiTrans(-3.01649999999993,30.6605329493663,7.63929090825073,rotAlv_10);
-    *transAlvBase =  (*transAlv_10_8) * (*transDef) ;
-    rotPlace_10->SetAngles(0., 0., 0.);
-    *transAlv_10_8 =  (*rotPlace_10) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,8,transAlv_10_8);
-    
-    TGeoCombiTrans* transAlv_10_9 = new TGeoCombiTrans();
-    rotAlv_10->SetAngles(-11.25, 0., 0.);
-    *transAlv_10_9 = (*rotPlace_10) * matDemo_3 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,9,transAlv_10_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_10_10 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_10_10 = (*rotPlace_10) * matDemo_3 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,10,transAlv_10_10); 
-      
-      TGeoCombiTrans* transAlv_10_11 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_10_11 = (*rotPlace_10) * matDemo_3 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,11,transAlv_10_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_10 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_10_12 = new TGeoCombiTrans(-3.01649999999993,30.6605329493663,7.63929090825073,rotAlv_10);
-    *transAlvBase =  (*transAlv_10_12) * (*transDef) ;
-    rotPlace_10->SetAngles(0., 0., 0.);
-    *transAlv_10_12 =  (*rotPlace_10) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,12,transAlv_10_12);
-    
-    TGeoCombiTrans* transAlv_10_13 = new TGeoCombiTrans();
-    rotAlv_10->SetAngles(-11.25, 0., 0.);
-    *transAlv_10_13 = (*rotPlace_10) * matDemo_4 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,13,transAlv_10_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_10_14 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_10_14 = (*rotPlace_10) * matDemo_4 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,14,transAlv_10_14); 
-      
-      TGeoCombiTrans* transAlv_10_15 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_10_15 = (*rotPlace_10) * matDemo_4 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,15,transAlv_10_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -977,12 +872,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_10_16) * (*transDef) ;
     rotPlace_10->SetAngles(0., 0., 0.);
     *transAlv_10_16 =  (*rotPlace_10) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,16,transAlv_10_16);
+    //pWorld->AddNode(Alveolus_10,16,transAlv_10_16);
+    trap_in->AddNode(Alveolus_10,16,transAlv_10_16);
     
     TGeoCombiTrans* transAlv_10_17 = new TGeoCombiTrans();
     rotAlv_10->SetAngles(-11.25, 0., 0.);
     *transAlv_10_17 = (*rotPlace_10) * matDemo_5 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,17,transAlv_10_17);
+    //pWorld->AddNode(Alveolus_10,17,transAlv_10_17);
+    trap_in->AddNode(Alveolus_10,17,transAlv_10_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_10_18 = new TGeoCombiTrans();
@@ -997,35 +894,6 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_10 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_10_20 = new TGeoCombiTrans(-3.01649999999993,30.6605329493663,7.63929090825073,rotAlv_10);
-    *transAlvBase =  (*transAlv_10_20) * (*transDef) ;
-    rotPlace_10->SetAngles(0., 0., 0.);
-    *transAlv_10_20 =  (*rotPlace_10) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,20,transAlv_10_20);
-    
-    TGeoCombiTrans* transAlv_10_21 = new TGeoCombiTrans();
-    rotAlv_10->SetAngles(-11.25, 0., 0.);
-    *transAlv_10_21 = (*rotPlace_10) * matDemo_6 * (*rotAlv_10) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_10,21,transAlv_10_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_10_22 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_10_22 = (*rotPlace_10) * matDemo_6 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,22,transAlv_10_22); 
-      
-      TGeoCombiTrans* transAlv_10_23 = new TGeoCombiTrans();
-      rotAlv_10->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_10_23 = (*rotPlace_10) * matDemo_6 * (*rotAlv_10) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_10,23,transAlv_10_23); 
-    }
-  }
-
-
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.2971184379757390000,0.9548406326790127600)/TMath::Pi();
   psiEuler = -180;
@@ -1033,114 +901,7 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_11 = new TGeoRotation("rotAlv11",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_11 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_11_0 = new TGeoCombiTrans(-3.04199999999993,30.9206806111464,10.9180918399028,rotAlv_11);
-    *transAlvBase =  (*transAlv_11_0) * (*transDef) ;
-    rotPlace_11->SetAngles(0., 0., 0.);
-    *transAlv_11_0 =  (*rotPlace_11) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,0,transAlv_11_0);
-    TGeoCombiTrans* transAlv_11_1 = new TGeoCombiTrans();
-    rotAlv_11->SetAngles(-11.25, 0., 0.);
-    *transAlv_11_1 = (*rotPlace_11) * matDemo_1 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,1,transAlv_11_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_11_2 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_11_2 = (*rotPlace_11) * matDemo_1 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,2,transAlv_11_2); 
-      TGeoCombiTrans* transAlv_11_3 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_11_3 = (*rotPlace_11) * matDemo_1 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,3,transAlv_11_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_11 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_11_4 = new TGeoCombiTrans(-3.04199999999993,30.9206806111464,10.9180918399028,rotAlv_11);
-    *transAlvBase =  (*transAlv_11_4) * (*transDef) ;
-    rotPlace_11->SetAngles(0., 0., 0.);
-    *transAlv_11_4 =  (*rotPlace_11) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,4,transAlv_11_4);
-    TGeoCombiTrans* transAlv_11_5 = new TGeoCombiTrans();
-    rotAlv_11->SetAngles(-11.25, 0., 0.);
-    *transAlv_11_5 = (*rotPlace_11) * matDemo_2 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,5,transAlv_11_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_11_6 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_11_6 = (*rotPlace_11) * matDemo_2 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,6,transAlv_11_6); 
-      TGeoCombiTrans* transAlv_11_7 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_11_7 = (*rotPlace_11) * matDemo_2 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,7,transAlv_11_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_11 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_11_8 = new TGeoCombiTrans(-3.04199999999993,30.9206806111464,10.9180918399028,rotAlv_11);
-    *transAlvBase =  (*transAlv_11_8) * (*transDef) ;
-    rotPlace_11->SetAngles(0., 0., 0.);
-    *transAlv_11_8 =  (*rotPlace_11) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,8,transAlv_11_8);
-    
-    TGeoCombiTrans* transAlv_11_9 = new TGeoCombiTrans();
-    rotAlv_11->SetAngles(-11.25, 0., 0.);
-    *transAlv_11_9 = (*rotPlace_11) * matDemo_3 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,9,transAlv_11_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_11_10 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_11_10 = (*rotPlace_11) * matDemo_3 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,10,transAlv_11_10); 
-      
-      TGeoCombiTrans* transAlv_11_11 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_11_11 = (*rotPlace_11) * matDemo_3 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,11,transAlv_11_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector    
-    *rotAlv_11 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_11_12 = new TGeoCombiTrans(-3.04199999999993,30.9206806111464,10.9180918399028,rotAlv_11);
-    *transAlvBase =  (*transAlv_11_12) * (*transDef) ;
-    rotPlace_11->SetAngles(0., 0., 0.);
-    *transAlv_11_12 =  (*rotPlace_11) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,12,transAlv_11_12);
-    
-    TGeoCombiTrans* transAlv_11_13 = new TGeoCombiTrans();
-    rotAlv_11->SetAngles(-11.25, 0., 0.);
-    *transAlv_11_13 = (*rotPlace_11) * matDemo_4 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,13,transAlv_11_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_11_14 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_11_14 = (*rotPlace_11) * matDemo_4 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,14,transAlv_11_14); 
-      
-      TGeoCombiTrans* transAlv_11_15 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_11_15 = (*rotPlace_11) * matDemo_4 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,15,transAlv_11_15); 
-    }
-  }
-  
+ 
   if(petals[4]>0){
     //Fifth sector
     //single petal or first half of double petal in fifth sector
@@ -1149,12 +910,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_11_16) * (*transDef) ;
     rotPlace_11->SetAngles(0., 0., 0.);
     *transAlv_11_16 =  (*rotPlace_11) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,16,transAlv_11_16);
+    //pWorld->AddNode(Alveolus_11,16,transAlv_11_16);
+    trap_in->AddNode(Alveolus_11,16,transAlv_11_16);
     
     TGeoCombiTrans* transAlv_11_17 = new TGeoCombiTrans();
     rotAlv_11->SetAngles(-11.25, 0., 0.);
     *transAlv_11_17 = (*rotPlace_11) * matDemo_5 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,17,transAlv_11_17);
+    //pWorld->AddNode(Alveolus_11,17,transAlv_11_17);
+    trap_in->AddNode(Alveolus_11,17,transAlv_11_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_11_18 = new TGeoCombiTrans();
@@ -1169,34 +932,7 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_11 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_11_20 = new TGeoCombiTrans(-3.04199999999993,30.9206806111464,10.9180918399028,rotAlv_11);
-    *transAlvBase =  (*transAlv_11_20) * (*transDef) ;
-    rotPlace_11->SetAngles(0., 0., 0.);
-    *transAlv_11_20 =  (*rotPlace_11) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,20,transAlv_11_20);
-    
-    TGeoCombiTrans* transAlv_11_21 = new TGeoCombiTrans();
-    rotAlv_11->SetAngles(-11.25, 0., 0.);
-    *transAlv_11_21 = (*rotPlace_11) * matDemo_6 * (*rotAlv_11) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_11,21,transAlv_11_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_11_22 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_11_22 = (*rotPlace_11) * matDemo_6 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,22,transAlv_11_22); 
-      
-      TGeoCombiTrans* transAlv_11_23 = new TGeoCombiTrans();
-      rotAlv_11->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_11_23 = (*rotPlace_11) * matDemo_6 * (*rotAlv_11) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_11,23,transAlv_11_23); 
-    }
-  }
-  
+ 
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.3788871076768108300,0.9254428991765514300)/TMath::Pi();
   psiEuler = -180;
@@ -1204,114 +940,7 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_12 = new TGeoRotation("rotAlv12",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_12 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_12_0 = new TGeoCombiTrans(-3.06749999999993,31.1737346881315,14.3082258908461,rotAlv_12);
-    *transAlvBase =  (*transAlv_12_0) * (*transDef) ;
-    rotPlace_12->SetAngles(0., 0., 0.);
-    *transAlv_12_0 =  (*rotPlace_12) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,0,transAlv_12_0);
-    TGeoCombiTrans* transAlv_12_1 = new TGeoCombiTrans();
-    rotAlv_12->SetAngles(-11.25, 0., 0.);
-    *transAlv_12_1 = (*rotPlace_12) * matDemo_1 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,1,transAlv_12_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_12_2 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_12_2 = (*rotPlace_12) * matDemo_1 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,2,transAlv_12_2); 
-      TGeoCombiTrans* transAlv_12_3 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_12_3 = (*rotPlace_12) * matDemo_1 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,3,transAlv_12_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_12 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_12_4 = new TGeoCombiTrans(-3.06749999999993,31.1737346881315,14.3082258908461,rotAlv_12);
-    *transAlvBase =  (*transAlv_12_4) * (*transDef) ;
-    rotPlace_12->SetAngles(0., 0., 0.);
-    *transAlv_12_4 =  (*rotPlace_12) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,4,transAlv_12_4);
-    TGeoCombiTrans* transAlv_12_5 = new TGeoCombiTrans();
-    rotAlv_12->SetAngles(-11.25, 0., 0.);
-    *transAlv_12_5 = (*rotPlace_12) * matDemo_2 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,5,transAlv_12_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_12_6 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_12_6 = (*rotPlace_12) * matDemo_2 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,6,transAlv_12_6); 
-      TGeoCombiTrans* transAlv_12_7 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_12_7 = (*rotPlace_12) * matDemo_2 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,7,transAlv_12_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_12 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_12_8 = new TGeoCombiTrans(-3.06749999999993,31.1737346881315,14.3082258908461,rotAlv_12);
-    *transAlvBase =  (*transAlv_12_8) * (*transDef) ;
-    rotPlace_12->SetAngles(0., 0., 0.);
-    *transAlv_12_8 =  (*rotPlace_12) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,8,transAlv_12_8);
     
-    TGeoCombiTrans* transAlv_12_9 = new TGeoCombiTrans();
-    rotAlv_12->SetAngles(-11.25, 0., 0.);
-    *transAlv_12_9 = (*rotPlace_12) * matDemo_3 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,9,transAlv_12_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_12_10 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_12_10 = (*rotPlace_12) * matDemo_3 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,10,transAlv_12_10); 
-      
-      TGeoCombiTrans* transAlv_12_11 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_12_11 = (*rotPlace_12) * matDemo_3 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,11,transAlv_12_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_12 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_12_12 = new TGeoCombiTrans(-3.06749999999993,31.1737346881315,14.3082258908461,rotAlv_12);
-    *transAlvBase =  (*transAlv_12_12) * (*transDef) ;
-    rotPlace_12->SetAngles(0., 0., 0.);
-    *transAlv_12_12 =  (*rotPlace_12) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,12,transAlv_12_12);
-    
-    TGeoCombiTrans* transAlv_12_13 = new TGeoCombiTrans();
-    rotAlv_12->SetAngles(-11.25, 0., 0.);
-    *transAlv_12_13 = (*rotPlace_12) * matDemo_4 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,13,transAlv_12_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_12_14 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_12_14 = (*rotPlace_12) * matDemo_4 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,14,transAlv_12_14); 
-      
-      TGeoCombiTrans* transAlv_12_15 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_12_15 = (*rotPlace_12) * matDemo_4 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,15,transAlv_12_15); 
-    }
-  }
-  
   if(petals[4]>0){
     //Fifth sector
     //single petal or first half of double petal in fifth sector
@@ -1320,12 +949,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_12_16) * (*transDef) ;
     rotPlace_12->SetAngles(0., 0., 0.);
     *transAlv_12_16 =  (*rotPlace_12) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,16,transAlv_12_16);
+    //pWorld->AddNode(Alveolus_12,16,transAlv_12_16);
+    trap_in->AddNode(Alveolus_12,16,transAlv_12_16);
     
     TGeoCombiTrans* transAlv_12_17 = new TGeoCombiTrans();
     rotAlv_12->SetAngles(-11.25, 0., 0.);
     *transAlv_12_17 = (*rotPlace_12) * matDemo_5 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,17,transAlv_12_17);
+    //pWorld->AddNode(Alveolus_12,17,transAlv_12_17);
+    trap_in->AddNode(Alveolus_12,17,transAlv_12_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_12_18 = new TGeoCombiTrans();
@@ -1340,34 +971,6 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_12 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_12_20 = new TGeoCombiTrans(-3.06749999999993,31.1737346881315,14.3082258908461,rotAlv_12);
-    *transAlvBase =  (*transAlv_12_20) * (*transDef) ;
-    rotPlace_12->SetAngles(0., 0., 0.);
-    *transAlv_12_20 =  (*rotPlace_12) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,20,transAlv_12_20);
-    
-    TGeoCombiTrans* transAlv_12_21 = new TGeoCombiTrans();
-    rotAlv_12->SetAngles(-11.25, 0., 0.);
-    *transAlv_12_21 = (*rotPlace_12) * matDemo_6 * (*rotAlv_12) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_12,21,transAlv_12_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_12_22 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_12_22 = (*rotPlace_12) * matDemo_6 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,22,transAlv_12_22); 
-      
-      TGeoCombiTrans* transAlv_12_23 = new TGeoCombiTrans();
-      rotAlv_12->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_12_23 = (*rotPlace_12) * matDemo_6 * (*rotAlv_12) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_12,23,transAlv_12_23); 
-    }
-  }
-
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.4578676224535794800,0.8890203823921623000)/TMath::Pi();
   psiEuler = -180;
@@ -1375,113 +978,7 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_13 = new TGeoRotation("rotAlv13",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_13 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_13_0 = new TGeoCombiTrans(-3.09099999999993,31.417956426523,17.8408437262792,rotAlv_13);
-    *transAlvBase =  (*transAlv_13_0) * (*transDef) ;
-    rotPlace_13->SetAngles(0., 0., 0.);
-    *transAlv_13_0 =  (*rotPlace_13) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,0,transAlv_13_0);
-    TGeoCombiTrans* transAlv_13_1 = new TGeoCombiTrans();
-    rotAlv_13->SetAngles(-11.25, 0., 0.);
-    *transAlv_13_1 = (*rotPlace_13) * matDemo_1 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,1,transAlv_13_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_13_2 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_13_2 = (*rotPlace_13) * matDemo_1 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,2,transAlv_13_2); 
-      TGeoCombiTrans* transAlv_13_3 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_13_3 = (*rotPlace_13) * matDemo_1 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,3,transAlv_13_3); 
-    }
-  }
 
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_13 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_13_4 = new TGeoCombiTrans(-3.09099999999993,31.417956426523,17.8408437262792,rotAlv_13);
-    *transAlvBase =  (*transAlv_13_4) * (*transDef) ;
-    rotPlace_13->SetAngles(0., 0., 0.);
-    *transAlv_13_4 =  (*rotPlace_13) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,4,transAlv_13_4);
-    TGeoCombiTrans* transAlv_13_5 = new TGeoCombiTrans();
-    rotAlv_13->SetAngles(-11.25, 0., 0.);
-    *transAlv_13_5 = (*rotPlace_13) * matDemo_2 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,5,transAlv_13_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_13_6 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_13_6 = (*rotPlace_13) * matDemo_2 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,6,transAlv_13_6); 
-      TGeoCombiTrans* transAlv_13_7 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_13_7 = (*rotPlace_13) * matDemo_2 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,7,transAlv_13_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_13 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_13_8 = new TGeoCombiTrans(-3.09099999999993,31.417956426523,17.8408437262792,rotAlv_13);
-    *transAlvBase =  (*transAlv_13_8) * (*transDef) ;
-    rotPlace_13->SetAngles(0., 0., 0.);
-    *transAlv_13_8 =  (*rotPlace_13) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,8,transAlv_13_8);
-    
-    TGeoCombiTrans* transAlv_13_9 = new TGeoCombiTrans();
-    rotAlv_13->SetAngles(-11.25, 0., 0.);
-    *transAlv_13_9 = (*rotPlace_13) * matDemo_3 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,9,transAlv_13_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_13_10 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_13_10 = (*rotPlace_13) * matDemo_3 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,10,transAlv_13_10); 
-      
-      TGeoCombiTrans* transAlv_13_11 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_13_11 = (*rotPlace_13) * matDemo_3 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,11,transAlv_13_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_13 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_13_12 = new TGeoCombiTrans(-3.09099999999993,31.417956426523,17.8408437262792,rotAlv_13);
-    *transAlvBase =  (*transAlv_13_12) * (*transDef) ;
-    rotPlace_13->SetAngles(0., 0., 0.);
-    *transAlv_13_12 =  (*rotPlace_13) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,12,transAlv_13_12);
-    
-    TGeoCombiTrans* transAlv_13_13 = new TGeoCombiTrans();
-    rotAlv_13->SetAngles(-11.25, 0., 0.);
-    *transAlv_13_13 = (*rotPlace_13) * matDemo_4 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,13,transAlv_13_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_13_14 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_13_14 = (*rotPlace_13) * matDemo_4 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,14,transAlv_13_14); 
-      
-      TGeoCombiTrans* transAlv_13_15 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_13_15 = (*rotPlace_13) * matDemo_4 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,15,transAlv_13_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -1491,12 +988,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_13_16) * (*transDef) ;
     rotPlace_13->SetAngles(0., 0., 0.);
     *transAlv_13_16 =  (*rotPlace_13) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,16,transAlv_13_16);
+    //pWorld->AddNode(Alveolus_13,16,transAlv_13_16);
+    trap_in->AddNode(Alveolus_13,16,transAlv_13_16);
     
     TGeoCombiTrans* transAlv_13_17 = new TGeoCombiTrans();
     rotAlv_13->SetAngles(-11.25, 0., 0.);
     *transAlv_13_17 = (*rotPlace_13) * matDemo_5 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,17,transAlv_13_17);
+    //pWorld->AddNode(Alveolus_13,17,transAlv_13_17);
+    trap_in->AddNode(Alveolus_13,17,transAlv_13_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_13_18 = new TGeoCombiTrans();
@@ -1511,33 +1010,6 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_13 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_13_20 = new TGeoCombiTrans(-3.09099999999993,31.417956426523,17.8408437262792,rotAlv_13);
-    *transAlvBase =  (*transAlv_13_20) * (*transDef) ;
-    rotPlace_13->SetAngles(0., 0., 0.);
-    *transAlv_13_20 =  (*rotPlace_13) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,20,transAlv_13_20);
-    
-    TGeoCombiTrans* transAlv_13_21 = new TGeoCombiTrans();
-    rotAlv_13->SetAngles(-11.25, 0., 0.);
-    *transAlv_13_21 = (*rotPlace_13) * matDemo_6 * (*rotAlv_13) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_13,21,transAlv_13_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_13_22 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_13_22 = (*rotPlace_13) * matDemo_6 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,22,transAlv_13_22); 
-      
-      TGeoCombiTrans* transAlv_13_23 = new TGeoCombiTrans();
-      rotAlv_13->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_13_23 = (*rotPlace_13) * matDemo_6 * (*rotAlv_13) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_13,23,transAlv_13_23); 
-    }
-  }
 
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.5334425026911959700,0.8458363295121305000)/TMath::Pi();
@@ -1546,113 +1018,6 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_14 = new TGeoRotation("rotAlv14",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_14 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_14_0 = new TGeoCombiTrans(-3.11449999999993,33.343093197755,22.6194116972268,rotAlv_14);
-    *transAlvBase =  (*transAlv_14_0) * (*transDef) ;
-    rotPlace_14->SetAngles(0., 0., 0.);
-    *transAlv_14_0 =  (*rotPlace_14) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,0,transAlv_14_0);
-    TGeoCombiTrans* transAlv_14_1 = new TGeoCombiTrans();
-    rotAlv_14->SetAngles(-11.25, 0., 0.);
-    *transAlv_14_1 = (*rotPlace_14) * matDemo_1 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,1,transAlv_14_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_14_2 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_14_2 = (*rotPlace_14) * matDemo_1 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,2,transAlv_14_2); 
-      TGeoCombiTrans* transAlv_14_3 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_14_3 = (*rotPlace_14) * matDemo_1 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,3,transAlv_14_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_14 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_14_4 = new TGeoCombiTrans(-3.11449999999993,33.343093197755,22.6194116972268,rotAlv_14);
-    *transAlvBase =  (*transAlv_14_4) * (*transDef) ;
-    rotPlace_14->SetAngles(0., 0., 0.);
-    *transAlv_14_4 =  (*rotPlace_14) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,4,transAlv_14_4);
-    TGeoCombiTrans* transAlv_14_5 = new TGeoCombiTrans();
-    rotAlv_14->SetAngles(-11.25, 0., 0.);
-    *transAlv_14_5 = (*rotPlace_14) * matDemo_2 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,5,transAlv_14_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_14_6 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_14_6 = (*rotPlace_14) * matDemo_2 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,6,transAlv_14_6); 
-      TGeoCombiTrans* transAlv_14_7 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_14_7 = (*rotPlace_14) * matDemo_2 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,7,transAlv_14_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_14 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_14_8 = new TGeoCombiTrans(-3.11449999999993,33.343093197755,22.6194116972268,rotAlv_14);
-    *transAlvBase =  (*transAlv_14_8) * (*transDef) ;
-    rotPlace_14->SetAngles(0., 0., 0.);
-    *transAlv_14_8 =  (*rotPlace_14) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,8,transAlv_14_8);
-    
-    TGeoCombiTrans* transAlv_14_9 = new TGeoCombiTrans();
-    rotAlv_14->SetAngles(-11.25, 0., 0.);
-    *transAlv_14_9 = (*rotPlace_14) * matDemo_3 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,9,transAlv_14_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_14_10 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_14_10 = (*rotPlace_14) * matDemo_3 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,10,transAlv_14_10); 
-      
-      TGeoCombiTrans* transAlv_14_11 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_14_11 = (*rotPlace_14) * matDemo_3 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,11,transAlv_14_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_14 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_14_12 = new TGeoCombiTrans(-3.11449999999993,33.343093197755,22.6194116972268,rotAlv_14);
-    *transAlvBase =  (*transAlv_14_12) * (*transDef) ;
-    rotPlace_14->SetAngles(0., 0., 0.);
-    *transAlv_14_12 =  (*rotPlace_14) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,12,transAlv_14_12);
-    
-    TGeoCombiTrans* transAlv_14_13 = new TGeoCombiTrans();
-    rotAlv_14->SetAngles(-11.25, 0., 0.);
-    *transAlv_14_13 = (*rotPlace_14) * matDemo_4 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,13,transAlv_14_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_14_14 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_14_14 = (*rotPlace_14) * matDemo_4 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,14,transAlv_14_14); 
-      
-      TGeoCombiTrans* transAlv_14_15 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_14_15 = (*rotPlace_14) * matDemo_4 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,15,transAlv_14_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -1662,12 +1027,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_14_16) * (*transDef) ;
     rotPlace_14->SetAngles(0., 0., 0.);
     *transAlv_14_16 =  (*rotPlace_14) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,16,transAlv_14_16);
+    //pWorld->AddNode(Alveolus_14,16,transAlv_14_16);
+    trap_in->AddNode(Alveolus_14,16,transAlv_14_16);
     
     TGeoCombiTrans* transAlv_14_17 = new TGeoCombiTrans();
     rotAlv_14->SetAngles(-11.25, 0., 0.);
     *transAlv_14_17 = (*rotPlace_14) * matDemo_5 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,17,transAlv_14_17);
+    //pWorld->AddNode(Alveolus_14,17,transAlv_14_17);
+    trap_in->AddNode(Alveolus_14,17,transAlv_14_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_14_18 = new TGeoCombiTrans();
@@ -1681,34 +1048,7 @@ void create_califa_geo(const char* geoTag)
       pWorld->AddNode(Alveolus_14,19,transAlv_14_19); 
     }
   }
-  
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_14 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_14_20 = new TGeoCombiTrans(-3.11449999999993,33.343093197755,22.6194116972268,rotAlv_14);
-    *transAlvBase =  (*transAlv_14_20) * (*transDef) ;
-    rotPlace_14->SetAngles(0., 0., 0.);
-    *transAlv_14_20 =  (*rotPlace_14) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,20,transAlv_14_20);
-    
-    TGeoCombiTrans* transAlv_14_21 = new TGeoCombiTrans();
-    rotAlv_14->SetAngles(-11.25, 0., 0.);
-    *transAlv_14_21 = (*rotPlace_14) * matDemo_6 * (*rotAlv_14) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_14,21,transAlv_14_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_14_22 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_14_22 = (*rotPlace_14) * matDemo_6 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,22,transAlv_14_22); 
-      
-      TGeoCombiTrans* transAlv_14_23 = new TGeoCombiTrans();
-      rotAlv_14->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_14_23 = (*rotPlace_14) * matDemo_6 * (*rotAlv_14) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_14,23,transAlv_14_23); 
-    }
-  }
+ 
 
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.6050038521676790500,0.7962225435531633500)/TMath::Pi();
@@ -1716,114 +1056,6 @@ void create_califa_geo(const char* geoTag)
 
   TGeoRotation *rotAlv_15 = new TGeoRotation("rotAlv15",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_15 = new TGeoRotation();
-
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_15_0 = new TGeoCombiTrans(-3.13549999999993,33.4646558050777,26.6976862352101,rotAlv_15);
-    *transAlvBase =  (*transAlv_15_0) * (*transDef) ;
-    rotPlace_15->SetAngles(0., 0., 0.);
-    *transAlv_15_0 =  (*rotPlace_15) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,0,transAlv_15_0);
-    TGeoCombiTrans* transAlv_15_1 = new TGeoCombiTrans();
-    rotAlv_15->SetAngles(-11.25, 0., 0.);
-    *transAlv_15_1 = (*rotPlace_15) * matDemo_1 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,1,transAlv_15_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_15_2 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_15_2 = (*rotPlace_15) * matDemo_1 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,2,transAlv_15_2); 
-      TGeoCombiTrans* transAlv_15_3 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_15_3 = (*rotPlace_15) * matDemo_1 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,3,transAlv_15_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_15 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_15_4 = new TGeoCombiTrans(-3.13549999999993,33.4646558050777,26.6976862352101,rotAlv_15);
-    *transAlvBase =  (*transAlv_15_4) * (*transDef) ;
-    rotPlace_15->SetAngles(0., 0., 0.);
-    *transAlv_15_4 =  (*rotPlace_15) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,4,transAlv_15_4);
-    TGeoCombiTrans* transAlv_15_5 = new TGeoCombiTrans();
-    rotAlv_15->SetAngles(-11.25, 0., 0.);
-    *transAlv_15_5 = (*rotPlace_15) * matDemo_2 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,5,transAlv_15_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_15_6 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_15_6 = (*rotPlace_15) * matDemo_2 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,6,transAlv_15_6); 
-      TGeoCombiTrans* transAlv_15_7 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_15_7 = (*rotPlace_15) * matDemo_2 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,7,transAlv_15_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_15 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_15_8 = new TGeoCombiTrans(-3.13549999999993,33.4646558050777,26.6976862352101,rotAlv_15);
-    *transAlvBase =  (*transAlv_15_8) * (*transDef) ;
-    rotPlace_15->SetAngles(0., 0., 0.);
-    *transAlv_15_8 =  (*rotPlace_15) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,8,transAlv_15_8);
-    
-    TGeoCombiTrans* transAlv_15_9 = new TGeoCombiTrans();
-    rotAlv_15->SetAngles(-11.25, 0., 0.);
-    *transAlv_15_9 = (*rotPlace_15) * matDemo_3 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,9,transAlv_15_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_15_10 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_15_10 = (*rotPlace_15) * matDemo_3 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,10,transAlv_15_10); 
-      
-      TGeoCombiTrans* transAlv_15_11 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_15_11 = (*rotPlace_15) * matDemo_3 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,11,transAlv_15_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_15 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_15_12 = new TGeoCombiTrans(-3.13549999999993,33.4646558050777,26.6976862352101,rotAlv_15);
-    *transAlvBase =  (*transAlv_15_12) * (*transDef) ;
-    rotPlace_15->SetAngles(0., 0., 0.);
-    *transAlv_15_12 =  (*rotPlace_15) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,12,transAlv_15_12);
-    
-    TGeoCombiTrans* transAlv_15_13 = new TGeoCombiTrans();
-    rotAlv_15->SetAngles(-11.25, 0., 0.);
-    *transAlv_15_13 = (*rotPlace_15) * matDemo_4 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,13,transAlv_15_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_15_14 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_15_14 = (*rotPlace_15) * matDemo_4 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,14,transAlv_15_14); 
-      
-      TGeoCombiTrans* transAlv_15_15 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_15_15 = (*rotPlace_15) * matDemo_4 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,15,transAlv_15_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -1833,12 +1065,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_15_16) * (*transDef) ;
     rotPlace_15->SetAngles(0., 0., 0.);
     *transAlv_15_16 =  (*rotPlace_15) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,16,transAlv_15_16);
+    //pWorld->AddNode(Alveolus_15,16,transAlv_15_16);
+    trap_in->AddNode(Alveolus_15,16,transAlv_15_16);
     
     TGeoCombiTrans* transAlv_15_17 = new TGeoCombiTrans();
     rotAlv_15->SetAngles(-11.25, 0., 0.);
     *transAlv_15_17 = (*rotPlace_15) * matDemo_5 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,17,transAlv_15_17);
+    //pWorld->AddNode(Alveolus_15,17,transAlv_15_17);
+    trap_in->AddNode(Alveolus_15,17,transAlv_15_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_15_18 = new TGeoCombiTrans();
@@ -1852,34 +1086,7 @@ void create_califa_geo(const char* geoTag)
       pWorld->AddNode(Alveolus_15,19,transAlv_15_19); 
     }
   }
-  
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_15 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_15_20 = new TGeoCombiTrans(-3.13549999999993,33.4646558050777,26.6976862352101,rotAlv_15);
-    *transAlvBase =  (*transAlv_15_20) * (*transDef) ;
-    rotPlace_15->SetAngles(0., 0., 0.);
-    *transAlv_15_20 =  (*rotPlace_15) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,20,transAlv_15_20);
-    
-    TGeoCombiTrans* transAlv_15_21 = new TGeoCombiTrans();
-    rotAlv_15->SetAngles(-11.25, 0., 0.);
-    *transAlv_15_21 = (*rotPlace_15) * matDemo_6 * (*rotAlv_15) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_15,21,transAlv_15_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_15_22 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_15_22 = (*rotPlace_15) * matDemo_6 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,22,transAlv_15_22); 
-      
-      TGeoCombiTrans* transAlv_15_23 = new TGeoCombiTrans();
-      rotAlv_15->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_15_23 = (*rotPlace_15) * matDemo_6 * (*rotAlv_15) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_15,23,transAlv_15_23); 
-    }
-  }
+ 
 
   phiEuler = 180;
   thetaEuler = 180.*TMath::ATan2(-0.6720370049050432600,0.7405175649761855900)/TMath::Pi();
@@ -1888,113 +1095,6 @@ void create_califa_geo(const char* geoTag)
   TGeoRotation *rotAlv_16 = new TGeoRotation("rotAlv16",phiEuler,thetaEuler,psiEuler);
   TGeoRotation *rotPlace_16 = new TGeoRotation();
 
-  if(petals[0]>0){
-    //First sector
-    //single petal or first half of double petal in first sector
-    TGeoCombiTrans* transAlv_16_0 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-    *transAlvBase =  (*transAlv_16_0) * (*transDef) ;
-    rotPlace_16->SetAngles(0., 0., 0.);
-    *transAlv_16_0 =  (*rotPlace_16) * matDemo_1 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,0,transAlv_16_0);
-    TGeoCombiTrans* transAlv_16_1 = new TGeoCombiTrans();
-    rotAlv_16->SetAngles(-11.25, 0., 0.);
-    *transAlv_16_1 = (*rotPlace_16) * matDemo_1 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,1,transAlv_16_1);
-    if(petals[0]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_16_2 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_16_2 = (*rotPlace_16) * matDemo_1 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,2,transAlv_16_2); 
-      TGeoCombiTrans* transAlv_16_3 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_16_3 = (*rotPlace_16) * matDemo_1 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,3,transAlv_16_3); 
-    }
-  }
-
-  if(petals[1]>0){
-    //Second sector
-    //single petal or first half of double petal in second sector
-    *rotAlv_16 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_16_4 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-    *transAlvBase =  (*transAlv_16_4) * (*transDef) ;
-    rotPlace_16->SetAngles(0., 0., 0.);
-    *transAlv_16_4 =  (*rotPlace_16) * matDemo_2 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,4,transAlv_16_4);
-    TGeoCombiTrans* transAlv_16_5 = new TGeoCombiTrans();
-    rotAlv_16->SetAngles(-11.25, 0., 0.);
-    *transAlv_16_5 = (*rotPlace_16) * matDemo_2 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,5,transAlv_16_5);
-    if(petals[1]>1){
-      //second half of double petal in first sector
-      TGeoCombiTrans* transAlv_16_6 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_16_6 = (*rotPlace_16) * matDemo_2 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,6,transAlv_16_6); 
-      TGeoCombiTrans* transAlv_16_7 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_16_7 = (*rotPlace_16) * matDemo_2 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,7,transAlv_16_7); 
-    }
-  }
-
-
-  if(petals[2]>0){
-    //Third sector
-    //single petal or first half of double petal in third sector
-    *rotAlv_16 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_16_8 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-    *transAlvBase =  (*transAlv_16_8) * (*transDef) ;
-    rotPlace_16->SetAngles(0., 0., 0.);
-    *transAlv_16_8 =  (*rotPlace_16) * matDemo_3 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,8,transAlv_16_8);
-    
-    TGeoCombiTrans* transAlv_16_9 = new TGeoCombiTrans();
-    rotAlv_16->SetAngles(-11.25, 0., 0.);
-    *transAlv_16_9 = (*rotPlace_16) * matDemo_3 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,9,transAlv_16_9);
-    if(petals[2]>1){
-      //second half of double petal in third sector
-      TGeoCombiTrans* transAlv_16_10 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_16_10 = (*rotPlace_16) * matDemo_3 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,10,transAlv_16_10); 
-      
-      TGeoCombiTrans* transAlv_16_11 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_16_11 = (*rotPlace_16) * matDemo_3 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,11,transAlv_16_11); 
-    }
-  }
-
-  if(petals[3]>0){
-    //Fourth sector
-    //single petal or first half of double petal in fourth sector
-    *rotAlv_16 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_16_12 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-    *transAlvBase =  (*transAlv_16_12) * (*transDef) ;
-    rotPlace_16->SetAngles(0., 0., 0.);
-    *transAlv_16_12 =  (*rotPlace_16) * matDemo_4 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,12,transAlv_16_12);
-    
-    TGeoCombiTrans* transAlv_16_13 = new TGeoCombiTrans();
-    rotAlv_16->SetAngles(-11.25, 0., 0.);
-    *transAlv_16_13 = (*rotPlace_16) * matDemo_4 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,13,transAlv_16_13);
-    if(petals[3]>1){
-      //second half of double petal in fourth sector
-      TGeoCombiTrans* transAlv_16_14 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_16_14 = (*rotPlace_16) * matDemo_4 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,14,transAlv_16_14); 
-      
-      TGeoCombiTrans* transAlv_16_15 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_16_15 = (*rotPlace_16) * matDemo_4 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,15,transAlv_16_15); 
-    }
-  }
   
   if(petals[4]>0){
     //Fifth sector
@@ -2004,12 +1104,14 @@ void create_califa_geo(const char* geoTag)
     *transAlvBase =  (*transAlv_16_16) * (*transDef) ;
     rotPlace_16->SetAngles(0., 0., 0.);
     *transAlv_16_16 =  (*rotPlace_16) * matDemo_5 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,16,transAlv_16_16);
+    //pWorld->AddNode(Alveolus_16,16,transAlv_16_16);
+    trap_in->AddNode(Alveolus_16,16,transAlv_16_16);
     
     TGeoCombiTrans* transAlv_16_17 = new TGeoCombiTrans();
     rotAlv_16->SetAngles(-11.25, 0., 0.);
     *transAlv_16_17 = (*rotPlace_16) * matDemo_5 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,17,transAlv_16_17);
+    //pWorld->AddNode(Alveolus_16,17,transAlv_16_17);
+    trap_in->AddNode(Alveolus_16,17,transAlv_16_17);
     if(petals[4]>1){
       //second half of double petal in fifth sector
       TGeoCombiTrans* transAlv_16_18 = new TGeoCombiTrans();
@@ -2024,66 +1126,26 @@ void create_califa_geo(const char* geoTag)
     }
   }
   
-  if(petals[5]>0){
-    //Fifth sector
-    //single petal or first half of double petal in fifth sector
-    *rotAlv_16 = TGeoRotation("rotAlv9",phiEuler,thetaEuler,psiEuler); 
-    TGeoCombiTrans* transAlv_16_20 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-    *transAlvBase =  (*transAlv_16_20) * (*transDef) ;
-    rotPlace_16->SetAngles(0., 0., 0.);
-    *transAlv_16_20 =  (*rotPlace_16) * matDemo_6 * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,20,transAlv_16_20);
-    
-    TGeoCombiTrans* transAlv_16_21 = new TGeoCombiTrans();
-    rotAlv_16->SetAngles(-11.25, 0., 0.);
-    *transAlv_16_21 = (*rotPlace_16) * matDemo_6 * (*rotAlv_16) * (*transAlvBase);
-    pWorld->AddNode(Alveolus_16,21,transAlv_16_21);
-    if(petals[5]>1){
-      //second half of double petal in fifth sector
-      TGeoCombiTrans* transAlv_16_22 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 2, 0., 0.);
-      *transAlv_16_22 = (*rotPlace_16) * matDemo_6 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,22,transAlv_16_22); 
-      
-      TGeoCombiTrans* transAlv_16_23 = new TGeoCombiTrans();
-      rotAlv_16->SetAngles(-11.25 * 3, 0., 0.);
-      *transAlv_16_23 = (*rotPlace_16) * matDemo_6 * (*rotAlv_16) * (*transAlvBase);
-      pWorld->AddNode(Alveolus_16,23,transAlv_16_23); 
-    }
-  }
 
-  /*
-  phiEuler = 180;
-  thetaEuler = 180.*TMath::ATan2(-0.6720370049050432600,0.7405175649761855900)/TMath::Pi();
-  psiEuler = -180;
+	
+   trap_out->AddNode(trap_in, 1, new TGeoTranslation(0,0,0));
+   trap_in->SetVisLeaves(kTRUE);
+  //---------------------------------
   
-  TGeoRotation *rotAlv_16 = new TGeoRotation("rotAlv16",phiEuler,thetaEuler,psiEuler);
-  TGeoRotation *rotPlace_16 = new TGeoRotation();
-  *rotAlv_16 = TGeoRotation("rotAlv16",phiEuler,thetaEuler,psiEuler);
-  TGeoCombiTrans* transAlv_16_0 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-  *transAlvBase =  (*transAlv_16_0) * (*transDef) ;
-  rotPlace_16->SetAngles(-120, 0., 0.);
-  *transAlv_16_0 =  (*rotPlace_16) * matDemo * (*transAlvBase);
-  rotAlv_16->SetAngles(-11.25, 0., 0.);
-  pWorld->AddNode(Alveolus_16,0,transAlv_16_0);
+  //BOX of petal 5 a 180º
+  TGeoRotation *rot_box_p5    = new TGeoRotation("rot_box_p5",-90.,340.,0.); //90.,260, 0.-----90.,350.,0. buena a 340 si lo queremos mas inclinado
+  TGeoCombiTrans *comb_box_p5 = new TGeoCombiTrans("comb_box_p5", 0., 0., 51.69,rot_box_p5); //specific orientation to BOX+Petal 5 exp Nov.16 Lisbon 
+  pWorld->AddNode(trap_out,1,comb_box_p5);
   
-  TGeoCombiTrans* transAlv_16_1 = new TGeoCombiTrans();
-  *transAlv_16_1 = (*rotPlace_16) * matDemo * (*rotAlv_16) * (*transAlvBase);
-  pWorld->AddNode(Alveolus_16,1,transAlv_16_1);
+  //BOX of petal 6 a 90º
+  TGeoRotation *rot_box_p6    = new TGeoRotation("rot_box_p6",-90.,60.,0.);//90.,-20, 0.
+  TGeoCombiTrans *comb_box_p6 = new TGeoCombiTrans("comb_box_p6", -51.69, 0.,0.,rot_box_p6); //specific orientation to BOX+Petal 6 exp Nov.16 Lisbon 0., 0., 51.69
+  pWorld->AddNode(trap_out,2,comb_box_p6);
+  trap_out->SetVisLeaves(kTRUE);
   
-  *rotAlv_16 = TGeoRotation("rotAlv16",phiEuler,thetaEuler,psiEuler);
-  TGeoCombiTrans* transAlv_16_2 = new TGeoCombiTrans(-3.15649999999993,33.559817680364,31.0463924828861,rotAlv_16);
-  *transAlvBase =  (*transAlv_16_2) * (*transDef) ;
-  rotPlace_16->SetAngles(-300, 0., 0.);
-  *transAlv_16_2 =  (*rotPlace_16) * matDemo * (*transAlvBase);
-  rotAlv_16->SetAngles(-11.25, 0., 0.);
-  pWorld->AddNode(Alveolus_16,2,transAlv_16_2);
   
-  TGeoCombiTrans* transAlv_16_3 = new TGeoCombiTrans();
-  *transAlv_16_3 = (*rotPlace_16) * matDemo * (*rotAlv_16) * (*transAlvBase);
-  pWorld->AddNode(Alveolus_16,3,transAlv_16_3);
-  */
-
+  
+  
   // ---------------   Finish   -----------------------------------------------
   gGeoMan->CloseGeometry();
   gGeoMan->CheckOverlaps(0.001);

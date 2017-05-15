@@ -1,5 +1,5 @@
 
-void checkResults() {
+void checkResults_HPGe() {
 
 
 	//ROOT ENVIRONMENT
@@ -14,24 +14,24 @@ void checkResults() {
 	//READING TREE
 	TTree* tree = (TTree*)file1->Get("cbmsim");
 
-	//HISTOGRAMS DEFINITION----------------------------------------------------  
+	//HISTOGRAMS DEFINITION-----------------------------------------------------------
         TH1F* h1   = new TH1F("h1","Primary PDG Code",60,-30,30);
         TH1F* h1_2 = new TH1F("h1_2","Secondaries PDG Code",60,-30,30);
         TH1F* h2   = new TH1F("h2","Primary Energy",1100,0,11);
-	TH1F* h3   = new TH1F("h3","HPGe Energy",1000,0,20);
-	TH1F* h3_c = new TH1F("h3_c","Crystal Energy",1000,0,20);
-	TH1F* h4   = new TH1F("h4","Theta",400,-180,180);
+	TH1F* h3   = new TH1F("h3","HPGe Energy",1000,0,1.2);
+	TH1F* h4   = new TH1F("h4","Theta",400,-4,4);
         TH1F* hx   = new TH1F("hx","X de impacto",600,-6,6);
-	TH2F* hxy = new TH2F("hxy","Impactos", 200,-6,6,130,0,12);
-
-	//----   MCTrack (input)   -----------------------------------------------------
+	TH2F* hxy  = new TH2F("hxy","Collides 2D", 200,-4,4,200,-4,4);
+	TH3F* hxyz = new TH3F("hxyz","Collides 3D", 80,-4,4,80,-4,4,80,-10,-18);
+	
+	//----   MCTrack (input)   -------------------------------------------------------
 	TClonesArray* MCTrackCA;
 	EnsarMCTrack** track;
 	MCTrackCA = new TClonesArray("EnsarMCTrack",5);
 	TBranch *branchMCTrack = tree ->GetBranch("MCTrack");
 	branchMCTrack->SetAddress(&MCTrackCA);
 
-	//HPGe Points and Hits (input)   ------------------------------------------------------
+	//Crystal Points (input)   -------------------------------------------------------
 	TClonesArray* hpgeHitCA;
 	EnsarHPGeDetHit** hpgeHit;
 	hpgeHitCA = new TClonesArray("EnsarHPGeDetHit",5);
@@ -44,17 +44,9 @@ void checkResults() {
 	TBranch *branchEnsarHPGeDetPoint = tree ->GetBranch("HPGeDetPoint");
 	branchEnsarHPGeDetPoint->SetAddress(&hpgePointCA );
 
-	//Crystal Hits (input)   ------------------------------------------------------
-	TClonesArray* crystalHitCA;
-	R3BCaloCrystalHitSim** crystalHit;
-	crystalHitCA = new TClonesArray("R3BCaloCrystalHitSim",5);
-	TBranch *branchCrystalHit = tree ->GetBranch("CrystalHitSim");
-	branchCrystalHit->SetAddress(&crystalHitCA );
-
 	Int_t MCtracksPerEvent = 0;
 	Int_t hpgeHitsPerEvent = 0;
 	Int_t hpgePointsPerEvent = 0;
-	Int_t crystalHitsPerEvent = 0;
         Double_t charge = 0.0;
 
         TVector3 momentum, vector3;
@@ -65,9 +57,6 @@ void checkResults() {
 
 	//TREE ENTRIES--------------------------------------------------------------------
 	Long64_t nevents = tree->GetEntries();
-
-        Int_t con=0;
-        Int_t conP=0;
         
 	//LOOP IN THE EVENTS--------------------------------------------------------------
 	for(int i=0;i<nevents;i++){
@@ -78,7 +67,6 @@ void checkResults() {
 		MCtracksPerEvent    = MCTrackCA->GetEntries();
 		hpgeHitsPerEvent    = hpgeHitCA->GetEntries();
 		hpgePointsPerEvent  = hpgePointCA->GetEntries();
-		crystalHitsPerEvent = crystalHitCA->GetEntries();
 
 		if(MCtracksPerEvent>0) {
 			track = new EnsarMCTrack*[MCtracksPerEvent];
@@ -88,7 +76,6 @@ void checkResults() {
 			}
 		}
 		if(hpgeHitsPerEvent>0) {
-                  con++;
 			hpgeHit = new EnsarHPGeDetHit*[hpgeHitsPerEvent];
 			for(Int_t j=0;j<hpgeHitsPerEvent;j++){
 				hpgeHit[j] = new EnsarHPGeDetHit;
@@ -96,18 +83,10 @@ void checkResults() {
 			}
 		}
 		if(hpgePointsPerEvent>0) {
-                  conP++;
 			hpgePoint = new EnsarHPGeDetPoint*[hpgePointsPerEvent];
 			for(Int_t j=0;j<hpgePointsPerEvent;j++){
 				hpgePoint[j] = new EnsarHPGeDetPoint;
 				hpgePoint[j] = (EnsarHPGeDetPoint*) hpgePointCA->At(j);
-			}
-		}
-		if(crystalHitsPerEvent>0) {
-			crystalHit = new R3BCaloCrystalHitSim*[crystalHitsPerEvent];
-			for(Int_t j=0;j<crystalHitsPerEvent;j++){
-				crystalHit[j] = new R3BCaloCrystalHitSim;
-				crystalHit[j] = (R3BCaloCrystalHitSim*) crystalHitCA->At(j);
 			}
 		}
 		
@@ -115,7 +94,7 @@ void checkResults() {
 		for(Int_t h=0;h<MCtracksPerEvent;h++){
 			if(track[h]->GetMotherId()<0) { //Primary Particle is MotherId=-1
 				h1->Fill(track[h]->GetPdgCode());
-				h2->Fill(track[h]->GetEnergy()*1000);	// to MeV
+				h2->Fill(track[h]->GetEnergy()*1000);		//MeV
                         } else {
                           h1_2->Fill(track[h]->GetPdgCode());
                         }
@@ -127,13 +106,6 @@ void checkResults() {
 
 		
 			h3->Fill(charge);
-		}
-		
-		//LOOP in crystalHits-------------------------------------------------------
-		for(Int_t h=0;h<crystalHitsPerEvent;h++){
-
-			h3_c->Fill(crystalHit[h]->GetEnergy()*1000);
-
 		}
 		
 		//LOOP in MC mother tracks------------------------------------------------
@@ -156,42 +128,34 @@ void checkResults() {
                                     X3=hpgePoint[r]->GetZIn();
                                     hx->Fill(X1);
                                     hxy->Fill(X1,X2);
+                                    hxyz->Fill(X1,X2,X3);
                     }
-
-                   // Xup   = (X1+X2)/2;
-                   // Xdown = (X3+X4)/2;
-
-
                   }
 
                 }
 
 	}
-	// END LOOP IN THE EVENTS--------------------------------------------------------------------------------------------------------------------
+	// END LOOP IN THE EVENTS---------------------------------------------------------
 
-//                     Xup=hx->GetRMS();//?
-//                     cout << "RMS" << Xup << endl;
-
-
-	TCanvas* c1 = new TCanvas("MCTrack","MCTrack",0,0,400,800);
-	c1->Divide(1,2); 
-	c1->SetFillColor(0); 
+	TCanvas* c1 = new TCanvas("MCTrack","MCTrack",0,0,400,800);	
+	c1->Divide(1,2);           
+	c1->SetFillColor(0);      
 	c1->SetFrameFillColor(0);
-	c1->cd(1);
+	c1->cd(1);                
 	h1_2->Draw();
 	h1_2->GetXaxis()->SetTitle("PDG Code");
 	h1_2->GetYaxis()->SetTitle("Counts");
         h1->Draw("same");
-        h1->SetLineColor(2);
-        h1_2->SetLineColor(8);
-	c1->cd(2);
+        h1->SetLineColor(2);        
+        h1_2->SetLineColor(8);      
+	c1->cd(2);                
 	h2->Draw();
-	h2->SetLineColor(9);
+	h2->SetLineColor(9);      
 	h2->GetXaxis()->SetTitle("Energy (MeV/c^{2})");
 	h2->GetYaxis()->SetTitle("Counts");
 
 
-	TCanvas* c2 = new TCanvas("c2","Energy in the HPGe",0,0,400,400);
+	TCanvas* c2 = new TCanvas("c2","Energy in the HPGe",0,0,400,400);                     
 	c2->SetFillColor(0);
 	c2->SetFrameFillColor(0);
 	Int_t ci;                    // for color index setting
@@ -208,12 +172,14 @@ void checkResults() {
    	h3->GetZaxis()->SetLabelSize(0.035);
    	h3->GetZaxis()->SetTitleSize(0.035);
    	h3->GetZaxis()->SetTitleFont(42);
-   	h3->Draw("");
+   	h3->Draw("");          
    	
-        TCanvas* c5 = new TCanvas("Region","Region de impactos",0,0,400,800);
+        TCanvas* c5 = new TCanvas("Region2D","Region de impactos 2D",0,0,400,800);
         c5->SetFillColor(0);
         c5->SetFrameFillColor(0);
-	hxy-> Draw("colz"); 
+	//hxy-> Draw("colz");            
+	hxy-> Draw("lego2z"); 		
+	//hxy-> Draw("surf2z");
 	hxy->GetXaxis()->SetTitle("x (cm)");
 	hxy->GetYaxis()->SetTitle("y (cm)");
 
@@ -222,15 +188,20 @@ void checkResults() {
 	c6->SetFillColor(0);
         c6->SetFrameFillColor(0);
 	h4->Draw("");
-	h4->SetLineColor(6);
-	h4->GetXaxis()->SetTitle("#theta (^{o})");
+	h4->SetLineColor(6);          
+	h4->GetXaxis()->SetTitle("#theta (rad)");
 	h4->GetYaxis()->SetTitle("Counts");
-
-
-	//cout << "Con: " << con << " ; ConP: " << conP << endl;
-
-
-
+	
+	TCanvas* c7 = new TCanvas("Region3D","Region de impactos 3D",0,0,400,800);
+        c7->SetFillColor(0);
+        c7->SetFrameFillColor(0);
+	hxyz-> Draw("");
+	hxyz->SetMarkerStyle(20); 
+	hxyz->SetMarkerSize(0.4); 
+	hxyz->SetMarkerColor(9); 
+	hxyz->GetXaxis()->SetTitle("x (cm)");
+	hxyz->GetYaxis()->SetTitle("y (cm)");
+	hxyz->GetZaxis()->SetTitle("z (cm)");
 
 }
 

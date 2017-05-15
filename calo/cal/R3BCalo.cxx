@@ -257,9 +257,10 @@ Bool_t R3BCalo::ProcessHits(FairVolume* vol)
 
   // Getting the Infos from Crystal Volumes
   Int_t cp1 = -1; Int_t volId1 = -1; 
-  Int_t cpAlv = -1; Int_t cpSupAlv = -1; 
-  Int_t volIdAlv = -1; Int_t volIdSupAlv = -1; 
+  Int_t cpAlv = -1; Int_t cpSupAlv = -1; Int_t cpPetal = -1; 
+  Int_t volIdAlv = -1; Int_t volIdSupAlv = -1; Int_t volIdPetal = -1; 
   Int_t cpCry = -1; Int_t volIdCry = -1;
+  
 
   // Crystals Ids
   int crysNum;
@@ -269,10 +270,12 @@ Bool_t R3BCalo::ProcessHits(FairVolume* vol)
   volIdAlv = gMC->CurrentVolOffID(2,cpAlv);
   //next is needed for versions 8.# and later
   volIdSupAlv = gMC->CurrentVolOffID(3,cpSupAlv);
+  volIdPetal = gMC->CurrentVolOffID(5,cpPetal);
   //LOG(ERROR) << "TEST INITIAL. " <<  gMC->CurrentVolPath()<< FairLogger::endl;
   Int_t crystalType = 0;
   Int_t crystalCopy = 0;
   Int_t crystalId = 0;
+  Int_t petalCopy =0;
   Int_t fEndcapIdentifier = 0;
   Int_t fPhoswichIdentifier = 0;
 
@@ -645,7 +648,40 @@ Bool_t R3BCalo::ProcessHits(FairVolume* vol)
 
 
 
-  } else if (fGeometryVersion==16) {
+  }else if (fGeometryVersion==1116) {
+  
+  //The present scheme here done works with 12:
+    // it reproduces a simple petal and its copies. 
+    // cpPetal     = number of petal copy (from 1 to total number of petals)
+    // crystalType = alveolus type (from 9 to 16) [Alveolus number]
+    // cpSupAlv    = alveolus copy (16 to upper crystals and 17 to down crystals) 
+    // cpCry       = crystal copy for each alveolus (from 0 to 3)
+    // crystalCopy = (alveolus copy-16) * 4 + crystals copy +1 (from 1 to 8) 
+    // crystalId   = first petal (from 1 to 64 for the first 64 crystals)
+    //               second petal (from 65 to 128)
+    //               other petals follow the same order  
+    // (numbercopy_petal-1)*64+ (alveolus type-9)*8 + (alvelous copy-16)*4 + (crystal copy) + 1        
+    //                     (in this way, crystalId runs from 1 to number of petals*64)
+  
+  
+    const char *alveolusPrefix = "Alveolus_";
+    const char *volumeName = gMC->VolName(volIdSupAlv);
+    
+    if (strncmp(alveolusPrefix, volumeName,8) == 0) {
+       crystalType = atoi(volumeName+9);//converting to int the alveolus index
+       
+       if (crystalType>8 && crystalType<17) {
+	  //running upper crystals: from 0*4+0+1=1 to 4, down crystals: from 1*4+0+1=5 to 8
+          crystalCopy = (cpSupAlv-16)*4+cpCry+1;
+        
+	  //running from 1 to 64 for first petal, 64 to 128 for second petal and so on
+          crystalId = (crystalType-9)*8+(cpSupAlv-16)*4+cpCry+1+(cpPetal-1)*64;
+       }
+
+    }else LOG(ERROR) << "R3BCalo: Impossible crystalType for geometryVersion 12."
+		      << FairLogger::endl;
+  
+   }else if (fGeometryVersion==16) {
     //RESERVED FOR CALIFA 8.11 BARREL + CC 0.2
     
     const char *alveolusECPrefix = "Alveolus_EC";
@@ -904,8 +940,8 @@ void R3BCalo::EndOfEvent()
 // -----   Public method Register   -------------------------------------------
 void R3BCalo::Register()
 {
-  //FairRootManager::Instance()->Register("CrystalPoint", GetName(), 
-  //                                      fCaloCollection, kTRUE);
+  FairRootManager::Instance()->Register("CrystalPoint", GetName(), 
+                                        fCaloCollection, kTRUE);
   FairRootManager::Instance()->Register("CrystalHitSim", GetName(), 
 					fCaloCrystalHitCollection, kTRUE);
   

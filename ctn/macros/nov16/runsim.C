@@ -53,13 +53,13 @@ void runsim() {
 
   TMap detGeo;
   detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));
-  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals.geo.root"));
+  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root"));
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 10000;
+   Int_t nEvents = 100000;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

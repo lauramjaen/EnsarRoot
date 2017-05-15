@@ -105,7 +105,7 @@ void simall(Int_t nEvents = 1,
 
   // CALIFA definition
   EnsarDetector* calo = new R3BCalo("Califa", kTRUE);
-  ((R3BCalo *)calo)->SelectGeometryVersion(10);
+  ((R3BCalo *)calo)->SelectGeometryVersion(1116);//version to single petal with copies
   //Selecting the Non-uniformity of the crystals (1 means +-1% max deviation)
   ((R3BCalo *)calo)->SetNonUniformity(1.0);
   calo->SetGeometryFileName(((TObjString*)fDetList->GetValue("CALIFA"))->GetString().Data());
@@ -122,14 +122,15 @@ void simall(Int_t nEvents = 1,
   if (fGenerator.CompareTo("box") == 0  ) {
   // 2- Define the BOX generator
   Int_t pdgId          = 22;            // geant particle id of the photon beam
-  Double32_t theta1    = 180.0;         // polar angle distribution (degrees)
-  Double32_t theta2    = 0.0;
+  Double32_t theta1    = 0.;         // polar angle distribution (degrees)
+  Double32_t theta2    = 180.;
   Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
-  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,1);
+  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,10);
   boxGen->SetThetaRange (theta1,theta2);
+  boxGen->SetCosTheta();
   boxGen->SetPRange     (0.001,0.001);  // momentum of the beam GeV/c
   boxGen->SetPhiRange   (0.0,360.0);
-  boxGen->SetXYZ        (0.0,0.0,0.0);  // origin of the beam in the center
+  boxGen->SetXYZ        (0.,0.,0.);  // origin of the beam in the center
   
   // add the box generator
   primGen->AddGenerator(boxGen);
@@ -147,6 +148,25 @@ void simall(Int_t nEvents = 1,
   run->SetStoreTraj(fVis);
 
   FairLogger::GetLogger()->SetLogVerbosityLevel("LOW");
+  
+  
+  
+
+// ----- Initialize CaloHitFinder task ------------------------------------
+  Bool_t fCaloHitFinder = true;
+  if(fCaloHitFinder) {
+    R3BCaloHitFinder* caloHF = new R3BCaloHitFinder();
+    caloHF->SetClusteringAlgorithm(1,0);    //square window
+    caloHF->SetDetectionThreshold(0.000050);//50 KeV
+    caloHF->SetExperimentalResolution(6.);  //percent @ 1 MeV
+    caloHF->SetComponentResolution(.25);    //sigma = 0.5 MeV
+    caloHF->SelectGeometryVersion(1116);
+    caloHF->SetAngularWindow(3.2,3.2);      //[0.25 around 14.3 degrees, 3.2 for the complete calorimeter]
+    run->AddTask(caloHF);
+  }  
+ 
+ 
+ 
 
 
   // -----   Initialize simulation run   ------------------------------------
