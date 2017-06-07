@@ -60,7 +60,7 @@ void calibrate(TString inputFile="", Int_t mode=0,
     hImprovedEnergy[i] = new TH1F(histitle,histitle,peak2Right-peak1Left+200,peak1Left-100,peak2Right+100);
   }
   
-  TTree* caloTree = (TTree*)file1->Get("cbmsim");
+  TTree* caloTree = (TTree*)file1->Get("ensartree");
   
   //Raw Hits (input)
   TClonesArray* rawHitCA;  

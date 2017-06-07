@@ -51,7 +51,7 @@ void checkResults() {
 	TFile *file1 = TFile::Open(inputFile);
 
 	//READING TREE
-	TTree* TCrystal = (TTree*)file1->Get("cbmsim");
+	TTree* TCrystal = (TTree*)file1->Get("ensartree");
 
 	//HISTOGRAMS DEFINITION
 	TH1F* h1 = new TH1F("h1","Primary PDG Code",100,-100,100);

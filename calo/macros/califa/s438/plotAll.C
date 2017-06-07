@@ -71,7 +71,7 @@ void plot(TString inputFile="") {
     hP2ABToT_Energy = new TH2F("hP2ABToT_Energy","AddBack ToT_Energy in Petal2: second largest ToT_Energy vs largest ToT_Energy",3000,-1000,299000,3000,-1000,299000);
   }
 
-  TTree* caloTree = (TTree*)file1->Get("cbmsim");
+  TTree* caloTree = (TTree*)file1->Get("ensartree");
  
   //Crystal Hits
   TClonesArray* crystalHitCA;  

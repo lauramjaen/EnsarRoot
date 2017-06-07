@@ -232,8 +232,8 @@ void checkResults_batch(Int_t totalEvents=1, Int_t fGeoVer=1, Double_t threshold
 	TH2F* h1_User = new TH2F("h1_User","Double hits, ... where?",400,-2.5,2.5,400,-2.5,2.5);
 
         //Getting trees from files
-	TTree* TCalo = (TTree*)file0->Get("cbmsim");
-	TTree* TCrystal = (TTree*)file1->Get("cbmsim");
+	TTree* TCalo = (TTree*)file0->Get("ensartree");
+	TTree* TCrystal = (TTree*)file1->Get("ensartree");
 	
 	//Crystal Hits (input)
 	TClonesArray* crystalHitCA;  

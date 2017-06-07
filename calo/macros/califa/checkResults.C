@@ -207,7 +207,7 @@ void checkResults() {
 	//Additional user defined histos
 	TH2F* h1_User = new TH2F("h1_User","Double hits, ... where?",400,-2.5,2.5,400,-2.5,2.5);
 
-	TTree* TCrystal = (TTree*)file1->Get("cbmsim");
+	TTree* TCrystal = (TTree*)file1->Get("ensartree");
 	
 	//Crystal Hits (input)
 	TClonesArray* crystalHitCA;  

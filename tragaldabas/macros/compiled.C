@@ -41,7 +41,7 @@ void analysis(Float_t* out, TString name) {
 	TFile* file1 = TFile::Open(name);
 
 	//Reading the tree
-	TTree* tree = (TTree*)file1->Get("cbmsim");
+	TTree* tree = (TTree*)file1->Get("ensartree");
 
 	//Histograms definition
 	TH1F hIDp("hIDp","Primary PDG Code",250,-20,230);

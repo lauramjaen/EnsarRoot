@@ -17,7 +17,7 @@ void results() {
 	TFile *file1 = TFile::Open(inputFile);
 
 	//READING TREE
-	TTree* tree = (TTree*)file1->Get("cbmsim");
+	TTree* tree = (TTree*)file1->Get("ensartree");
 
 	//HISTOGRAMS DEFINITION
         TH1F* hIDp     = new TH1F("hIDp","Primary PDG Code",250,-20,230);

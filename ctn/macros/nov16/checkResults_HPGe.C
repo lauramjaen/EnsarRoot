@@ -12,7 +12,7 @@ void checkResults_HPGe() {
 	TFile *file1 = TFile::Open(inputFile);
 
 	//READING TREE
-	TTree* tree = (TTree*)file1->Get("cbmsim");
+	TTree* tree = (TTree*)file1->Get("ensartree");
 
 	//HISTOGRAMS DEFINITION-----------------------------------------------------------
         TH1F* h1   = new TH1F("h1","Primary PDG Code",60,-30,30);

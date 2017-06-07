@@ -58,7 +58,7 @@ void tragsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 1000000;
+   Int_t nEvents = 100;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

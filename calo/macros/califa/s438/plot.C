@@ -34,7 +34,7 @@ void plot(TString inputFile="") {
 
 
 
-  TTree* caloTree = (TTree*)file1->Get("cbmsim");
+  TTree* caloTree = (TTree*)file1->Get("ensartree");
  
   //Raw Hits (input)
   TClonesArray* rawHitCA;  

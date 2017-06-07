@@ -149,7 +149,8 @@ class TraRPC : public EnsarDetector
     TraRPCHit* AddRPCHit(Int_t detID, Double_t charge, Double_t tof,
 					Int_t steps, Double_t einc,
 					Int_t trackid, Int_t volid, Int_t partrackid,
-					Int_t pdgid, Int_t uniqueid);
+					Int_t pdgid, Int_t uniqueid,
+                                        Double_t posxin, Double_t posyin);
 
 
     /** Private method ResetParameters

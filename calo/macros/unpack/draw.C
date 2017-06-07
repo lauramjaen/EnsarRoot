@@ -1,7 +1,7 @@
 
 {
   TFile *file = new TFile("rawData.root");
-  TTree *tree = (TTree*) file->Get("cbmsim");
+  TTree *tree = (TTree*) file->Get("ensartree");
   cout << tree->GetEntries() << endl;
  
   TH1F *h_en = new TH1F("h_en", "", 55, 280, 390);

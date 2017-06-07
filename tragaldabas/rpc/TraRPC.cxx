@@ -144,12 +144,12 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
   LOG(DEBUG) << "TraRPC: Processing Points in RPC_Plane Nb "
     << cpKIV << FairLogger::endl;
 
-    // Hit: Fired cell with a charge value bigger than a given threshold.
-    // fRPCId decodes the plane number (1 to 4, 3 bits PPP),
-    // column (X direction, 0 to 11 in 4 bits TTTT),
-    // row (Y direction, 0 to 9, 4 bits RRRR)
-    // acording to 0PPP00TTTT00CCCC
-    // The numbers 12.6 and 12.3 come from our cell dimensions. The origin is placed at the center of the plane
+  // Hit: Fired cell with a charge value bigger than a given threshold.
+  // fRPCId decodes the plane number (1 to 4, 3 bits PPP),
+  // column (X direction, 0 to 11 in 4 bits TTTT),
+  // row (Y direction, 0 to 9, 4 bits RRRR)
+  // acording to 0PPP00TTTT00CCCC
+  // The numbers 12.6 and 12.3 come from our cell dimensions. The origin is placed at the center of the plane
   if ( gMC->IsTrackEntering() ) {
     fELoss  = 0.;
     fNSteps  = 0; // FIXME
@@ -164,17 +164,17 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
   Double_t dE = gMC->Edep() * 1000.;         //in MeV
   Double_t post_E = (gMC->Etot() - gMC->TrackMass()) * 1000.;      //in MeV
   // TString motherID = gMC->GetStack()->GetCurrentTrack()->GetMotherID();
-//  manera de crear un pointer para los parmametros de la traza
-// mirar si es gMC->MotherID()
- TString ptype = gMC->GetStack()->GetCurrentTrack()->GetName();
+  //  manera de crear un pointer para los parmametros de la traza
+  // mirar si es gMC->MotherID()
+  TString ptype = gMC->GetStack()->GetCurrentTrack()->GetName();
 
   fELoss += dE / 1000.;       //back to GeV
   fNSteps++;
 
   // Set additional parameters at exit of active volume. Create TraRPCPoint.
   if ( gMC->IsTrackExiting()    ||
-       gMC->IsTrackStop()       ||
-       gMC->IsTrackDisappeared()   ) {
+      gMC->IsTrackStop()       ||
+      gMC->IsTrackDisappeared()   ) {
 
     fTrackID        = gMC->GetStack()->GetCurrentTrackNumber();
     fParentTrackID  = gMC->GetStack()->GetCurrentParentTrackNumber();
@@ -206,8 +206,8 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
       safety = gGeoManager->GetSafeDistance();
 
       gGeoManager->SetCurrentDirection(-newdirection[0],
-				       -newdirection[1],
-				       -newdirection[2]);
+          -newdirection[1],
+          -newdirection[2]);
 
       for (Int_t i=0; i<3; i++) {
         newpos[i] = oldpos[i] - (3*safety*olddirection[i]);
@@ -224,11 +224,11 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     Xcenter = 69.3-(12-Column)*12.6;
     Ycenter = 54.45-(Row-1)*12.10;
     AddHit(fTrackID, fVolumeID, RPCId,
-           TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
-           TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
-           TVector3(fMomIn.Px(),  fMomIn.Py(),  fMomIn.Pz()),
-           TVector3(fMomOut.Px(), fMomOut.Py(), fMomOut.Pz()),
-           fTime, fLength, fELoss);
+        TVector3(fPosIn.X(),   fPosIn.Y(),   fPosIn.Z()),
+        TVector3(fPosOut.X(),  fPosOut.Y(),  fPosOut.Z()),
+        TVector3(fMomIn.Px(),  fMomIn.Py(),  fMomIn.Pz()),
+        TVector3(fMomOut.Px(), fMomOut.Py(), fMomOut.Pz()),
+        fTime, fLength, fELoss);
 
     // Increment number of RPCPoints for this track
     EnsarMCStack* stack = (EnsarMCStack*) gMC->GetStack();
@@ -237,41 +237,42 @@ Bool_t TraRPC::ProcessHits(FairVolume* vol)
     //Adding a RPCHIT support
     // If the impact occurs in the active zone, we create a hit
     if(IsInsideActiveZone(fPosIn.X(),fPosIn.Y(),Xcenter,Ycenter)){
-    Int_t nHits = fRPCHitCollection->GetEntriesFast();
-    Bool_t existHit = 0;
 
-    // Time correction: TimeMC+TimeInsidePad+Smearing
-    Double_t const c=30.0; // speed of light,c, in cm/ns 
-    Double_t const percentage = 0.6;  
-    Double_t vel=percentage*c; // signal velocity
-    Double_t sigT=0.05; // sigma in time (ns) 
-    // random variable for smearing
-    TRandom3 random; 
-    random.SetSeed(0);
-    fTime = fTime+TMath::Sqrt(fPosIn.X()*fPosIn.X()+fPosIn.Y()*fPosIn.Y())/vel+random.Gaus(0,sigT);
+      Int_t nHits = fRPCHitCollection->GetEntriesFast();
+      Bool_t existHit = 0;
 
-    if (nHits==0) AddRPCHit(RPCId, fELoss, fTime, fNSteps,
-				       fEinc, fTrackID, fVolumeID,
-				       fParentTrackID, fTrackPID, fUniqueID);
-    else {
-      for (Int_t i=0; i<nHits; i++) {
-        if ( ((TraRPCHit *)(fRPCHitCollection->At(i)))->GetRPCId() == RPCId ) {
-          ((TraRPCHit *)(fRPCHitCollection->At(i)))->AddCharge(fELoss);
-          if ( ((TraRPCHit *)(fRPCHitCollection->At(i)))->GetTime() > fTime ) {
-            ((TraRPCHit *)(fRPCHitCollection->At(i)))->SetTime(fTime);
+      // Time correction: TimeMC+TimeInsidePad+Smearing
+      Double_t const c=30.0; // speed of light,c, in cm/ns 
+      Double_t const percentage = 0.6;  
+      Double_t vel=percentage*c; // signal velocity
+      Double_t sigT=0.05; // sigma in time (ns) 
+      // random variable for smearing
+      TRandom3 random; 
+      random.SetSeed(0);
+      fTime = fTime+TMath::Sqrt(fPosIn.X()*fPosIn.X()+fPosIn.Y()*fPosIn.Y())/vel+random.Gaus(0,sigT);
+
+      if (nHits==0) AddRPCHit(RPCId, fELoss, fTime, fNSteps,
+          fEinc, fTrackID, fVolumeID,
+          fParentTrackID, fTrackPID, fUniqueID, fPosIn.X(), fPosIn.Y());
+      else {
+        for (Int_t i=0; i<nHits; i++) {
+          if ( ((TraRPCHit *)(fRPCHitCollection->At(i)))->GetRPCId() == RPCId ) {
+            ((TraRPCHit *)(fRPCHitCollection->At(i)))->AddCharge(fELoss);
+            if ( ((TraRPCHit *)(fRPCHitCollection->At(i)))->GetTime() > fTime ) {
+              ((TraRPCHit *)(fRPCHitCollection->At(i)))->SetTime(fTime);
+            }
+            existHit=1; //to avoid the creation of a new Hit
+            break;
           }
-          existHit=1; //to avoid the creation of a new Hit
-          break;
         }
+        if (!existHit) AddRPCHit(RPCId, fELoss, fTime, fNSteps,
+            fEinc, fTrackID, fVolumeID,
+            fParentTrackID, fTrackPID, fUniqueID, fPosIn.X(), fPosIn.Y());
       }
-      if (!existHit) AddRPCHit(RPCId, fELoss, fTime, fNSteps,
-               fEinc, fTrackID, fVolumeID,
-               fParentTrackID, fTrackPID, fUniqueID);
-    }
 
-    existHit=0;
+      existHit=0;
 
-     }    // active zone condition ends here
+    }    // active zone condition ends here
 
     ResetParameters();
   }
@@ -382,7 +383,8 @@ TraRPCHit* TraRPC::AddRPCHit(Int_t detID,Double_t energy, Double_t time,
 					     Int_t steps, Double_t einc,
 					     Int_t trackid, Int_t volid,
 					     Int_t partrackid, Int_t pdgtype,
-					     Int_t uniqueid)
+					     Int_t uniqueid,
+                                             Double_t posxin, Double_t posyin)
 {
   TClonesArray& clref = *fRPCHitCollection;
   Int_t size = clref.GetEntriesFast();
@@ -394,7 +396,7 @@ TraRPCHit* TraRPC::AddRPCHit(Int_t detID,Double_t energy, Double_t time,
 	      << " partrackid : " << partrackid << " type: " << pdgtype
 	      << " unique id: " << uniqueid << FairLogger::endl;
   }
-  return new(clref[size]) TraRPCHit(detID, energy, time);
+  return new(clref[size]) TraRPCHit(detID, energy, time, posxin, posyin);
 }
 
 // -----   Public method ConstructGeometry   ----------------------------------

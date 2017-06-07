@@ -59,8 +59,8 @@ void cal(TString inputFile_30="",TString inputFile_300="", Int_t np=4) {
     hEnergy_300[i] = new TH1F(histitle,histitle,2000,1000,3000);
   }  
 
-  TTree* caloTree = (TTree*)file1->Get("cbmsim");
-  TTree* caloTree2 = (TTree*)file2->Get("cbmsim");
+  TTree* caloTree = (TTree*)file1->Get("ensartree");
+  TTree* caloTree2 = (TTree*)file2->Get("ensartree");
   
   //Raw Hits (input)
   TClonesArray* rawHitCA;  

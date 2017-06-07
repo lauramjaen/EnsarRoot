@@ -12,7 +12,7 @@ void checkResults_petals() {
 	TFile *file1 = TFile::Open(inputFile);
 
 	//READING TREE
-	TTree* tree = (TTree*)file1->Get("cbmsim");
+	TTree* tree = (TTree*)file1->Get("ensartree");
 
 	//HISTOGRAMS DEFINITION----------------------------------------------------------- Change the intervals for each run energy
   	

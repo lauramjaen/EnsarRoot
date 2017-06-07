@@ -32,7 +32,7 @@ void petal_viewer(TString inputFile="") {
     E_p1[i]->GetXaxis()->SetTitle("keV");
   }
 
-  TTree* caloTree = (TTree*)file1->Get("cbmsim");
+  TTree* caloTree = (TTree*)file1->Get("ensartree");
  
   //Raw Hits (input)
   TClonesArray* rawHitCA;  

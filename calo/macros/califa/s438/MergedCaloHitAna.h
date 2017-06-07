@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
 // Wed Nov 26 16:42:51 2014 by ROOT version 5.34/22
-// from TTree cbmsim//cbmout
+// from TTree ensartree
 // found on file: root/hit/run291-293.root
 //////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ CaloHitAna::CaloHitAna(TTree *tree) : fChain(0)
       if (!f || !f->IsOpen()) {
          f = new TFile("root/hit/run291-293.root");
       }
-      f->GetObject("cbmsim",tree);
+      f->GetObject("ensartree",tree);
 
    }
    Init(tree);

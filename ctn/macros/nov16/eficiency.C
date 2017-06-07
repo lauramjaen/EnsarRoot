@@ -35,7 +35,7 @@ void eficiency() {
 		h[k] = new TH1F(namehist,titlehist,8000,0.0,11.0);// asignamos los nombres histo_1, histo_2... a cada histograma del array
 
 		//READING TREE---------------------------------------------------------------------
-		TTree* tree = (TTree*)file2->Get("cbmsim");
+		TTree* tree = (TTree*)file2->Get("ensartree");
 
 
 		//cout<< "estoy aqui 3"<<endl;

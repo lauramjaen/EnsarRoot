@@ -13,22 +13,22 @@ using std::flush;
 // -----   Default constructor   -------------------------------------------
 TraRPCHit::TraRPCHit()
   : FairMultiLinkedData(),
-    fCharge(-1.), fTime(-1.), fRPCId(-1)
+    fCharge(-1.), fTime(-1.), fRPCId(-1), fPosXIn(0), fPosYIn(0)
 {
 }
 // -------------------------------------------------------------------------
 
 // -----   Standard constructor   ------------------------------------------
-TraRPCHit::TraRPCHit(Int_t id, Double_t charge, Double_t time) 
+TraRPCHit::TraRPCHit(Int_t id, Double_t charge, Double_t time, Double_t posxin, Double_t posyin) 
   : FairMultiLinkedData(),
-    fCharge(charge), fTime(time), fRPCId(id)
+    fCharge(charge), fTime(time), fRPCId(id), fPosXIn(posxin), fPosYIn(posyin)
 {
 }
 // -------------------------------------------------------------------------
 
 TraRPCHit::TraRPCHit(const TraRPCHit& right)
   : FairMultiLinkedData(right),
-    fCharge(right.fCharge), fTime(right.fTime), fRPCId(right.fRPCId)
+    fCharge(right.fCharge), fTime(right.fTime), fRPCId(right.fRPCId), fPosXIn(right.fPosXIn), fPosYIn(right.fPosYIn)
 {
 }
 // -------------------------------------------------------------------------
