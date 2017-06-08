@@ -23,8 +23,6 @@ ${PLUTO_INCLUDE_DIR}
 ${BASE_INCLUDE_DIRECTORIES}
 #put here all directories where header files are located
 ${ENSARROOT_SOURCE_DIR}/ensargen
-${ENSARROOT_SOURCE_DIR}/field 
-${ENSARROOT_SOURCE_DIR}/generators 
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})
@@ -42,6 +40,7 @@ set(SRCS
 EnsarAsciiIonGenerator.cxx
 EnsarIonGenerator.cxx
 EnsarBoxGenerator.cxx
+EnsarCryAsciiGenerator.cxx
 )
 
 # fill list of header files from list of source files

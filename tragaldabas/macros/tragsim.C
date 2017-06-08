@@ -29,6 +29,7 @@ void tragsim() {
   // Box  generator:             "box"
   // Ascii generator:          "ascii"
   // TraBox generator:         "tragbox"
+  // CryAscii generator:         "cry"
   TString fGene="box";
 
   //-------------------------------------------------
@@ -58,7 +59,7 @@ void tragsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 100;
+   Int_t nEvents = 10;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

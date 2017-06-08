@@ -137,6 +137,11 @@ void tragall(Int_t nEvents = 1,
     primGen->AddGenerator(gen);
   }
 
+  if (fGenerator.CompareTo("cry") == 0  ) {
+    EnsarCryAsciiGenerator* gen = new EnsarCryAsciiGenerator(InFile.Data());
+    primGen->AddGenerator(gen);
+  }
+
   if (fGenerator.CompareTo("tragbox") == 0  ) {
 
     // 2- Define the Tragaldabas BOX generator
