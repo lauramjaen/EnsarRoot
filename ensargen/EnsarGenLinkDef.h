@@ -10,5 +10,7 @@
 #pragma link C++ class  EnsarIonGenerator+;
 #pragma link C++ class  EnsarBoxGenerator+;
 #pragma link C++ class  EnsarCryAsciiGenerator+;
+#pragma link C++ class  EnsarSiGenerator+;
+#pragma link C++ class  EnsarCascadeGen+;
 
 #endif

@@ -21,9 +21,9 @@ void checkResults_petals() {
 	TH1F* h3_Cry = new TH1F("h3_Cry","Crystal Type",32,0,32);
 	TH1F* h4_Cry = new TH1F("h4_Cry","Crystal Copy",15,0,15);
 	
-	TH1F* h1_Cal = new TH1F("h1_Cal","Hit Energy (MeV)",200,0,10); //Change this maximum energy
+	TH1F* h1_Cal = new TH1F("h1_Cal","Hit Energy (MeV)",200,0,10);
 	TH1F* h3_Cal = new TH1F("h3_Cal","Hit Theta",200,-3.2,3.2);
-	TH1F* h4_Cal = new TH1F("h4_Cal","Hit Phi",200,-3.6,3.6);//-3.2,3.2
+	TH1F* h4_Cal = new TH1F("h4_Cal","Hit Phi",200,-3.6,3.6);
 	
 	TH2F* hxz_Point = new TH2F("hxz_Point","Position x and z", 180,-20.,70.,200,-30.,70.);
 	TH3F* hxzy_Point = new TH3F("hxzy_Point","Position x, z and y", 180,-20.,70.,200,-30.,70., 40,-10.,10.);
@@ -93,7 +93,7 @@ void checkResults_petals() {
 			}
 		}
 		
-                //loop in crystal Hits
+        //loop in crystal Hits
 		for(Int_t h=0;h<crystalHitsPerEvent;h++){
 			h1_Cry->Fill(crystalHit[h]->GetCrystalId());
 			h2_Cry->Fill(crystalHit[h]->GetEnergy()*1000);
@@ -149,7 +149,7 @@ void checkResults_petals() {
 	c8->SetFillColor(0);
 	c8->SetFrameFillColor(0);
 	c8->cd();
-	c8->Divide(2,2);//Change if you want to plot h3_Cry,h4_Cry
+	c8->Divide(2,2);
 	
 	c8->cd(1); 
 	h1_Cry->Draw();
@@ -204,8 +204,8 @@ void checkResults_petals() {
 
 	//Crystal Point
 	TCanvas* c3 = new TCanvas("Position","Position x and y",0,0,400,800);
-        c3->SetFillColor(0);
-        c3->SetFrameFillColor(0);
+    c3->SetFillColor(0);
+    c3->SetFrameFillColor(0);
 	//hxz-> Draw("colz");
 	hxz_Point-> Draw("lego2z");   //draw a Lego 2D with a palete of colours at right side
 	//hxz-> Draw("surf2z");       //draw a surface with a palete of colours at right side
@@ -213,9 +213,9 @@ void checkResults_petals() {
 	hxz_Point->GetYaxis()->SetTitle("Z (cm)");
 	
 	TCanvas* c4 = new TCanvas("Position2","Position x, z and y",0,0,400,800);
-        c4->SetFillColor(0);
-        c4->SetFrameFillColor(0);
-        hxzy_Point->Draw("");
+    c4->SetFillColor(0);
+    c4->SetFrameFillColor(0);
+    hxzy_Point->Draw("");
 	hxzy_Point->SetMarkerStyle(20); 
 	hxzy_Point->SetMarkerSize(0.4); 
 	hxzy_Point->SetMarkerColor(9); 

@@ -1133,13 +1133,13 @@ void create_califa_geo(const char* geoTag)
   //---------------------------------
   
   //BOX of petal 5 a 180º
-  TGeoRotation *rot_box_p5    = new TGeoRotation("rot_box_p5",-90.,340.,0.); //90.,260, 0.-----90.,350.,0. buena a 340 si lo queremos mas inclinado
-  TGeoCombiTrans *comb_box_p5 = new TGeoCombiTrans("comb_box_p5", 0., 0., 51.69,rot_box_p5); //specific orientation to BOX+Petal 5 exp Nov.16 Lisbon 
+  TGeoRotation *rot_box_p5    = new TGeoRotation("rot_box_p5",-90.,250.,0.); //-90.,340.,0.
+  TGeoCombiTrans *comb_box_p5 = new TGeoCombiTrans("comb_box_p5", 51.69, 0., 0.,rot_box_p5); //specific orientation to BOX+Petal 5 exp Nov.16 Lisbon   0., 0., 51.69
   pWorld->AddNode(trap_out,1,comb_box_p5);
   
   //BOX of petal 6 a 90º
-  TGeoRotation *rot_box_p6    = new TGeoRotation("rot_box_p6",-90.,60.,0.);//90.,-20, 0.
-  TGeoCombiTrans *comb_box_p6 = new TGeoCombiTrans("comb_box_p6", -51.69, 0.,0.,rot_box_p6); //specific orientation to BOX+Petal 6 exp Nov.16 Lisbon 0., 0., 51.69
+  TGeoRotation *rot_box_p6    = new TGeoRotation("rot_box_p6",-90.,340.,0.);//-90.,60.,0.
+  TGeoCombiTrans *comb_box_p6 = new TGeoCombiTrans("comb_box_p6", 0, 0.,51.09,rot_box_p6); //specific orientation to BOX+Petal 6 exp Nov.16 Lisbon -51.69, 0.,0.
   pWorld->AddNode(trap_out,2,comb_box_p6);
   trap_out->SetVisLeaves(kTRUE);
   

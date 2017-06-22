@@ -1,4 +1,3 @@
-
 #include <iomanip>
 #include <iostream>
 #include "TGeoManager.h"
@@ -49,7 +48,7 @@ void create_geo(const char* geoTag = "test")
 
 
 	// -------   Geometry file name (output)   ----------------------------------OK
-	TString geoFileName = geoPath + "/ctn/geometry/HPGedetector_";
+	TString geoFileName = geoPath + "/ctn/geometry/HPGe_ch_target_";
 	geoFileName = geoFileName + geoTag + ".geo.root";
 	// --------------------------------------------------------------------------
 
@@ -221,8 +220,8 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 
 	// ----------------------------------------------
 	// detector at 90 degrees
-	TGeoRotation *rot     = new TGeoRotation("rot",90,-90,0);//0,180,0
-	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-13.295,0,0,rot);//,0,0,-13.295
+	TGeoRotation *rot     = new TGeoRotation("rot",0,180,0);
+	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",0,0,-13.295,rot);
 	pWorld->AddNode(main_tube,1,comb); 
 	// ----------------------------------------------
 	
@@ -265,8 +264,19 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 	// ----------------------------------------------
 	
 	// ----------------------------------------------
+	// Create target of Al inside the vacuum of the chamber
+	TGeoVolume *target_Al = gGeoManager->MakeTube("target_Al", pMedAl, 0.0, 0.5, 0.00004);
+	steel_base1->SetFillColor(13);
+	steel_base1->SetLineColor(13);
+	TGeoRotation *rot_target    = new TGeoRotation("rot_target",90.,90.,0.);
+  	TGeoCombiTrans *comb_target = new TGeoCombiTrans("comb_target", 0., 0.,0.,rot_target);
+	vacuum_chamber->AddNode(target_Al,1,comb_target);
+	target_Al->SetVisLeaves(kTRUE);
+	// ----------------------------------------------
+	
+	// ----------------------------------------------
 	// reaction chamber in the origin 
-	TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);
+	TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);//0,90,0
 	TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
 	pWorld->AddNode(main_chamber,1,comb_ch);
 	// ----------------------------------------------

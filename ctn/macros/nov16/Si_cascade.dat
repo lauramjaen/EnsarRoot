@@ -1,0 +1,37 @@
+///////////////////////////////////////////////////////////////////////////////
+////                                                                       ////
+////               12643 KeV excited state of Si*                          ////
+//// Gamma cascade from 12643->to different states-> ground state 0 KeV    ////
+//// with Angular Correlation between gammas and Branching Ratio           ////
+////                                                                       ////
+///////////////////////////////////////////////////////////////////////////////
+Number, Energy(GeV), Probability and Number of Levels of each Si* state
+1       0.012643        0.5           5   
+2       0.012900        0.5           9            
+Energy of the transitions (initial -->  final)
+0.012643	0.006879 		
+0.012643	0.006888 	
+0.012643	0.008945 	
+0.012643	0.009702 	
+0.009702	0.006879 	
+Energy of gamma emmited in each transition
+0.005764	       	
+0.005755	        
+0.003698	        
+0.002941	        
+0.002823	        
+Branching Ratios(1)
+0.32	        
+0.231            
+0.064           
+0.385    
+1
+Angular correlation coefficeints(A2 and A4)
+0.579 	        0.0512
+-0.187	        0.088
+0.0911			0.0515
+0.393			0.004
+0.2412			0.116
+
+//Only change the values
+//don't modify the file structure 

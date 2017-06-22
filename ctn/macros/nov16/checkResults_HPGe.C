@@ -15,14 +15,16 @@ void checkResults_HPGe() {
 	TTree* tree = (TTree*)file1->Get("ensartree");
 
 	//HISTOGRAMS DEFINITION-----------------------------------------------------------
-        TH1F* h1   = new TH1F("h1","Primary PDG Code",60,-30,30);
-        TH1F* h1_2 = new TH1F("h1_2","Secondaries PDG Code",60,-30,30);
-        TH1F* h2   = new TH1F("h2","Primary Energy",1100,0,11);
+    TH1F* h1   = new TH1F("h1","Primary PDG Code",60,-30,30);
+    TH1F* h1_2 = new TH1F("h1_2","Secondaries PDG Code",60,-30,30);
+    TH1F* h2   = new TH1F("h2","Primary Energy",1100,0,11);
 	TH1F* h3   = new TH1F("h3","HPGe Energy",1000,0,1.2);
 	TH1F* h4   = new TH1F("h4","Theta",400,-4,4);
-        TH1F* hx   = new TH1F("hx","X de impacto",600,-6,6);
+    TH1F* hx   = new TH1F("hx","X de impacto",600,-6,6);
 	TH2F* hxy  = new TH2F("hxy","Collides 2D", 200,-4,4,200,-4,4);
 	TH3F* hxyz = new TH3F("hxyz","Collides 3D", 80,-4,4,80,-4,4,80,-10,-18);
+	TH1F *hxdif = new TH1F("hxdiff","hxdiff",500,-100,100);
+    TH1F *hydif = new TH1F("hydiff","hydiff",500,-100,100);
 	
 	//----   MCTrack (input)   -------------------------------------------------------
 	TClonesArray* MCTrackCA;
@@ -49,11 +51,10 @@ void checkResults_HPGe() {
 	Int_t hpgePointsPerEvent = 0;
         Double_t charge = 0.0;
 
-        TVector3 momentum, vector3;
-        Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
+    TVector3 momentum, vector3;
+    Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
         
-        TH1F *hxdif = new TH1F("hxdiff","hxdiff",500,-100,100);
-        TH1F *hydif = new TH1F("hydiff","hydiff",500,-100,100);
+
 
 	//TREE ENTRIES--------------------------------------------------------------------
 	Long64_t nevents = tree->GetEntries();
@@ -115,24 +116,23 @@ void checkResults_HPGe() {
 
                    //track[h]->GetMomentum(momentum);
 
-                    for(Int_t r=0;r<hpgePointsPerEvent;r++) {                           //LOOP in hpgeHits for each MCTrack
+                    for(Int_t r=0;r<hpgePointsPerEvent;r++) {     //LOOP in hpgeHits for each MCTrack
 
-				    hxdif->Fill(hpgePoint[r]->GetXIn());
-				    hydif->Fill(hpgePoint[r]->GetYIn());
-				    hpgePoint[r]->PositionIn(vector3);
-				    //cout << " ---- " << vector3.Theta() << endl ;
-			            h4->Fill(vector3.Phi());    
-				    X1=hpgePoint[r]->GetXIn();
-				    hx->Fill(X1);
-                                    X2=hpgePoint[r]->GetYIn();
-                                    X3=hpgePoint[r]->GetZIn();
-                                    hx->Fill(X1);
-                                    hxy->Fill(X1,X2);
-                                    hxyz->Fill(X1,X2,X3);
+				    	hxdif->Fill(hpgePoint[r]->GetXIn());
+				    	hydif->Fill(hpgePoint[r]->GetYIn());
+				    	hpgePoint[r]->PositionIn(vector3);
+				    	//cout << " ---- " << vector3.Theta() << endl ;
+			        	h4->Fill(vector3.Phi());    
+				    	X1=hpgePoint[r]->GetXIn();
+				    	hx->Fill(X1);
+                        X2=hpgePoint[r]->GetYIn();
+                        X3=hpgePoint[r]->GetZIn();
+                        hx->Fill(X1);
+                        hxy->Fill(X1,X2);
+                        hxyz->Fill(X1,X2,X3);
                     }
                   }
-
-                }
+               }
 
 	}
 	// END LOOP IN THE EVENTS---------------------------------------------------------
@@ -145,9 +145,9 @@ void checkResults_HPGe() {
 	h1_2->Draw();
 	h1_2->GetXaxis()->SetTitle("PDG Code");
 	h1_2->GetYaxis()->SetTitle("Counts");
-        h1->Draw("same");
-        h1->SetLineColor(2);        
-        h1_2->SetLineColor(8);      
+    h1->Draw("same");
+    h1->SetLineColor(2);        
+    h1_2->SetLineColor(8);      
 	c1->cd(2);                
 	h2->Draw();
 	h2->SetLineColor(9);      
@@ -174,9 +174,9 @@ void checkResults_HPGe() {
    	h3->GetZaxis()->SetTitleFont(42);
    	h3->Draw("");          
    	
-        TCanvas* c5 = new TCanvas("Region2D","Region de impactos 2D",0,0,400,800);
-        c5->SetFillColor(0);
-        c5->SetFrameFillColor(0);
+    TCanvas* c5 = new TCanvas("Region2D","Region de impactos 2D",0,0,400,800);
+    c5->SetFillColor(0);
+    c5->SetFrameFillColor(0);
 	//hxy-> Draw("colz");            
 	hxy-> Draw("lego2z"); 		
 	//hxy-> Draw("surf2z");
@@ -186,15 +186,15 @@ void checkResults_HPGe() {
 
 	TCanvas* c6 = new TCanvas("theta","Angulo theta",0,0,400,400);
 	c6->SetFillColor(0);
-        c6->SetFrameFillColor(0);
+    c6->SetFrameFillColor(0);
 	h4->Draw("");
 	h4->SetLineColor(6);          
 	h4->GetXaxis()->SetTitle("#theta (rad)");
 	h4->GetYaxis()->SetTitle("Counts");
 	
 	TCanvas* c7 = new TCanvas("Region3D","Region de impactos 3D",0,0,400,800);
-        c7->SetFillColor(0);
-        c7->SetFrameFillColor(0);
+    c7->SetFillColor(0);
+    c7->SetFrameFillColor(0);
 	hxyz-> Draw("");
 	hxyz->SetMarkerStyle(20); 
 	hxyz->SetMarkerSize(0.4); 

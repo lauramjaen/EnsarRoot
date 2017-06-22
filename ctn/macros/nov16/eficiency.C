@@ -11,15 +11,15 @@ void eficiency() {
 	//HISTOGRAMS DEFINITION------------------------------------------------------------
 
 	const Int_t n=19;
-	TH1F* h [n]; // creamos un array de histogramas
+	TH1F* h [n];
 	//TH1F* h   = new TH1F("h","HPGe Energy",8000,0.0,11.0);
-	char namehist [250]; // creamos un char
+	char namehist [250];
 	char titlehist [250]; 
 	Double_t efy[n];
 	Double_t x[n]={1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, 6., 6.5, 7., 7.5, 8., 8.5, 9., 9.5, 10.};
 
 	//INPUT FILE --------------------------------------------------------------------- 
-	for (Int_t k=0; k<n ; k++)	// loop to all generated files MODIFICADO SON 20!!
+	for (Int_t k=0; k<n ; k++)
 	{
 	
 		cout<<"HISTOGRAM: "<< k <<endl;
@@ -29,19 +29,15 @@ void eficiency() {
 		sprintf(file1, "outsim_%d.root", k+1);
 		TFile *file2 = TFile::Open(file1);
 
-		sprintf(namehist, "histo_%d", k);      //crea el nombre histo_1, histo_2 ...
+		sprintf(namehist, "histo_%d", k); 
 		sprintf(titlehist, "Photon Energy of %.2f MeV", x[k]);
 		//format(x, '.2f')  .prec=2
-		h[k] = new TH1F(namehist,titlehist,8000,0.0,11.0);// asignamos los nombres histo_1, histo_2... a cada histograma del array
+		h[k] = new TH1F(namehist,titlehist,8000,0.0,11.0);
 
 		//READING TREE---------------------------------------------------------------------
 		TTree* tree = (TTree*)file2->Get("ensartree");
 
-
-		//cout<< "estoy aqui 3"<<endl;
-
 		//Crystal Points (input)------------------------------------------------------------
-
 		TClonesArray* hpgeHitCA;
 		EnsarHPGeDetHit** hpgeHit;
 		hpgeHitCA = new TClonesArray("EnsarHPGeDetHit",5);
@@ -82,7 +78,7 @@ void eficiency() {
 
 
 					energy = hpgeHit[j]->GetEnergy()*1000; //energy MeV
-					h[k]->Fill(energy); // rellenamos el array de histogramas	
+					h[k]->Fill(energy); 
 					//cout<<"El valor de la energia es de: "<< energy <<endl;		
 				}
 			}
@@ -90,7 +86,7 @@ void eficiency() {
 		}
 		
 
-			//-------------    AJUSTE GENERAL   --------------------------------------------------------------------------------	
+			//-------------    GENERAL FIT   --------------------------------------------------------------------------------	
 			
 			/*//Find the numer of peaks on each spectrum
 			TSpectrum* spec= new TSpectrum(); 
@@ -116,43 +112,12 @@ void eficiency() {
 			Int_t binX1 = h[k]->GetXaxis()->FindBin(xp-0.01*xp); //bin position of the gaussian extrem
 			Int_t binX2 = h[k]->GetXaxis()->FindBin(xp+0.01*xp); //bin position of the gaussian extrem
 			Double_t integral= h[k]->Integral (binX1, binX2);*/
-			//------------------------------------------------------------------------------------------------------------------------			
+			//-----------------------------------------------------------------------------------------------------------------			
 			
+		
 			
-			//--------------  AJUSTE PARA DIFERENTES ENRGÍAS (no va bien) ------------------------------------------------------------
-			/*//Find the photopeak of each histogram
-			TSpectrum* spec= new TSpectrum();
-			
-			
-			if(k<11){
-			
-				nfound = spec-> Search(h[k],5.9,"",0.8);
-				printf("Found %d candidate peaks to fit\n",nfound);
-				Double_t *xpeaks = spec->GetPositionX();
-				xp = xpeaks[0];
-				
-			} else if (k<15 && k>10){
-			
-				nfound = spec-> Search(h[k],5,"",0.4);
-				printf("Found %d candidate peaks to fit\n",nfound);
-				Double_t *xpeaks = spec->GetPositionX();
-				xp = xpeaks[1];
-			} else if (k>=15){
-			
-				nfound = spec-> Search(h[k],7,"",0.35);
-				printf("Found %d candidate peaks to fit\n",nfound);
-				Double_t *xpeaks = spec->GetPositionX();
-				xp = xpeaks[2];
-				if (k==16){xp = xpeaks[3];}
-				if (k==18){xp = xpeaks[3];}
-			} else{
-				cout<<"error"<<endl;			
-			}*/
-			
-			
-			//------ AJUSTE GENERAL (seleccionando los photopicos)------------------------------------------------------------------
-			
-			
+			//------ GENERAL FIT (photopeak)------------------------------------------------------------------
+					
 			TSpectrum* spec= new TSpectrum();
 			nfound = spec-> Search(h[k],5,"",0.35);
 			Double_t *xpeaks = spec->GetPositionX();
@@ -184,35 +149,32 @@ void eficiency() {
 
 	cout<<"All photopeaks have been found!"<<endl;
 	
-	//-----Eficiency of photopeaks------------	
-	
+	//-----Efficiency of photopeaks------------	
    	
-   	        //Int_t K=0;
-   		//for (Float_t i=1;i<=10;i=i+0.5) 
-   		//{
-   		//      cout << " K = " << K << " and i = " << i << endl;
-     		//      y[K] = i;
-   		//      K++;
-    	 	//}
+   	/*Int_t K=0;
+   	for (Float_t i=1;i<=10;i=i+0.5){
+   		cout << " K = " << K << " and i = " << i << endl;
+     	y[K] = i;
+   		K++;
+    }*/
 
-  	 TGraph *gr  = new TGraph(n,x,efy); // create eficiency graph
+   TGraph *gr  = new TGraph(n,x,efy); // create eficiency graph
 
 
 
 	//----- Draw histograms and efficiency-----
-	TCanvas* c1 = new TCanvas("c1","Energy in the HPGe",0,0,400,400); // en el origen y CUADRADA
-	c1->Divide(5,4);           // divide la canvas en 20 partes
+	TCanvas* c1 = new TCanvas("c1","Energy in the HPGe",0,0,400,400);
+	c1->Divide(5,4); 
 	c1->SetFillColor(0);
 	c1->SetFrameFillColor(0);
 
 	for(Int_t j=0; j<n; j++)
 	{
-
 		c1->cd(j+1);
 		h[j]->Draw();
 		h[j]->GetXaxis()->SetTitle("Energy (MeV/c^{2})");
 		h[j]->GetYaxis()->SetTitle("Counts");
-		h[j]->SetLineColor(j);        // differents colours
+		h[j]->SetLineColor(j); 
 		if(j==0) h[j]->SetLineColor(j+20);
 		if(j==10) h[j]->SetLineColor(j+20);
 	}

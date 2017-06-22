@@ -1,0 +1,19 @@
+///////////////////////////////////////////////////////////
+////                                   				   ////
+////       		 Cascade of 12900 KeV                  ////
+//// this is an example of 12900->1779->0 cascade      ////
+////                                   				   ////
+///////////////////////////////////////////////////////////
+Energy(GeV), Number of Levels
+0.012900     1                         
+Energy of the transitions (initial -->  final)
+0.012900	0.001779			
+Energy of gamma emmited in the transition
+0.011121       		        
+Branching Ratios
+1
+Angular correlation coefficeints (A2 and A4)
+0.579 	        0.0512
+
+//Only change the values
+//don't modify the file structure 

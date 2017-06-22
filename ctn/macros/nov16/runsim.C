@@ -34,8 +34,14 @@ void runsim() {
   // Event Generator Type |   fGene       (TString)
   //-------------------------------------------------
   // Box  generator:             "box"
-  // Ascii generator:          "ascii"
-  TString fGene="box";
+  // Ascii generator:            "ascii"
+  // Sili cascade generator:     "Sicascade"
+  // Cascade generator:          "Cascade"
+  // Co cascade generator:       "Cocascade"
+  //TString fGene="box";
+  TString fGene="Sicascade";
+  //TString fGene="Cascade";
+  //TString fGene="Cocascade";
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -52,8 +58,11 @@ void runsim() {
   //-------------------------------------------------
 
   TMap detGeo;
-  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));
-  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root"));
+  //detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGe_ch_target_test.geo.root")); //HPGe detector + Reaction chamber+ Al target (Lisboa exp2016) -> 90º rotated
+  //detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber_ROT.geo.root"));   //HPGe detector + Reaction chamber (Lisboa exp2016)	-> 90º rotated
+  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));   //HPGe detector + Reaction chamber (Lisboa exp2016)	
+  //detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box_ROT.geo.root")); //PETALS (Lisboa exp2016)									-> 90º rotated
+  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root")); // PETALS (Lisboa exp2016)
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
@@ -66,7 +75,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kTRUE;
+   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,

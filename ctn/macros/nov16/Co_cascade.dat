@@ -1,0 +1,19 @@
+///////////////////////////////////////////////
+////                                       ////
+////        Cascade of 60-Co               ////
+////         (60-Co->60-Ni)                ////
+////                                       ////
+///////////////////////////////////////////////
+Energy(GeV), Number of Levels
+0.002504     1                         
+Energy of the transitions (initial -->  final)
+0.002504	0.001332			
+Energy of gamma emmited in the transition
+0.01172       		        
+Branching Ratios
+1
+Angular correlation coefficeints (A2 and A4)
+0.125	        0.0416
+
+//Only change the values
+//don't modify the file structure 

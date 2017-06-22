@@ -40,7 +40,8 @@ set(SRCS
 EnsarAsciiIonGenerator.cxx
 EnsarIonGenerator.cxx
 EnsarBoxGenerator.cxx
-EnsarCryAsciiGenerator.cxx
+EnsarSiGenerator.cxx
+EnsarCascadeGen.cxx
 )
 
 # fill list of header files from list of source files

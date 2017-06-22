@@ -267,13 +267,31 @@ void R3BCaloHitFinder::Exec(Option_t* opt)
         switch (fClusteringAlgorithmSelector) {
         case 1: {  //square window
           //Dealing with the particular definition of azimuthal 
-	  //angles (discontinuity in pi and -pi)
+	  	  //angles (discontinuity in pi and -pi)
           if (azimuthalAngle + fDeltaAzimuthal > TMath::Pi()) {
-            angle1 = azimuthalAngle-TMath::Pi(); 
-	    angle2 = testAzimuthal-TMath::Pi();
-          } else if (azimuthalAngle - fDeltaAzimuthal < -TMath::Pi()) {
-            angle1 = azimuthalAngle+TMath::Pi(); 
-	    angle2 = testAzimuthal+TMath::Pi();
+          
+		      	Double_t h=0.;
+		    	h= azimuthalAngle + fDeltaAzimuthal - TMath::Pi();
+		      	
+		      	if (testAzimuthal < (h-TMath::Pi()) ){
+		      		 angle1=azimuthalAngle-TMath::Pi();
+		      		 angle2=testAzimuthal+ TMath::Pi();
+		      	}else{
+		        	angle1 = azimuthalAngle-TMath::Pi(); 
+					angle2 = testAzimuthal-TMath::Pi();
+				}
+          }else if (azimuthalAngle - fDeltaAzimuthal < -TMath::Pi()) {
+          	
+		      	Double_t h=0.;
+		    	h= -azimuthalAngle + fDeltaAzimuthal - TMath::Pi();
+		    	
+		    	if (testAzimuthal > (TMath::Pi()-h)){
+		    		angle1= azimuthalAngle+TMath::Pi();
+		    		angle2= testAzimuthal-TMath::Pi();
+		    	}else{
+		    		angle1 = azimuthalAngle+TMath::Pi(); 
+					angle2 = testAzimuthal+TMath::Pi();
+		    	}
           } else {
             angle1 = azimuthalAngle; angle2 = testAzimuthal;
           }
@@ -388,6 +406,7 @@ void R3BCaloHitFinder::Exec(Option_t* opt)
     
     if(kSimulation) {
       AddHitSim(crystalsInHit, energy, Nf, Ns, polarAngle, azimuthalAngle, eInc);
+      //cout<<"Line 392: Angle Crystals in Hit -> Polar="<<polarAngle*180/TMath::Pi()<< " Azimutal="<<azimuthalAngle*180/TMath::Pi()<<"\n \n "<<endl;				//MODIFICATION ELI
     } else {
       AddHit(crystalsInHit, energy, Nf, Ns, polarAngle, azimuthalAngle);
     }
