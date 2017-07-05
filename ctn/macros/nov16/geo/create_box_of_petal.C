@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////																										
+////							--- Simulation of the Lisbon Nov-2016 setup ---								
+////
+////		This macro recreates one Aluminum BOX of the petal (empty)
+////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iomanip>
 #include <iostream>
@@ -36,7 +43,7 @@ void create_geo(const char* geoTag = "test")
 {
 	fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 
-	// -------   Load media from media file   ----------------------------------- OK
+	// -------   Load media from media file   ----------------------------------- 
 	FairGeoLoader*    geoLoad = new FairGeoLoader("TGeo","FairGeoLoader");
 	FairGeoInterface* geoFace = geoLoad->getGeoInterface();
 	TString geoPath = gSystem->Getenv("VMCWORKDIR");
@@ -48,14 +55,14 @@ void create_geo(const char* geoTag = "test")
 
 
 
-	// -------   Geometry file name (output)   ----------------------------------OK
+	// -------   Geometry file name (output)   ----------------------------------
 	TString geoFileName = geoPath + "/ctn/geometry/box_petal_";
 	geoFileName = geoFileName + geoTag + ".geo.root";
 	// --------------------------------------------------------------------------
 
 
 
-	// -----------------   Get and create the required media    ----------------- OK
+	// -----------------   Get and create the required media    ----------------- 
 	FairGeoMedia* gGeoMedia = geoFace->getMedia(); 
 	FairGeoBuilder* gGeoBuild = geoLoad->getGeoBuilder(); 
 
@@ -99,7 +106,7 @@ void create_geo(const char* geoTag = "test")
 
 
 
-	// --------------   Create geometry and top volume  ------------------------- OK
+	// --------------   Create geometry and top volume  ------------------------- 
 	gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
 	gGeoMan->SetName("HPGEgeom");
 	gTop = new TGeoVolumeAssembly("TOP");
@@ -112,7 +119,7 @@ void create_geo(const char* geoTag = "test")
 	ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi, pMedAir); 	
 
 
-	// ---------------   Finish   ----------------------------------------------- OK
+	// ---------------   Finish   ----------------------------------------------- 
 	gGeoMan->CloseGeometry();
 	gGeoMan->CheckOverlaps(0.001);
 	gGeoMan->PrintOverlaps();

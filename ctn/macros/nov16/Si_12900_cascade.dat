@@ -1,20 +1,19 @@
-////////////////////////////////////////////////////////////
-////                                                    ////
-////    Cascade of 60-Co with Angular Correlations      ////
-////            (60-Co->60-Ni)                          ////
-////           2504->1332->0 keV                        ////
-////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+////                                   				          ////
+////	   Simply Cascade of Si* with Angular Correlations    ////
+////              12900->1779->0 keV                          ////
+////                                        		          ////
+//////////////////////////////////////////////////////////////////
 Energy(GeV), Number of Levels
-0.002504     1                         
+0.012900     1                         
 Energy of the transitions (initial -->  final)
-0.002504	0.001332			
+0.012900	0.001779			
 Energy of gamma emmited in the transition
-0.001172       		        
+0.011121       		        
 Branching Ratios
 1
 Angular correlations coefficients (A2 and A4)
-0.125	        0.0416
-
+0.579 	        0.0512
 
 //It works with ensargen/EnsarCascadeGen.h & EnsarCascadeGen.cxx
 //

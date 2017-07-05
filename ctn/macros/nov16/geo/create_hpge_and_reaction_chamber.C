@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////																										
+////							--- Simulation of the Lisbon Nov-2016 setup ---								
+////
+////		This macro recreates HPGe detector at 90º w.r.t. z axis 
+////		and the Reaction Chamber in the center (LaboratoryRS)
+////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <iomanip>
 #include <iostream>
 #include "TGeoManager.h"
@@ -35,7 +44,7 @@ void create_geo(const char* geoTag = "test")
 {
 	fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 
-	// -------   Load media from media file   ----------------------------------- OK
+	// -------   Load media from media file   ----------------------------------- 
 	FairGeoLoader*    geoLoad = new FairGeoLoader("TGeo","FairGeoLoader");
 	FairGeoInterface* geoFace = geoLoad->getGeoInterface();
 	TString geoPath = gSystem->Getenv("VMCWORKDIR");
@@ -47,14 +56,14 @@ void create_geo(const char* geoTag = "test")
 
 
 
-	// -------   Geometry file name (output)   ----------------------------------OK
-	TString geoFileName = geoPath + "/ctn/geometry/HPGe_ch_target_";
+	// -------   Geometry file name (output)   ----------------------------------
+	TString geoFileName = geoPath + "/ctn/geometry/HPGedetector_";
 	geoFileName = geoFileName + geoTag + ".geo.root";
 	// --------------------------------------------------------------------------
 
 
 
-	// -----------------   Get and create the required media    ----------------- OK
+	// -----------------   Get and create the required media    ----------------- 
 	FairGeoMedia* gGeoMedia = geoFace->getMedia(); 
 	FairGeoBuilder* gGeoBuild = geoLoad->getGeoBuilder(); 
 
@@ -98,7 +107,7 @@ void create_geo(const char* geoTag = "test")
 
 
 
-	// --------------   Create geometry and top volume  ------------------------- OK
+	// --------------   Create geometry and top volume  ------------------------- 
 	gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
 	gGeoMan->SetName("HPGEgeom");
 	gTop = new TGeoVolumeAssembly("TOP");
@@ -111,7 +120,7 @@ void create_geo(const char* geoTag = "test")
 	ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi, pMedAir); 	
 
 
-	// ---------------   Finish   ----------------------------------------------- OK
+	// ---------------   Finish   ----------------------------------------------- 
 	gGeoMan->CloseGeometry();
 	gGeoMan->CheckOverlaps(0.001);
 	gGeoMan->PrintOverlaps();
@@ -220,8 +229,8 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 
 	// ----------------------------------------------
 	// detector at 90 degrees
-	TGeoRotation *rot     = new TGeoRotation("rot",0,180,0);
-	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",0,0,-13.295,rot);
+	TGeoRotation *rot     = new TGeoRotation("rot",90,-90,0);
+	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-13.295,0,0,rot);
 	pWorld->AddNode(main_tube,1,comb); 
 	// ----------------------------------------------
 	
@@ -264,19 +273,8 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
 	// ----------------------------------------------
 	
 	// ----------------------------------------------
-	// Create target of Al inside the vacuum of the chamber
-	TGeoVolume *target_Al = gGeoManager->MakeTube("target_Al", pMedAl, 0.0, 0.5, 0.00004);
-	steel_base1->SetFillColor(13);
-	steel_base1->SetLineColor(13);
-	TGeoRotation *rot_target    = new TGeoRotation("rot_target",90.,90.,0.);
-  	TGeoCombiTrans *comb_target = new TGeoCombiTrans("comb_target", 0., 0.,0.,rot_target);
-	vacuum_chamber->AddNode(target_Al,1,comb_target);
-	target_Al->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-	
-	// ----------------------------------------------
 	// reaction chamber in the origin 
-	TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);//0,90,0
+	TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);
 	TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
 	pWorld->AddNode(main_chamber,1,comb_ch);
 	// ----------------------------------------------
@@ -337,8 +335,6 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
       pRot->SetMatrix(fRotable);
       TGeoCombiTrans *pTmp = new TGeoCombiTrans(*fGlobalTrans,*pRot);
       
-      // ne peut pas etre applique ici
-      // il faut differencier trans et rot dans la multi.
       TGeoRotation rot_id;
       rot_id.SetAngles(0.0,0.0,0.0);
       

@@ -1,9 +1,20 @@
-// ----------------------------------------------------------------------
-// ----- 												            -----
-// -----          EnsarCascadeGen header                            -----
-// ----- gamma generator of one cascade with angular correlation    ----- 
-// ----- 												            -----
-// ----------------------------------------------------------------------
+// *********************************************************************
+// *****             EnsarCascadeGen header file                   *****
+// *****   												           *****
+// *****      Simply Gamma Cascade Generator  	                   *****
+// *****      with Angular Correlations                       	   *****
+// ***** 												           *****
+// *****      Works with the data files:				    	   *****
+// ***** 		 -Co_cascade.dat								   *****
+// *****		 -Si_12900_cascade.dat		    				   *****
+// ***** 		 -Gamma_AngularC_200k.dat						   *****
+// ***** 	  or any file with the same data structure		       *****
+// *****												           *****
+// ***** elisabet.galiana@usc.es				                   *****
+// ***** Universidad de Santiago de Compostela                     *****
+// ***** Dpto. Física de Partículas                                *****
+// *****   												           *****
+// *********************************************************************
 
 
 #ifndef ENSAR_CASCADEGENERATOR_H
@@ -29,7 +40,7 @@ class EnsarCascadeGen : public FairGenerator
     EnsarCascadeGen();
 
     /** Constructor.  **/
-    EnsarCascadeGen(const char* inputFile, Int_t state); //file name of Cascade, the state is not used here
+    EnsarCascadeGen(const char* inputFile, Int_t state); //file name
 
     /** Destructor. **/
     virtual ~EnsarCascadeGen();
@@ -51,7 +62,7 @@ class EnsarCascadeGen : public FairGenerator
 	Double_t* fener_i;				//Initial energy of each level
 	Double_t* fener_f;				//Final energy of each level
 	Double_t* fener_gamma;			//Gamma energy
-	Double_t* fBR;					//Branching Ratio
+	Double_t* fBR;					//Branching Ratios
 	Double_t** fA;					//Angular Coeficients A2 and A4
     ClassDef(EnsarCascadeGen,1);
     void CloseInput();

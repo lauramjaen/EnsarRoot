@@ -1,11 +1,18 @@
-// ----------------------------------------------------------------------
-// -----           EnsarSiGenerator source file                     -----
-// ----- 												            -----
-// -----    Gamma generator of different Si* cascades 				----- 
-// -----    from primary reaction  Al+p-> Si*-> Si+gammas           -----
-// -----    with Angular Correlation and Branching Ration			-----
-// ----- 												            -----
-// ----------------------------------------------------------------------
+// ************************************************************************
+// *****             EnsarSiGenerator source file                     *****
+// ***** 												              *****
+// *****      Gamma Generator of different Si* cascades 	          *****
+// *****      with Angular Correlations and Branching Rations		  *****
+// ***** 	  from primary reaction  Al+p-> Si*-> Si+gammas           *****
+// ***** 												              *****
+// ***** 	  Works with the Si_12643_cascade.dat data file	    	  *****
+// ***** 	  or any file with the same data structure		    	  *****
+// ***** 												              *****
+// ***** elisabet.galiana@usc.es				                      *****
+// ***** Universidad de Santiago de Compostela                        *****
+// ***** Dpto. Física de Partículas                                   *****
+// ***** 												              *****
+// ************************************************************************
 
 #include "EnsarSiGenerator.h"
 
@@ -60,7 +67,7 @@ EnsarSiGenerator::EnsarSiGenerator(const char* inputFile, Int_t state) :
 // -----   Inizialize generator   -----------------------------------------
 Bool_t  EnsarSiGenerator::Init()
 {
-  // not done!
+  // not finished!
   // if (state>2 || state<0) {
   //  Fatal("Init()","EnsarSiGenerator: Invalid number of Si* state");
   //}
@@ -104,7 +111,7 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 
 
 	Float_t ran =gRandom->Rndm();
-	cout<<"ran= "<<ran<<endl;
+	//cout<<"ran= "<<ran<<endl;
 	
 	Double_t limit1=0.;
 	Double_t limit2=0.;
@@ -121,7 +128,7 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 	limit3=limit2 + l3;
 	l4=fBR[3];
 	limit4=limit3 + l4;
-	cout<< "limit 1,2,3,4= "<<limit1<<", "<<limit2<<", "<<limit3<<", "<<limit4<<endl;
+	//cout<< "limit 1,2,3,4= "<<limit1<<", "<<limit2<<", "<<limit3<<", "<<limit4<<endl;
 	
 	
 		if(ran<=limit1){ //Cascade A
@@ -130,10 +137,10 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 			  Egamma2=fener_f[i];
 			  A2=fA[i][i];
 			  A4=fA[i][i+1];
-			  cout<<"i= "<<i<<endl;
-			  cout<<"Egamma1= "<<Egamma1<<endl;
-			  cout<<"Egamma2= "<<Egamma2<<endl;
-			  cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
+			  //cout<<"i= "<<i<<endl;
+			  //cout<<"Egamma1= "<<Egamma1<<endl;
+			  //cout<<"Egamma2= "<<Egamma2<<endl;
+			  //cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
 		}	  
 		else if (ran>limit1 && ran<=limit2){ //Cascade B
 			  i=1;
@@ -141,10 +148,10 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 			  Egamma2=fener_f[i];
 			  A2=fA[i][0];
 			  A4=fA[i][1];
-			  cout<<"i= "<<i<<endl;
-			  cout<<"Egamma1= "<<Egamma1<<endl;
-			  cout<<"Egamma2= "<<Egamma2<<endl;
-			  cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
+			  //cout<<"i= "<<i<<endl;
+			  //cout<<"Egamma1= "<<Egamma1<<endl;
+			  //cout<<"Egamma2= "<<Egamma2<<endl;
+			  //cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
 		}
 		else if (ran>limit2 && ran<=limit3){ //Cascade C
 			  i=2;
@@ -152,15 +159,15 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 			  Egamma2=fener_f[i];
 			  A2=fA[i][0];
 			  A4=fA[i][1];
-			  cout<<"i= "<<i<<endl;
-			  cout<<"Egamma1= "<<Egamma1<<endl;
-			  cout<<"Egamma2= "<<Egamma2<<endl;
-			  cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
+			  //cout<<"i= "<<i<<endl;
+			  //cout<<"Egamma1= "<<Egamma1<<endl;
+			  //cout<<"Egamma2= "<<Egamma2<<endl;
+			  //cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
 		}
 		else if (ran>limit3 && ran<=limit4){ //Cascade D and E
 	
 			  i=3;
-			  cout<<"i= "<<i<<endl;
+			  //cout<<"i= "<<i<<endl;
 			  Egamma1=fener_gamma[i];
 			  Egamma2=fener_gamma[i+1];
 			  Egamma3=fener_f[i+1];
@@ -168,11 +175,11 @@ Bool_t EnsarSiGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 			  A4=fA[i][1];
 			  A6=fA[i+1][0];
 			  A8=fA[i+1][1];
-			  cout<<"Egamma1= "<<Egamma1<<endl;
-			  cout<<"Egamma2= "<<Egamma2<<endl;
-			  cout<<"Egamma3= "<<Egamma3<<endl;
-			  cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
-			  cout<<"A6= "<<A6<<" A8= "<<A8<<endl;
+			  //cout<<"Egamma1= "<<Egamma1<<endl;
+			  //cout<<"Egamma2= "<<Egamma2<<endl;
+			  //cout<<"Egamma3= "<<Egamma3<<endl;
+			  //cout<<"A2= "<<A2<<" A4= "<<A4<<endl;
+			  //cout<<"A6= "<<A6<<" A8= "<<A8<<endl;
 		}
 		  
 
@@ -408,7 +415,7 @@ void EnsarSiGenerator::ReadParameters() {
 	 	cout<<"E_gamma= "<<fener_gamma[i]<<endl;
     }
     
-    // ---- Reading Branching Ratio
+    // ---- Reading Branching Ratios
     fInputFile->ignore(256,'\n');
 	fInputFile->ignore(256,'\n');
     for(int i = 0; i < nLevel; i++){ 

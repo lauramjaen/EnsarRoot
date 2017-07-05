@@ -238,7 +238,9 @@ void R3BCaloHitFinder::Exec(Option_t* opt)
       GetAngles(crystalHit[crystalWithHigherEnergy]->GetCrystalId(),
 		&polarAngle,&azimuthalAngle,&rhoAngle);
     }
-
+    
+	//cout<<"azimutalAngle= "<<azimuthalAngle<<endl;
+	//cout<<"polarAngle= "<<polarAngle<<endl;
 
     // Third, finding closest hits and adding their energy
     // Clusterization: you want to put a condition on the angle between the highest
@@ -295,6 +297,10 @@ void R3BCaloHitFinder::Exec(Option_t* opt)
           } else {
             angle1 = azimuthalAngle; angle2 = testAzimuthal;
           }
+          
+          //cout<<"Azimutal_angle1= "<<angle1<<endl;
+          //cout<<"Azimutal_angle2= "<<angle2<<endl;
+          
           if (TMath::Abs(polarAngle - testPolar) < fDeltaPolar &&
               TMath::Abs(angle1 - angle2) < fDeltaAzimuthal ) {
             if(kSimulation) {
@@ -1742,7 +1748,7 @@ void R3BCaloHitFinder::GetAngles(Int_t iD, Double_t* polar,
     // cpPetal           = number of petal copy (from 1 to total number of petals)
     // crystalType       = alveolus type (from 9 to 16) [Alveolus number]
     // alveolusCopy      = alveolus copy (16 to upper crystals and 17 to down crystals) 
-    // crystalInAlveolus = crystal copy for each alveolus (from 0 to 3)                                    
+    // crystalInAlveolus = crystal copy for each alveolus (from 1 to 4)                                  
     // crystalCopy       = (alveolus copy-16) * 4 + crystals copy +1 (from 1 to 8) 
     // iD (crystalId)    = first petal (from 1 to 64 for the first 64 crystals)
     //                     second petal (from 65 to 128)
@@ -1760,18 +1766,20 @@ void R3BCaloHitFinder::GetAngles(Int_t iD, Double_t* polar,
      crystalType= Int_t((iD2-1)/8+9);//alveous type
      crystalCopy= iD2-8*(crystalType-9);//crystal copy (from 1 to 8)
      if(crystalCopy<5){
-     	crystalInAlveolus=crystalCopy-1;// crystal in alveolus (from 0 to 3)
+     	crystalInAlveolus=crystalCopy;// crystal in alveolus (from 1 to 4)
      	alveolusCopy=16;		//alveolus type 16
      }else{
-     	crystalInAlveolus=crystalCopy-5;// crystal in alveolus (from 0 to 3)
+     	crystalInAlveolus=crystalCopy-4;// crystal in alveolus (from 1 to 4)
      	alveolusCopy=17;		//alveolus type 17
      }
      
-     //cout<<"cpPetal ="<<cpPetal<<endl;
-     //cout<<"crystalType ="<<crystalType<<endl;
-     //cout<<"crystalCopy ="<<crystalCopy<<endl;
-     //cout<<"crystalInAlveolus ="<<crystalInAlveolus<<endl;
-     //cout<<"alveolusCopy ="<<alveolusCopy<<endl;
+     //cout<<"CrystalId= "<<iD<<endl;
+     //cout<<"iD2= "<<iD2<<endl;
+     //cout<<"cpPetal= "<<cpPetal<<endl;
+     //cout<<"crystalType= "<<crystalType<<endl;
+     //cout<<"crystalCopy= "<<crystalCopy<<endl;
+     //cout<<"crystalInAlveolus= "<<crystalInAlveolus<<endl;
+     //cout<<"alveolusCopy= "<<alveolusCopy<<endl;
      
      
     Int_t alveoliType[16]={1,2,2,2,2,3,3,4,4,4,5,5,5,6,6,6};
@@ -1781,42 +1789,8 @@ void R3BCaloHitFinder::GetAngles(Int_t iD, Double_t* polar,
 	    "/cave_1/CalifaWorld_0/trap_out_%i/trap_in_1/Alveolus_%i_%i/AlveolusInner_%i_1/CrystalWithWrapping_%i_%i_%i/Crystal_%i_%i_1",
 	    cpPetal,crystalType, alveolusCopy, 
 	    crystalType, alveoliType[crystalType-1], 
-	    crystalInAlveolus+1, crystalInAlveolus, 
-	    alveoliType[crystalType-1], crystalInAlveolus+1);
-
-    // the origin for each crystal is the alveoli corner
-   
-    if (crystalType==8 || crystalType==9 || crystalType==10) {
-      if(crystalInAlveolus==1){
-	local[0]=38.3683/8; local[1]=-4.71618/8; local[2]=0;
-      } else if(crystalInAlveolus==2) {
-	local[0]=38.3683/8; local[1]=-19.8438/8; local[2]=0;
-      } else if(crystalInAlveolus==3) {
-	local[0]=8.43569/8; local[1]=-4.71618/8; local[2]=0;
-      } else if(crystalInAlveolus==4){
-	local[0]=8.43569/8; local[1]=-19.8438/8; local[2]=0;
-      }
-    } else if (crystalType==11 || crystalType==12 || crystalType==13) {
-      if(crystalInAlveolus==1){
-	local[0]=38.3495/8; local[1]=-4.70373/8; local[2]=0;
-      } else if(crystalInAlveolus==2) {
-	local[0]=38.3495/8; local[1]=-19.8403/8; local[2]=0;
-      } else if(crystalInAlveolus==3) {
-	local[0]=8.66654/8; local[1]=-4.70373/8; local[2]=0;
-      } else if(crystalInAlveolus==4){
-	local[0]=8.66654/8; local[1]=-19.8403/8; local[2]=0;
-      }
-    } else if (crystalType==14 || crystalType==15 || crystalType==16) {
-      if(crystalInAlveolus==1){
-	local[0]=37.9075/8; local[1]=-4.66458/8; local[2]=0;
-      } else if(crystalInAlveolus==2) {
-	local[0]=37.9075/8; local[1]=-19.8474/8; local[2]=0;
-      } else if(crystalInAlveolus==3) {
-	local[0]=9.07247/8; local[1]=-19.8474/8; local[2]=0;
-      } else if(crystalInAlveolus==4){
-	local[0]=9.07247/8; local[1]=-4.66458/8; local[2]=0;
-      }
-    }		
+	    crystalInAlveolus, crystalInAlveolus-1, 
+	    alveoliType[crystalType-1], crystalInAlveolus);
 
     gGeoManager->CdTop();
 
@@ -1834,7 +1808,7 @@ void R3BCaloHitFinder::GetAngles(Int_t iD, Double_t* polar,
 	    "/cave_1/CalifaWorld_0/trap_out_%i/trap_in_1/Alveolus_%i_%i/AlveolusInner_%i_1/CrystalWithWrapping_%i_%i_%i",
 	    cpPetal,crystalType, alveolusCopy, 
 	    crystalType, alveoliType[crystalType-1], 
-	    crystalInAlveolus+1, crystalInAlveolus);
+	    crystalInAlveolus, crystalInAlveolus-1);
     gGeoManager->cd(nameVolume);
     currentNode = gGeoManager->GetCurrentNode();
     local[0]=master[0]; local[1]=master[1]; local[2]=master[2];

@@ -35,13 +35,16 @@ void runsim() {
   //-------------------------------------------------
   // Box  generator:             "box"
   // Ascii generator:            "ascii"
-  // Sili cascade generator:     "Sicascade"
-  // Cascade generator:          "Cascade"
-  // Co cascade generator:       "Cocascade"
-  //TString fGene="box";
-  TString fGene="Sicascade";
-  //TString fGene="Cascade";
+  // Si-12643 cascade generator: "Sicascade"
+  // Si-12900 cascade generator: "SiOneCascade"
+  // Co-60 cascade generator:    "Cocascade"
+  // Gamma-200keV cascade generator: "Gamma_AngularC_200k"
+  TString fGene="box";
+  //TString fGene="Sicascade";
+  //TString fGene="SiOneCascade";
   //TString fGene="Cocascade";
+  //TString fGene="Gamma_AngularC_200k";
+
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -58,17 +61,15 @@ void runsim() {
   //-------------------------------------------------
 
   TMap detGeo;
-  //detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGe_ch_target_test.geo.root")); //HPGe detector + Reaction chamber+ Al target (Lisboa exp2016) -> 90º rotated
-  //detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber_ROT.geo.root"));   //HPGe detector + Reaction chamber (Lisboa exp2016)	-> 90º rotated
-  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));   //HPGe detector + Reaction chamber (Lisboa exp2016)	
-  //detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box_ROT.geo.root")); //PETALS (Lisboa exp2016)									-> 90º rotated
-  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root")); // PETALS (Lisboa exp2016)
+  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));   	//HPGe detector + Reaction chamber (Lisboa exp2016)	
+  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root"));			// PETALS (Lisboa exp2016)
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 100000;
+   Int_t nEvents = 1000000;
+
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

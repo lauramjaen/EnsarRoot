@@ -1,3 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////																										
+////							--- Simulation of the Lisbon Nov-2016 setup ---								
+////
+////		This macro recreates the two petals (each one formed by 64 crystals) inside
+////		their boxes at 90º and 180º w.r.t. HPGe detector
+////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 #include <iomanip>
 #include <iostream>
 #include "TGeoManager.h"
@@ -55,7 +66,7 @@ TGeoCombiTrans matDemo_1(0., 0., 0., new TGeoRotation("rotDemo_1", 0., 0., 0.));
 TGeoCombiTrans matDemo_2(0., 0., 0., new TGeoRotation("rotDemo_2", 0., 0., 0.));
 TGeoCombiTrans matDemo_3(0., 0., 0., new TGeoRotation("rotDemo_3", 0., 0., 0.));
 TGeoCombiTrans matDemo_4(0., 0., 0., new TGeoRotation("rotDemo_4", 0., 0., 0.));
-TGeoCombiTrans matDemo_5(0.6, 25., -47., new TGeoRotation("rotDemo_5", 0., 90., 7.));  //specific orientation to Petal inside his BOX
+TGeoCombiTrans matDemo_5(0.6, 25., -47., new TGeoRotation("rotDemo_5", 0., 90., 7.));//specific orientation to the Crystals of the Petal inside its BOX
 TGeoCombiTrans matDemo_6(0., 0., 0., new TGeoRotation("rotDemo_6", 0., 0., 0.));
 
 /*
@@ -313,7 +324,7 @@ void create_califa_geo(const char* geoTag)
   
   
   //-------------------------------------------------------------------------------------
-  
+  //Geometry part has been taken from create_califa_demosntrator.C 
   
   TGeoCombiTrans *t0 = new TGeoCombiTrans();
   TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
@@ -1132,14 +1143,14 @@ void create_califa_geo(const char* geoTag)
    trap_in->SetVisLeaves(kTRUE);
   //---------------------------------
   
-  //BOX of petal 5 a 180º
-  TGeoRotation *rot_box_p5    = new TGeoRotation("rot_box_p5",-90.,250.,0.); //-90.,340.,0.
-  TGeoCombiTrans *comb_box_p5 = new TGeoCombiTrans("comb_box_p5", 51.69, 0., 0.,rot_box_p5); //specific orientation to BOX+Petal 5 exp Nov.16 Lisbon   0., 0., 51.69
+  //BOX of petal at 180º w.r.t. HPGe
+  TGeoRotation *rot_box_p5    = new TGeoRotation("rot_box_p5",-90.,250.,0.);
+  TGeoCombiTrans *comb_box_p5 = new TGeoCombiTrans("comb_box_p5", 51.69, 0., 0.,rot_box_p5); //specific orientation to BOX+Petal Lisbon Nov.16 exp
   pWorld->AddNode(trap_out,1,comb_box_p5);
   
-  //BOX of petal 6 a 90º
-  TGeoRotation *rot_box_p6    = new TGeoRotation("rot_box_p6",-90.,340.,0.);//-90.,60.,0.
-  TGeoCombiTrans *comb_box_p6 = new TGeoCombiTrans("comb_box_p6", 0, 0.,51.09,rot_box_p6); //specific orientation to BOX+Petal 6 exp Nov.16 Lisbon -51.69, 0.,0.
+  //BOX of petal at 90º w.r.t. HPGe
+  TGeoRotation *rot_box_p6    = new TGeoRotation("rot_box_p6",-90.,340.,0.);
+  TGeoCombiTrans *comb_box_p6 = new TGeoCombiTrans("comb_box_p6", 0., 0.,51.09,rot_box_p6); //specific orientation to BOX+Petal Lisbon Nov.16 exp
   pWorld->AddNode(trap_out,2,comb_box_p6);
   trap_out->SetVisLeaves(kTRUE);
   

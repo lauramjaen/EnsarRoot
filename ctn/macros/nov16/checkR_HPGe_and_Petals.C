@@ -1,6 +1,47 @@
+////////////////////////////////////////////////////////////////////////////////////
+////																			
+////		--- Simulation of the Lisbon Nov-2016 setup ---						
+////																			
+////		Macro to checkResults of the HPGe & Petals							
+////																			
+////		It analyzes the MCTracks of the primary and secondary particles		
+////		and the detector responses: the HPGe detector and the two Petals	
+////		which have three branches of information: Point, Crystal and Calo	
+////																			
+////		Usage:																
+////			1st: select the root file & change the ranges (OPTIONAL)		
+////			2nd: root -l checkR_HPGe_and_Petals.C							
+////																			
+////		Calculate:															
+////			-MCTrack: Primary and Secondary PDG Code,						
+////			 		  energy, theta&phi angles of Primary Particles			
+////			-HPGe: energy, Collides 1D & 2D & 3D, theta angle				
+////			-Crystal: ID, Type, Copy, energy								
+////			-Calo: energy, theta&phi angles									
+////			-Point: Collides 2D & 3D										
+////			-Both detectors: Collides 3D									
+////																			
+////																			
+//// **elisabet.galiana@usc.es													
+//// ** Universidad de Santiago de Compostela									
+//// ** Dpto. Física de Partículas 												
+////////////////////////////////////////////////////////////////////////////////////
 
-void checkResults_bothdet() {
+//NOTE1: if you want to analyze the HPGePoint & CrystalPoint
+//      you have to activate them before to execute runsim.C,
+//		in order to create their branches
+//
+//		How to activate them: comment/descomment these lines
+//		HPGe: ctn/detector/EnsarHPGeDet.cxx 
+//				->FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
+//		Califa: calo/cal/R3BCalo.cxx
+//				->FairRootManager::Instance()->Register("CrystalPoint", GetName(), fCaloCollection, kTRUE);
 
+//NOTE2:The Crystals could be identified by their CrystalId:											
+//				-Petal at 90º w.r.t.HPGe: CryId from 1 to 64											
+//				-Petal at 180º w.r.t.HPGe: CryId from 65 to 128											
+
+void checkR_HPGe_and_Petals() {
 
 	//ROOT ENVIRONMENT
 	gROOT->SetStyle("Plain");
@@ -8,27 +49,27 @@ void checkResults_bothdet() {
 	gStyle->SetOptFit(0);
 
 	//INPUT FILE
-	char inputFile[250] = "outsim.root";                                              
+	char inputFile[250] = "outsim.root";  //change root file                                            
 	TFile *file1 = TFile::Open(inputFile);
 
 	//READING TREE
 	TTree* tree = (TTree*)file1->Get("ensartree");
 
-	//HISTOGRAMS DEFINITION-----------------------------------------------------------//Change these maximum energies
+	//HISTOGRAMS DEFINITION-----------------------------------------------------------//Change these ranges
     TH1F* h1   = new TH1F("h1","Primary PDG Code",60,-30,30);
     TH1F* h1_2 = new TH1F("h1_2","Secondaries PDG Code",60,-30,30);
     TH1F* h2   = new TH1F("h2","Primary Energy",1100,0,15);
-	TH1F* h3   = new TH1F("h3","HPGe Energy",1000,0,15);
-	TH1F* h4   = new TH1F("h4","Theta",200,-4,4);
-    TH1F* hx   = new TH1F("hx","X de impacto",600,-6,6);
-	TH2F* hxy  = new TH2F("hxy","HPGe Collides 2D", 200,-4,4,200,-4,4);
-	TH3F* hxyz = new TH3F("hxyz","HPGe Collides 3D", 80,-4,4,80,-4,4,80,-10,-18);
-	TH3F* hxyz_ambos = new TH3F("hxyz_ambos","Collides 3D both detectors", 180,-20.,70., 40,-10.,10. ,200,-30.,70.);
-	TH1F* h3_T = new TH1F("h3_T","Primary Theta",200,0,3.2);
-	TH1F* h4_T = new TH1F("h4_T","Primary Phi",200,-3.2,3.2);
+    TH1F* h3   = new TH1F("h3","Primary Theta",200,0,3.2);
+	TH1F* h4   = new TH1F("h4","Primary Phi",200,-3.2,3.2);
+	
+	TH1F* h3_Ge   = new TH1F("h3_Ge","HPGe Energy",1000,0,15);
+	TH1F* h4_Ge   = new TH1F("h4_Ge","Theta",200,-4,4);
+    TH1F* hx_Ge   = new TH1F("hx_Ge","HPGe Collides 1D (x)",600,-6,6);
+	TH2F* hxy_Ge  = new TH2F("hxy_Ge","HPGe Collides 2D (x,y)", 200,-4,4,200,-4,4);
+	TH3F* hxyz_Ge = new TH3F("hxyz_Ge","HPGe Collides 3D (x,y,z)", 80,-4,4,80,-4,4,80,-10,-18);
 	
 	TH1F* h1_Cry = new TH1F("h1_Cry","Crystal ID",150,0,150);
-	TH1F* h2_Cry = new TH1F("h2_Cry","Petals Energy",200,0,2);
+	TH1F* h2_Cry = new TH1F("h2_Cry","Crystal Energy",200,0,2);
 	TH1F* h3_Cry = new TH1F("h3_Cry","Crystal Type",32,0,32);
 	TH1F* h4_Cry = new TH1F("h4_Cry","Crystal Copy",15,0,15);
 	
@@ -39,6 +80,8 @@ void checkResults_bothdet() {
 	TH2F* hxz_Point = new TH2F("hxz_Point","Petals Collides 2D (x,z)", 180,-20.,70.,200,-30.,70.);
 	TH3F* hxzy_Point = new TH3F("hxzy_Point","Petals Collides 3D (x,z,y)", 180,-20.,70.,200,-30.,70., 40,-10.,10.);
 
+	TH3F* hxyz_ambos = new TH3F("hxyz_ambos","Collides 3D both detectors", 180,-20.,70., 40,-10.,10. ,200,-30.,70.);
+	
 	//----   MCTrack (input)   -------------------------------------------------------
 	TClonesArray* MCTrackCA;
 	EnsarMCTrack** track;
@@ -93,21 +136,20 @@ void checkResults_bothdet() {
 	Int_t crystalHitsPerEvent = 0;
 	Int_t caloHitsPerEvent=0;
 	Int_t crystalPointPerEvent=0;
-        Double_t charge = 0.0;
+    Double_t energy = 0.0;
 
-        TVector3 momentum, vector3;
-        Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
+    TVector3 momentum, vector3;
+    Float_t X1=0.,X2=0.,X3=0.,X4=0.,Xup=0.,Xdown=0.;
         
 
 	//TREE ENTRIES--------------------------------------------------------------------
 	Long64_t nevents = tree->GetEntries();
-        Int_t con=0; // con,conP son dos contadores se pueden eliminar
-        Int_t conP=0;
+
         
 	//LOOP IN THE EVENTS--------------------------------------------------------------
 	for(int i=0;i<nevents;i++){
 	    	if(i%1== 100) printf("Event:%i\n",i);
-		charge = 0.;
+		energy = 0.;
 		tree->GetEvent(i);
 
 		MCtracksPerEvent     = MCTrackCA->GetEntries();
@@ -166,8 +208,8 @@ void checkResults_bothdet() {
 				h1->Fill(track[h]->GetPdgCode());
 				h2->Fill(track[h]->GetEnergy()*1000);//MeV
 				track[h]->GetMomentum(momentum);
-                h3_T->Fill(momentum.Theta());
-				h4_T->Fill(momentum.Phi());
+                h3->Fill(momentum.Theta());
+				h4->Fill(momentum.Phi());
                         } else {
                           h1_2->Fill(track[h]->GetPdgCode());
                         }
@@ -178,18 +220,19 @@ void checkResults_bothdet() {
 
                   if(track[h]->GetMotherId()<0) {    //Primary Particle is MotherId=-1
                     //LOOP in HPGe points
-                    for(Int_t r=0;r<hpgePointsPerEvent;r++) {                           //LOOP in hpgeHits for each MCTrack
+                    for(Int_t r=0;r<hpgePointsPerEvent;r++) { //LOOP in hpgeHits for each MCTrack
 
 				    hpgePoint[r]->PositionIn(vector3);
-			            h4->Fill(vector3.Phi());    
+			        h4_Ge->Fill(vector3.Phi());    
+				    
 				    X1=hpgePoint[r]->GetXIn();
-				    hx->Fill(X1);
-                                    X2=hpgePoint[r]->GetYIn();
-                                    X3=hpgePoint[r]->GetZIn();
-                                    hx->Fill(X1);
-                                    hxy->Fill(X1,X2);
-                                    hxyz->Fill(X1,X2,X3);
-                                    hxyz_ambos->Fill(X1,X2,X3);
+				    hx_Ge->Fill(X1);
+                    X2=hpgePoint[r]->GetYIn();
+                    X3=hpgePoint[r]->GetZIn();
+                    hx_Ge->Fill(X1);
+                    hxy_Ge->Fill(X1,X2);
+                    hxyz_Ge->Fill(X1,X2,X3);
+                    hxyz_ambos->Fill(X1,X2,X3);
                     }
                   }
                 }
@@ -197,8 +240,8 @@ void checkResults_bothdet() {
 		//LOOP in HPGe Hits
 		for(Int_t h=0;h<hpgeHitsPerEvent;h++){
 		
-			charge = hpgeHit[h]->GetEnergy()*1000;
-			h3->Fill(charge);
+			energy = hpgeHit[h]->GetEnergy()*1000;
+			h3_Ge->Fill(energy);
 		}
 		
         //LOOP in crystal Hits
@@ -276,51 +319,51 @@ void checkResults_bothdet() {
 	c2->SetFrameFillColor(0);
 	Int_t ci;// for color index setting
    	ci = TColor::GetColor("#000099");
-   	h3->SetLineColor(ci);
-   	h3->SetLineWidth(2);
-   	h3->GetXaxis()->SetTitle("Energy (MeV/c^{2})");
-   	h3->GetXaxis()->SetLabelSize(0.035);
-   	h3->GetXaxis()->SetTitleSize(0.035);
-   	h3->GetYaxis()->SetTitle("Counts");
-   	h3->GetYaxis()->SetLabelSize(0.035);
-   	h3->GetYaxis()->SetTitleSize(0.035);
-   	h3->GetZaxis()->SetLabelFont(42);
-   	h3->GetZaxis()->SetLabelSize(0.035);
-   	h3->GetZaxis()->SetTitleSize(0.035);
-   	h3->GetZaxis()->SetTitleFont(42);
-   	h3->Draw(""); 
+   	h3_Ge->SetLineColor(ci);
+   	h3_Ge->SetLineWidth(2);
+   	h3_Ge->GetXaxis()->SetTitle("Energy (MeV/c^{2})");
+   	h3_Ge->GetXaxis()->SetLabelSize(0.035);
+   	h3_Ge->GetXaxis()->SetTitleSize(0.035);
+   	h3_Ge->GetYaxis()->SetTitle("Counts");
+   	h3_Ge->GetYaxis()->SetLabelSize(0.035);
+   	h3_Ge->GetYaxis()->SetTitleSize(0.035);
+   	h3_Ge->GetZaxis()->SetLabelFont(42);
+   	h3_Ge->GetZaxis()->SetLabelSize(0.035);
+   	h3_Ge->GetZaxis()->SetTitleSize(0.035);
+   	h3_Ge->GetZaxis()->SetTitleFont(42);
+   	h3_Ge->Draw(""); 
    	
     TCanvas* c5 = new TCanvas("Region2D","Region de impactos 2D",0,0,400,800);
     c5->SetFillColor(0);
     c5->SetFrameFillColor(0);
-	hxy-> Draw("colz");  
+	hxy_Ge-> Draw("colz");  
 	//hxy-> Draw("lego2z");//draw a Lego 2D with a palete of colours at right side
 	//hxy-> Draw("surf2z");  //draw a surface with a palete of colours at right side
-	hxy->GetXaxis()->SetTitle("x (cm)");
-	hxy->GetYaxis()->SetTitle("y (cm)");
+	hxy_Ge->GetXaxis()->SetTitle("x (cm)");
+	hxy_Ge->GetYaxis()->SetTitle("y (cm)");
 
 	TCanvas* c6 = new TCanvas("theta","Angulo theta",0,0,400,400);
 	c6->SetFillColor(0);
     c6->SetFrameFillColor(0);
-	h4->Draw("");
-	h4->SetLineColor(6);
-	h4->GetXaxis()->SetTitle("#theta (rad)");
-	h4->GetYaxis()->SetTitle("Counts");
+	h4_Ge->Draw("");
+	h4_Ge->SetLineColor(6);
+	h4_Ge->GetXaxis()->SetTitle("#theta (rad)");
+	h4_Ge->GetYaxis()->SetTitle("Counts");
 		
 	TCanvas* c7 = new TCanvas("Region3D","Region de impactos 3D",0,0,400,800);
     c7->SetFillColor(0);
     c7->SetFrameFillColor(0);
-	hxyz-> Draw("");
-	hxyz->SetMarkerStyle(20); 
-	hxyz->SetMarkerSize(0.4); 
-	hxyz->SetMarkerColor(9); 
-	hxyz->GetXaxis()->SetTitle("x (cm)");
-	hxyz->GetYaxis()->SetTitle("y (cm)");
-	hxyz->GetZaxis()->SetTitle("z (cm)");
+	hxyz_Ge-> Draw("");
+	hxyz_Ge->SetMarkerStyle(20); 
+	hxyz_Ge->SetMarkerSize(0.4); 
+	hxyz_Ge->SetMarkerColor(9); 
+	hxyz_Ge->GetXaxis()->SetTitle("x (cm)");
+	hxyz_Ge->GetYaxis()->SetTitle("y (cm)");
+	hxyz_Ge->GetZaxis()->SetTitle("z (cm)");
 
 	//CALIFA ----------------------
 	//CrystalHit
-	TCanvas* c8 = new TCanvas("crystalHit","crystalHit",0,0,720,900);
+	TCanvas* c8 = new TCanvas("CrystalHit","CrystalHit",0,0,720,900);
 	c8->SetFillColor(0);
 	c8->SetFrameFillColor(0);
 	c8->cd();
@@ -414,15 +457,15 @@ void checkResults_bothdet() {
 	c11->SetFillColor(0);       
 	c11->SetFrameFillColor(0);
 	c11->cd(1);                 
-	h3_T->Draw();
-	h3_T->SetLineColor(9);
-	h3_T->GetXaxis()->SetTitle("Theta MCTrack");
-	h3_T->GetYaxis()->SetTitle("Counts"); 
+	h3->Draw();
+	h3->SetLineColor(9);
+	h3->GetXaxis()->SetTitle("Theta MCTrack");
+	h3->GetYaxis()->SetTitle("Counts"); 
 	c11->cd(2);                  
-	h4_T->Draw();
-	h4_T->SetLineColor(9);        
-	h4_T->GetXaxis()->SetTitle("Phi MCTrack");
-	h4_T->GetYaxis()->SetTitle("Counts");
+	h4->Draw();
+	h4->SetLineColor(9);        
+	h4->GetXaxis()->SetTitle("Phi MCTrack");
+	h4->GetYaxis()->SetTitle("Counts");
 	
 	
 	TCanvas* c12 = new TCanvas("Energy","Energy",0,0,400,800);
@@ -435,10 +478,10 @@ void checkResults_bothdet() {
 	h2->GetXaxis()->SetTitle("MCTrack Energy (MeV)");
 	h2->GetYaxis()->SetTitle("Counts"); 
 	c12->cd(2);                  
-	h3->Draw(); 	 c12->cd(2)->SetLogy();
-	h3->SetLineColor(9);        
-	h3->GetXaxis()->SetTitle("HPGe Energy (MeV)");
-	h3->GetYaxis()->SetTitle("Counts");
+	h3_Ge->Draw(); 	 c12->cd(2)->SetLogy();
+	h3_Ge->SetLineColor(9);        
+	h3_Ge->GetXaxis()->SetTitle("HPGe Energy (MeV)");
+	h3_Ge->GetYaxis()->SetTitle("Counts");
 	c12->cd(3);                  
 	h2_Cry->Draw();	 c12->cd(3)->SetLogy();
 	h2_Cry->SetLineColor(8);        

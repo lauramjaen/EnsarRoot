@@ -1,20 +1,19 @@
 ////////////////////////////////////////////////////////////
 ////                                                    ////
-////    Cascade of 60-Co with Angular Correlations      ////
-////            (60-Co->60-Ni)                          ////
-////           2504->1332->0 keV                        ////
+////      Cascade of Gammas with Angular Correlations   ////
+////               400->200->0 keV                      ////
+////                                                    ////
 ////////////////////////////////////////////////////////////
 Energy(GeV), Number of Levels
-0.002504     1                         
+0.0004     1                         
 Energy of the transitions (initial -->  final)
-0.002504	0.001332			
+0.0004	0.0002			
 Energy of gamma emmited in the transition
-0.001172       		        
+0.0002       		        
 Branching Ratios
 1
-Angular correlations coefficients (A2 and A4)
-0.125	        0.0416
-
+Angular correlation coefficients (A2 and A4)
+0.95		0.95
 
 //It works with ensargen/EnsarCascadeGen.h & EnsarCascadeGen.cxx
 //
@@ -25,3 +24,8 @@ Angular correlations coefficients (A2 and A4)
 //elisabet.galiana@usc.es
 //Universidad de Santiago de Compostela
 //Dpto. Física de Partículas
+//
+//
+//A2		A4
+//0.95		0.95 (cas extrem)
+//0.429		0.	(2->2->0)

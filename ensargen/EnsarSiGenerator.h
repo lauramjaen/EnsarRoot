@@ -1,12 +1,18 @@
-// ----------------------------------------------------------------------
-// ----- 												            -----
-// -----          EnsarSiGenerator header                           -----
-// ----- 												            -----
-// -----    Gamma generator of different Si* cascades 				----- 
-// -----    from primary reaction  Al+p-> Si*-> Si+gammas           -----
-// -----    with Angular Correlation and Branching Ration			-----
-// ----- 												            -----
-// ----------------------------------------------------------------------
+// ************************************************************************
+// *****             EnsarSiGenerator header file                     *****
+// ***** 												              *****
+// *****      Gamma Generator of different Si* cascades 	          *****
+// *****      with Angular Correlations and Branching Rations		  *****
+// ***** 	  from primary reaction  Al+p-> Si*-> Si+gammas           *****
+// ***** 												              *****
+// ***** 	  Works with the Si_12643_cascade.dat data file	    	  *****
+// ***** 	  or any file with the same data structure		    	  *****
+// ***** 												              *****
+// ***** elisabet.galiana@usc.es				                      *****
+// ***** Universidad de Santiago de Compostela                        *****
+// ***** Dpto. Física de Partículas                                   *****
+// ***** 												              *****
+// ************************************************************************
 
 
 #ifndef ENSAR_SIGENERATOR_H
@@ -32,7 +38,7 @@ class EnsarSiGenerator : public FairGenerator
     EnsarSiGenerator();
 
     /** Constructor.  **/
-    EnsarSiGenerator(const char* inputFile, Int_t state); //file name of Si* and number of Si* state (1 for 0.012643  and  2 for 0.012900->not yet) 
+    EnsarSiGenerator(const char* inputFile, Int_t state); //file name of Si* and number of Si* state (1 for 0.012643  and  2 for 0.012900->not done!) 
 
     /** Destructor. **/
     virtual ~EnsarSiGenerator();
@@ -56,7 +62,7 @@ class EnsarSiGenerator : public FairGenerator
 	Double_t* fener_i;				//Initial energy of each level
 	Double_t* fener_f;				//Final energy of each level
 	Double_t* fener_gamma;			//Gamma energy
-	Double_t* fBR;					//Branching Ratio
+	Double_t* fBR;					//Branching Ratios
 	Double_t** fA;					//Angular Coeficients A2 and A4
     ClassDef(EnsarSiGenerator,1);
     void CloseInput();
