@@ -35,7 +35,6 @@ class TraRPCHit2Saeta : public FairTask
     /** Virtual method Reset **/
     virtual void Reset();
 
-
   protected:
 
 
@@ -54,7 +53,6 @@ class TraRPCHit2Saeta : public FairTask
 
     TClonesArray* fTraHitCA;
     TClonesArray* fTraSaetaCA;
-// los points
     TClonesArray* fTraPointCA;
 
   private:
@@ -63,17 +61,44 @@ class TraRPCHit2Saeta : public FairTask
     **
     ** Adds a RPCSaeta to the Collection
     **/
-    TraRPCSaeta* AddSaeta(Double_t Xcoor,Double_t Xslope,Double_t Ycoor,Double_t Yslope,Double_t time,Double_t slowness);
+    TraRPCSaeta* AddSaeta(TMatrixD Saeta, Int_t id, Int_t size);
 
+    // It calculates the chi-square of a saeta
+    Double_t ChiSquare(TMatrixD, TMatrixD, TMatrixD, TMatrixD);
 
-// voy a añadir el prototipo de la funcion creadora de matrices
-TMatrixD CreateKMatrix(Double_t);
-TMatrixD CreateAMatrix(Double_t, Double_t, Double_t, Double_t);
-void SetCoefficients(Double_t, Double_t, Double_t, Double_t,  Double_t, Double_t, Double_t, Double_t*); 
-TMatrixD CreateKRestMatrix(Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t );
-TMatrixD CreateARestMatrix(Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t);
-Double_t Mahalanobis(Double_t, Double_t, Double_t, Double_t, Double_t);
-TMatrixD Reduce(TMatrixD);
+    // It creates a reduced data matrix
+    TMatrixD CreateAMatrix(Double_t, Double_t, Double_t, Double_t);
+
+    // It creates a data matrix
+    TMatrixD CreateDataMatrix(Double_t, Double_t, Double_t);
+
+    // It creates a K matrix
+    TMatrixD CreateKMatrix(Double_t);
+
+    // It constructs a S2 saeta and adds it to the array
+    void CreateS2(Int_t, Double_t, Int_t, Double_t);
+
+    // It constructs a S3 saeta
+    void CreateS3(Int_t, Double_t , Int_t , Double_t, Int_t, Double_t);
+
+    // It constructs a S3 saeta
+    void CreateS4(Int_t, Double_t , Int_t , Double_t, Int_t, Double_t, Int_t, Double_t);
+
+    // It writes error matrix as a function of sigma and rho
+    TMatrixD Reduce(TMatrixD);
+
+    // It calculates the drift of the signal
+    TMatrixD Drift(TMatrixD, TMatrixD, TMatrixD, TMatrixD, TMatrixD);
+
+    // It sets the recurrent coefficients during the drift calculation
+    void SetCoefficients(Double_t, Double_t, Double_t, Double_t,  Double_t, Double_t, Double_t, Double_t*); 
+
+    // It creates the K matrix with restrictions
+    TMatrixD CreateKRestMatrix(Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t, Double_t );
+
+    // It creates the A matrix with restrictions
+    TMatrixD CreateARestMatrix(Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t,Double_t);
+
 ClassDef(TraRPCHit2Saeta,1);
 };
 
