@@ -1,11 +1,11 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////																										
-////							--- Simulation of the Lisbon Nov-2016 setup ---								
+///////////////////////////////////////////////////////////////////////
+////																				       	
+////	--- Simulation of the Lisbon Nov-2016 setup ---								
 ////
-////		This macro recreates HPGe detector at 90º w.r.t. z axis 
-////		and the Reaction Chamber in the center (LaboratoryRS)
+////	This macro recreates HPGe detector at 90º w.r.t. z axis 
+////	and the Reaction Chamber in the center (LaboratoryRS)
 ////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 
 #include <iomanip>
 #include <iostream>
@@ -42,244 +42,244 @@ void ConstructGeometry(TGeoMedium *pMed, TGeoMedium *pMedAl, TGeoMedium *pMedSte
 
 void create_geo(const char* geoTag = "test")
 {
-	fGlobalTrans->SetTranslation(0.0,0.0,0.0);
+  fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 
-	// -------   Load media from media file   ----------------------------------- 
-	FairGeoLoader*    geoLoad = new FairGeoLoader("TGeo","FairGeoLoader");
-	FairGeoInterface* geoFace = geoLoad->getGeoInterface();
-	TString geoPath = gSystem->Getenv("VMCWORKDIR");
-	TString medFile = geoPath + "/ctn/geometry/media.geo";
-	geoFace->setMediaFile(medFile);
-	geoFace->readMedia();
-	gGeoMan = gGeoManager;
-	// --------------------------------------------------------------------------
+  // -------   Load media from media file   ----------------------------------- 
+  FairGeoLoader*    geoLoad = new FairGeoLoader("TGeo","FairGeoLoader");
+  FairGeoInterface* geoFace = geoLoad->getGeoInterface();
+  TString geoPath = gSystem->Getenv("VMCWORKDIR");
+  TString medFile = geoPath + "/ctn/geometry/media.geo";
+  geoFace->setMediaFile(medFile);
+  geoFace->readMedia();
+  gGeoMan = gGeoManager;
+  // --------------------------------------------------------------------------
+  
+  
+  
+  // -------   Geometry file name (output)   ----------------------------------
+  TString geoFileName = geoPath + "/ctn/geometry/HPGedetector_";
+  geoFileName = geoFileName + geoTag + ".geo.root";
+  // --------------------------------------------------------------------------
 
-
-
-	// -------   Geometry file name (output)   ----------------------------------
-	TString geoFileName = geoPath + "/ctn/geometry/HPGedetector_";
-	geoFileName = geoFileName + geoTag + ".geo.root";
-	// --------------------------------------------------------------------------
-
-
-
-	// -----------------   Get and create the required media    ----------------- 
-	FairGeoMedia* gGeoMedia = geoFace->getMedia(); 
-	FairGeoBuilder* gGeoBuild = geoLoad->getGeoBuilder(); 
-
-	FairGeoMedium* mVac      = gGeoMedia->getMedium("vacuum");
-	if ( ! mVac ) Fatal("Main", "FairMedium vacuum not found");
-	gGeoBuild->createMedium(mVac);
-	TGeoMedium* pMedVac = gGeoMan->GetMedium("vacuum");
-	if ( ! pMedVac ) Fatal("Main", "Medium vacuum not found");   
-
-        FairGeoMedium* mAir      = gGeoMedia->getMedium("Air");
-        if ( ! mAir ) Fatal("Main", "FairMedium Air not found");
-        gGeoBuild->createMedium(mAir);
-        TGeoMedium* pMedAir = gGeoMan->GetMedium("Air");
-        if ( ! pMedAir ) Fatal("Main", "Medium Air not found");
-
-	FairGeoMedium* mAl      = gGeoMedia->getMedium("aluminium");
-	if ( ! mAl ) Fatal("Main", "FairMedium Al not found");
-	gGeoBuild->createMedium(mAl);
-	TGeoMedium* pMedAl = gGeoMan->GetMedium("aluminium");
-	if ( ! pMedAl ) Fatal("Main", "Medium Al not found");       
-
-	FairGeoMedium* mSteel      = gGeoMedia->getMedium("Steel");
-	if ( ! mSteel ) Fatal("Main", "FairMedium Steel not found");
-	gGeoBuild->createMedium(mSteel);
-	TGeoMedium* pMedSteel = gGeoMan->GetMedium("Steel");
-	if ( ! pMedSteel ) Fatal("Main", "Medium Steel not found"); 
-
-	FairGeoMedium* mGe      = gGeoMedia->getMedium("germanium");
-	if ( ! mGe ) Fatal("Main", "FairMedium Ge not found");
-	gGeoBuild->createMedium(mGe);
-	TGeoMedium* pMedGe = gGeoMan->GetMedium("germanium");
-	if ( ! pMedGe ) Fatal("Main", "Medium Ge not found");      
-
-	FairGeoMedium* mLi      = gGeoMedia->getMedium("litium");
-	if ( ! mLi ) Fatal("Main", "FairMedium Li not found");
-	gGeoBuild->createMedium(mLi);
-	TGeoMedium* pMedLi = gGeoMan->GetMedium("litium");
-	if ( ! pMedLi ) Fatal("Main", "Medium Li not found");     
-
-	// --------------------------------------------------------------------------
-
-
-
-	// --------------   Create geometry and top volume  ------------------------- 
-	gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
-	gGeoMan->SetName("HPGEgeom");
-	gTop = new TGeoVolumeAssembly("TOP");
-	gGeoMan->SetTopVolume(gTop);
-	
-
-	// --------------------------------------------------------------------------
-
-
-	ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi, pMedAir); 	
-
-
-	// ---------------   Finish   ----------------------------------------------- 
-	gGeoMan->CloseGeometry();
-	gGeoMan->CheckOverlaps(0.001);
-	gGeoMan->PrintOverlaps();
-	gGeoMan->Test();
-
-	TFile* geoFile = new TFile(geoFileName, "RECREATE");
-	gTop->Write();
-	geoFile->Close();
-	// --------------------------------------------------------------------------
+  
+  
+  // -----------------   Get and create the required media    ----------------- 
+  FairGeoMedia* gGeoMedia = geoFace->getMedia(); 
+  FairGeoBuilder* gGeoBuild = geoLoad->getGeoBuilder(); 
+  
+  FairGeoMedium* mVac      = gGeoMedia->getMedium("vacuum");
+  if ( ! mVac ) Fatal("Main", "FairMedium vacuum not found");
+  gGeoBuild->createMedium(mVac);
+  TGeoMedium* pMedVac = gGeoMan->GetMedium("vacuum");
+  if ( ! pMedVac ) Fatal("Main", "Medium vacuum not found");   
+  
+  FairGeoMedium* mAir      = gGeoMedia->getMedium("Air");
+  if ( ! mAir ) Fatal("Main", "FairMedium Air not found");
+  gGeoBuild->createMedium(mAir);
+  TGeoMedium* pMedAir = gGeoMan->GetMedium("Air");
+  if ( ! pMedAir ) Fatal("Main", "Medium Air not found");
+  
+  FairGeoMedium* mAl      = gGeoMedia->getMedium("aluminium");
+  if ( ! mAl ) Fatal("Main", "FairMedium Al not found");
+  gGeoBuild->createMedium(mAl);
+  TGeoMedium* pMedAl = gGeoMan->GetMedium("aluminium");
+  if ( ! pMedAl ) Fatal("Main", "Medium Al not found");       
+  
+  FairGeoMedium* mSteel      = gGeoMedia->getMedium("Steel");
+  if ( ! mSteel ) Fatal("Main", "FairMedium Steel not found");
+  gGeoBuild->createMedium(mSteel);
+  TGeoMedium* pMedSteel = gGeoMan->GetMedium("Steel");
+  if ( ! pMedSteel ) Fatal("Main", "Medium Steel not found"); 
+  
+  FairGeoMedium* mGe      = gGeoMedia->getMedium("germanium");
+  if ( ! mGe ) Fatal("Main", "FairMedium Ge not found");
+  gGeoBuild->createMedium(mGe);
+  TGeoMedium* pMedGe = gGeoMan->GetMedium("germanium");
+  if ( ! pMedGe ) Fatal("Main", "Medium Ge not found");      
+  
+  FairGeoMedium* mLi      = gGeoMedia->getMedium("litium");
+  if ( ! mLi ) Fatal("Main", "FairMedium Li not found");
+  gGeoBuild->createMedium(mLi);
+  TGeoMedium* pMedLi = gGeoMan->GetMedium("litium");
+  if ( ! pMedLi ) Fatal("Main", "Medium Li not found");     
+  
+  // --------------------------------------------------------------------------
+  
+  
+  
+  // --------------   Create geometry and top volume  ------------------------- 
+  gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
+  gGeoMan->SetName("HPGEgeom");
+  gTop = new TGeoVolumeAssembly("TOP");
+  gGeoMan->SetTopVolume(gTop);
+  
+  
+  // --------------------------------------------------------------------------
+  
+  
+  ConstructGeometry(pMedVac, pMedAl, pMedSteel, pMedGe, pMedLi, pMedAir); 	
+  
+  
+  // ---------------   Finish   ----------------------------------------------- 
+  gGeoMan->CloseGeometry();
+  gGeoMan->CheckOverlaps(0.001);
+  gGeoMan->PrintOverlaps();
+  gGeoMan->Test();
+  
+  TFile* geoFile = new TFile(geoFileName, "RECREATE");
+  gTop->Write();
+  geoFile->Close();
+  // --------------------------------------------------------------------------
 }
 
 
 void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMedSteel, TGeoMedium *pMedGe, TGeoMedium *pMedLi, TGeoMedium *pMedAir)
 {
-	cout << endl;
-	cout << "-I- Ensar::ConstructGeometry() "<< endl;
-	cout << "-I- Ensar  HPGe detector "<< endl;
-	cout << endl;
-	
-	
-        // Defintion of the Mother Volume
-        Double_t length = 40.;
-        TGeoShape *pCtnWorld = new TGeoBBox("CtnWorldBox",length/2.0,length/2.0,length/2.0);
-        TGeoVolume* pWorld = new TGeoVolume("CtnWorld", pCtnWorld, pMedAir);
-        TGeoCombiTrans *t0 = new TGeoCombiTrans();
-        TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
-        gTop->AddNode(pWorld,0,pGlobalc);
-	
-	//-----------------------------------------------
+  cout << endl;
+  cout << "-I- Ensar::ConstructGeometry() "<< endl;
+  cout << "-I- Ensar  HPGe detector "<< endl;
+  cout << endl;
+  
+  
+  // Defintion of the Mother Volume
+  Double_t length = 40.;
+  TGeoShape *pCtnWorld = new TGeoBBox("CtnWorldBox",length/2.0,length/2.0,length/2.0);
+  TGeoVolume* pWorld = new TGeoVolume("CtnWorld", pCtnWorld, pMedAir);
+  TGeoCombiTrans *t0 = new TGeoCombiTrans();
+  TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
+  gTop->AddNode(pWorld,0,pGlobalc);
+  
+  //-----------------------------------------------
+  
+  // ----------------------------------------------
+  // Auxiliar vacuum volume holding all important volumes as daugthers
+  // The easiest way to rotate all volumes to the final position
+  TGeoVolume *main_tube = gGeoManager->MakeTube("main_tube",pMedVac,0.0,4.035,3.505);
+  main_tube->SetFillColor(5);
+  main_tube->SetLineColor(5);
+  main_tube->SetTransparency(70);
+  main_tube->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // First Aluminum wrapping
+  TGeoVolume *al_tub1 = gGeoManager->MakeTube("AL_TUB1", pMedAl, 0.0, 3.75, 0.05);
+  al_tub1->SetFillColor(18);
+  al_tub1->SetLineColor(18);
+  main_tube->AddNode(al_tub1,1,new TGeoTranslation(0,0,-3.255));
+  al_tub1->SetVisLeaves(kTRUE);
+  TGeoVolume *al_tub2 = gGeoManager->MakeTube("AL_TUB2", pMedAl, 3.65, 3.75, 3.355);
+  al_tub2->SetFillColor(18);
+  al_tub2->SetLineColor(18);
+  main_tube->AddNode(al_tub2,1,new TGeoTranslation(0,0,0.15));
+  al_tub2->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
 
-	// ----------------------------------------------
-	// Auxiliar vacuum volume holding all important volumes as daugthers
-	// The easiest way to rotate all volumes to the final position
-	TGeoVolume *main_tube = gGeoManager->MakeTube("main_tube",pMedVac,0.0,4.035,3.505);
-	main_tube->SetFillColor(5);
-	main_tube->SetLineColor(5);
-	main_tube->SetTransparency(70);
-	main_tube->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
+  // ----------------------------------------------
+  // Second Aluminum wrapping (4mm vacuum between both wrappings)
+  TGeoVolume *al_tub3 = gGeoManager->MakeTube("AL_TUB3", pMedAl, 0.0, 3.25, 0.025);
+  al_tub3->SetFillColor(14);
+  al_tub3->SetLineColor(14);
+  main_tube->AddNode(al_tub3,1,new TGeoTranslation(0,0,-2.78));
+  al_tub3->SetVisLeaves(kTRUE);
+  TGeoVolume *al_tub4 = gGeoManager->MakeTube("AL_TUB4", pMedAl, 3.20, 3.25, 3.13);
+  al_tub4->SetFillColor(14);
+  al_tub4->SetLineColor(14);
+  main_tube->AddNode(al_tub4,1,new TGeoTranslation(0,0,0.375));
+  al_tub4->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // Lithium side-contacts
+  TGeoVolume *li_tub1 = gGeoManager->MakeTube("LI_TUB1", pMedLi, 3.13, 3.20, 3.13);
+  li_tub1->SetFillColor(4);
+  li_tub1->SetLineColor(4);
+  main_tube->AddNode(li_tub1,1,new TGeoTranslation(0,0,0.375));
+  li_tub1->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  //Ge inactive layer: 2mm
+  TGeoVolume *ge_inac_tub1 = gGeoManager->MakeTube("GE_INAC_TUB1", pMedGe, 0.0, 3.13, 0.0875);
+  ge_inac_tub1->SetFillColor(50);
+  ge_inac_tub1->SetLineColor(50);
+  main_tube->AddNode(ge_inac_tub1,1,new TGeoTranslation(0,0,-2.6675));
+  ge_inac_tub1->SetVisLeaves(kTRUE);
+  TGeoVolume *ge_inac_tub2 = gGeoManager->MakeTube("GE_INAC_TUB2", pMedGe, 3.0, 3.13, 3.03);
+  ge_inac_tub2->SetFillColor(50);
+  ge_inac_tub2->SetLineColor(50);
+  main_tube->AddNode(ge_inac_tub2,1,new TGeoTranslation(0,0,0.475));
+  ge_inac_tub2->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
 
-	// ----------------------------------------------
-	// First Aluminum wrapping
-	TGeoVolume *al_tub1 = gGeoManager->MakeTube("AL_TUB1", pMedAl, 0.0, 3.75, 0.05);
-	al_tub1->SetFillColor(18);
-	al_tub1->SetLineColor(18);
-	main_tube->AddNode(al_tub1,1,new TGeoTranslation(0,0,-3.255));
-	al_tub1->SetVisLeaves(kTRUE);
-	TGeoVolume *al_tub2 = gGeoManager->MakeTube("AL_TUB2", pMedAl, 3.65, 3.75, 3.355);
-	al_tub2->SetFillColor(18);
-	al_tub2->SetLineColor(18);
-	main_tube->AddNode(al_tub2,1,new TGeoTranslation(0,0,0.15));
-	al_tub2->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
+  // ----------------------------------------------
+  //Ge active volume
+  TGeoVolume *ge_tub3 = gGeoManager->MakeTube("GE_TUB3", pMedGe, 0.0, 3.0, 0.575);
+  ge_tub3->SetFillColor(30);
+  ge_tub3->SetLineColor(30);
+  main_tube->AddNode(ge_tub3,1,new TGeoTranslation(0,0,-2.005));
+  ge_tub3->SetVisLeaves(kTRUE);
+  TGeoVolume *ge_tub4 = gGeoManager->MakeTube("GE_TUB4", pMedGe, 0.45, 3.0, 2.455);
+  ge_tub4->SetFillColor(30);
+  ge_tub4->SetLineColor(30);
+  main_tube->AddNode(ge_tub4,1,new TGeoTranslation(0,0,1.05));
+  ge_tub4->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  
+  // ----------------------------------------------
+  // detector at 90 degrees
+  TGeoRotation *rot     = new TGeoRotation("rot",90,-90,0);
+  TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-13.295,0,0,rot);
+  pWorld->AddNode(main_tube,1,comb); 
+  // ----------------------------------------------
+  
+  
+  //-------------------------------------------------------------------------------------------------------------------
+  //Create the Munich REACTION CHAMBER 
+  TGeoVolume *main_chamber = gGeoManager->MakeTube("main_chamber",pMedAir,0.0,6.59,13.5);
+  main_chamber->SetFillColor(14);
+  main_chamber->SetLineColor(14);
+  main_chamber->SetTransparency(70);
+  main_chamber->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // Steel tube of the chamber (walls)
+  TGeoVolume *steel_chamber1 = gGeoManager->MakeTube("steel_chamber1", pMedSteel, 4.95, 5.09, 11.5);
+  steel_chamber1->SetFillColor(14);
+  steel_chamber1->SetLineColor(14);
+  main_chamber->AddNode(steel_chamber1,1,new TGeoTranslation(0,0,0));
+  steel_chamber1->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // Vacuum inside the reaction chamber
+  TGeoVolume *vacuum_chamber = gGeoManager->MakeTube("vacuum_chamber", pMedVac, 0., 4.949, 11.5);
+  vacuum_chamber->SetFillColor(11);
+  vacuum_chamber->SetLineColor(11);
+  main_chamber->AddNode(vacuum_chamber,1,new TGeoTranslation(0,0,0));
+  vacuum_chamber->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // Steel basis of the chamber
+  TGeoVolume *steel_base1 = gGeoManager->MakeTube("steel_base1", pMedSteel, 0.0, 6.59, 1.0);
+  steel_base1->SetFillColor(14);
+  steel_base1->SetLineColor(14);
+  main_chamber->AddNode(steel_base1,1,new TGeoTranslation(0,0,12.5));
+  main_chamber->AddNode(steel_base1,2,new TGeoTranslation(0,0,-12.5));
+  steel_base1->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // reaction chamber in the origin 
+  TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);
+  TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
+  pWorld->AddNode(main_chamber,1,comb_ch);
+  // ----------------------------------------------
 
-	// ----------------------------------------------
-	// Second Aluminum wrapping (4mm vacuum between both wrappings)
-	TGeoVolume *al_tub3 = gGeoManager->MakeTube("AL_TUB3", pMedAl, 0.0, 3.25, 0.025);
-	al_tub3->SetFillColor(14);
-	al_tub3->SetLineColor(14);
-	main_tube->AddNode(al_tub3,1,new TGeoTranslation(0,0,-2.78));
-	al_tub3->SetVisLeaves(kTRUE);
-	TGeoVolume *al_tub4 = gGeoManager->MakeTube("AL_TUB4", pMedAl, 3.20, 3.25, 3.13);
-	al_tub4->SetFillColor(14);
-	al_tub4->SetLineColor(14);
-	main_tube->AddNode(al_tub4,1,new TGeoTranslation(0,0,0.375));
-	al_tub4->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-
-	// ----------------------------------------------
-	// Lithium side-contacts
-	TGeoVolume *li_tub1 = gGeoManager->MakeTube("LI_TUB1", pMedLi, 3.13, 3.20, 3.13);
-	li_tub1->SetFillColor(4);
-	li_tub1->SetLineColor(4);
-	main_tube->AddNode(li_tub1,1,new TGeoTranslation(0,0,0.375));
-	li_tub1->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-
-	// ----------------------------------------------
-	//Ge inactive layer: 2mm
-	TGeoVolume *ge_inac_tub1 = gGeoManager->MakeTube("GE_INAC_TUB1", pMedGe, 0.0, 3.13, 0.0875);
-	ge_inac_tub1->SetFillColor(50);
-	ge_inac_tub1->SetLineColor(50);
-	main_tube->AddNode(ge_inac_tub1,1,new TGeoTranslation(0,0,-2.6675));
-	ge_inac_tub1->SetVisLeaves(kTRUE);
-	TGeoVolume *ge_inac_tub2 = gGeoManager->MakeTube("GE_INAC_TUB2", pMedGe, 3.0, 3.13, 3.03);
-	ge_inac_tub2->SetFillColor(50);
-	ge_inac_tub2->SetLineColor(50);
-	main_tube->AddNode(ge_inac_tub2,1,new TGeoTranslation(0,0,0.475));
-	ge_inac_tub2->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-
-	// ----------------------------------------------
-	//Ge active volume
-	TGeoVolume *ge_tub3 = gGeoManager->MakeTube("GE_TUB3", pMedGe, 0.0, 3.0, 0.575);
-	ge_tub3->SetFillColor(30);
-	ge_tub3->SetLineColor(30);
-	main_tube->AddNode(ge_tub3,1,new TGeoTranslation(0,0,-2.005));
-	ge_tub3->SetVisLeaves(kTRUE);
-	TGeoVolume *ge_tub4 = gGeoManager->MakeTube("GE_TUB4", pMedGe, 0.45, 3.0, 2.455);
-	ge_tub4->SetFillColor(30);
-	ge_tub4->SetLineColor(30);
-	main_tube->AddNode(ge_tub4,1,new TGeoTranslation(0,0,1.05));
-	ge_tub4->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-
-
-	// ----------------------------------------------
-	// detector at 90 degrees
-	TGeoRotation *rot     = new TGeoRotation("rot",90,-90,0);
-	TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-13.295,0,0,rot);
-	pWorld->AddNode(main_tube,1,comb); 
-	// ----------------------------------------------
-	
-	
-	//-------------------------------------------------------------------------------------------------------------------
-	//Create the Munich REACTION CHAMBER 
-	TGeoVolume *main_chamber = gGeoManager->MakeTube("main_chamber",pMedAir,0.0,6.59,13.5);
-	main_chamber->SetFillColor(14);
-	main_chamber->SetLineColor(14);
-	main_chamber->SetTransparency(70);
-	main_chamber->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-
-	// ----------------------------------------------
-	// Steel tube of the chamber (walls)
-	TGeoVolume *steel_chamber1 = gGeoManager->MakeTube("steel_chamber1", pMedSteel, 4.95, 5.09, 11.5);
-	steel_chamber1->SetFillColor(14);
-	steel_chamber1->SetLineColor(14);
-	main_chamber->AddNode(steel_chamber1,1,new TGeoTranslation(0,0,0));
-	steel_chamber1->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-	
-	// ----------------------------------------------
-	// Vacuum inside the reaction chamber
-	TGeoVolume *vacuum_chamber = gGeoManager->MakeTube("vacuum_chamber", pMedVac, 0., 4.949, 11.5);
-	vacuum_chamber->SetFillColor(11);
-	vacuum_chamber->SetLineColor(11);
-	main_chamber->AddNode(vacuum_chamber,1,new TGeoTranslation(0,0,0));
-	vacuum_chamber->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-	
-	// ----------------------------------------------
-	// Steel basis of the chamber
-	TGeoVolume *steel_base1 = gGeoManager->MakeTube("steel_base1", pMedSteel, 0.0, 6.59, 1.0);
-	steel_base1->SetFillColor(14);
-	steel_base1->SetLineColor(14);
-	main_chamber->AddNode(steel_base1,1,new TGeoTranslation(0,0,12.5));
-	main_chamber->AddNode(steel_base1,2,new TGeoTranslation(0,0,-12.5));
-	steel_base1->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-	
-	// ----------------------------------------------
-	// reaction chamber in the origin 
-	TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);
-	TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
-	pWorld->AddNode(main_chamber,1,comb_ch);
-	// ----------------------------------------------
-
-
+  
 }
 
 

@@ -1,19 +1,19 @@
 // *********************************************************************
-// *****             EnsarCascadeGen header file                   *****
-// *****   												           *****
-// *****      Simply Gamma Cascade Generator  	                   *****
-// *****      with Angular Correlations                       	   *****
-// ***** 												           *****
-// *****      Works with the data files:				    	   *****
-// ***** 		 -Co_cascade.dat								   *****
-// *****		 -Si_12900_cascade.dat		    				   *****
-// ***** 		 -Gamma_AngularC_200k.dat						   *****
-// ***** 	  or any file with the same data structure		       *****
-// *****												           *****
-// ***** elisabet.galiana@usc.es				                   *****
-// ***** Universidad de Santiago de Compostela                     *****
-// ***** Dpto. Física de Partículas                                *****
-// *****   												           *****
+// *****             EnsarCascadeGen header file              
+// *****   						
+// *****      Simply Gamma Cascade Generator
+// *****      with Angular Correlations                       	 
+// ***** 							
+// *****      Works with the data files:			
+// ***** 		 -Co_cascade.dat			
+// *****		 -Si_12900_cascade.dat		    	
+// ***** 		 -Gamma_AngularC_200k.dat		
+// ***** 	  or any file with the same data structure	
+// *****							
+// ***** elisabet.galiana@usc.es
+// ***** Universidad de Santiago de Compostela                    
+// ***** Dpto. Física de Partículas                               
+// *****   							
 // *********************************************************************
 
 
@@ -50,24 +50,24 @@ class EnsarCascadeGen : public FairGenerator
     
     /** Initializer **/
     Bool_t Init();
-
+    
     /** Creates an event **/
     virtual Bool_t ReadEvent(FairPrimaryGenerator* primGen);
-
-  private:
-	ifstream*     fInputFile;       //! Input file stream
-	const Char_t* fFileName; 		//! Input file Name
-	Double_t* fener;				//Energy of the states
-	Double_t* fnLevel_tot;			//Number of Levels
-	Double_t* fener_i;				//Initial energy of each level
-	Double_t* fener_f;				//Final energy of each level
-	Double_t* fener_gamma;			//Gamma energy
-	Double_t* fBR;					//Branching Ratios
-	Double_t** fA;					//Angular Coeficients A2 and A4
+    
+ private:
+    ifstream*     fInputFile;       //! Input file stream
+    const Char_t* fFileName; 		//! Input file Name
+    Double_t* fener;				//Energy of the states
+    Double_t* fnLevel_tot;			//Number of Levels
+    Double_t* fener_i;				//Initial energy of each level
+    Double_t* fener_f;				//Final energy of each level
+    Double_t* fener_gamma;			//Gamma energy
+    Double_t* fBR;					//Branching Ratios
+    Double_t** fA;					//Angular Coeficients A2 and A4
     ClassDef(EnsarCascadeGen,1);
     void CloseInput();
     void ReadParameters();
-
+    
 };
 
 
