@@ -39,10 +39,10 @@ void runsim() {
   // Si-12900 cascade generator: "SiOneCascade"
   // Co-60 cascade generator:    "Cocascade"
   // Gamma-200keV cascade generator: "Gamma_AngularC_200k"
-  TString fGene="box";
+  // TString fGene="box";
   //TString fGene="Sicascade";
   //TString fGene="SiOneCascade";
-  //TString fGene="Cocascade";
+  TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
 
 

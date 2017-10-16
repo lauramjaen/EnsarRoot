@@ -28,8 +28,8 @@
 ////		-Both detectors: Collides 3D
 ////	Usage: DET_RESPONSE = true
 ////
-////		        -- Gamma angular Correlation --
-////	It analyses the Angular Correlations between primary gammas in MCTrack and
+////		        -- Gamma Angular Correlations --
+////	It analyzes the Angular Correlations between primary gammas in MCTrack and
 ////	in the detectors applying the HPGe condition (see note2)
 ////
 ////	Calculate:
