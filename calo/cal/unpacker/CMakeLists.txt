@@ -29,9 +29,10 @@ link_directories( ${LINK_DIRECTORIES} )
 #set( ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS_NAME}" )
 add_compile_options(-std=c++1y -Wall -Wno-shadow -Wfatal-errors)
 #
-set(MAIN_SRCS OptionWrappers.cxx fixROOT.cxx )
+#set(MAIN_SRCS OptionWrappers.cxx fixROOT.cxx )
+set(MAIN_SRCS fixROOT.cxx )
 
-add_executable(caloUnpack ${MAIN_SRCS})
-target_compile_options(caloUnpack PUBLIC "-DMAIN=FairRunOnline(FairLmdSource(R3BCaloUnpack),R3BCaloRawAna)" )
-target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl ${Boost_LIBRARIES})
+#add_executable(caloUnpack ${MAIN_SRCS})
+#target_compile_options(caloUnpack PUBLIC "-DMAIN=FairRunOnline(FairLmdSource(R3BCaloUnpack),R3BCaloRawAna)" )
+#target_link_libraries(caloUnpack ParBase Base R3Bbase R3BCaloCal dl ${Boost_LIBRARIES})
 
