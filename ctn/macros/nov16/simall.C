@@ -118,7 +118,7 @@ void simall(Int_t nEvents = 1,
   Double32_t theta1    = 0.;            // polar angle distribution (degrees)
   Double32_t theta2    = 2.;
   Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
-  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,100); //multiplicity
+  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,1); //multiplicity
   boxGen->SetThetaRange (theta1,theta2);
   boxGen->SetCosTheta();
   boxGen->SetPRange     (0.01049,0.01049);// momentum of the beam GeV/c
