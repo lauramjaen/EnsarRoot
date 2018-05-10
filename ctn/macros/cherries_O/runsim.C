@@ -39,10 +39,10 @@ void runsim() {
   // Si-12900 cascade generator: "SiOneCascade"
   // Co-60 cascade generator:    "Cocascade"
   // Gamma-200keV cascade generator: "Gamma_AngularC_200k"
-   TString fGene="box";
+  // TString fGene="box";
   //TString fGene="Sicascade";
   //TString fGene="SiOneCascade";
-  //TString fGene="Cocascade";
+  TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
 
 
@@ -61,13 +61,14 @@ void runsim() {
   //-------------------------------------------------
 
   TMap detGeo;
-	detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_tomato_test3.geo.root"));   	//HPGe detector + Reaction	
+  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));   	//HPGe detector + Reaction chamber (Lisboa exp2016)	
+  detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root"));			// PETALS (Lisboa exp2016)
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 2;
+   Int_t nEvents = 1000;
 
 
    //-------------------------------------------------
@@ -75,7 +76,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kTRUE;//kTRUE info GeoTracks
+   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,

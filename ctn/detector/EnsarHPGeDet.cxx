@@ -241,7 +241,7 @@ void EnsarHPGeDet::EndOfEvent()
 void EnsarHPGeDet::Register()
 {
 
-  //FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
+  FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
   FairRootManager::Instance()->Register("HPGeDetHit", GetName(), fHitCollection, kTRUE);
 
 }
@@ -374,7 +374,10 @@ void EnsarHPGeDet::ConstructGeometry()
 
 Bool_t EnsarHPGeDet::CheckIfSensitive(std::string name)
 {
-  if(TString(name).Contains("GE_TUB")) {
+  /*if(TString(name).Contains("GE_TUB")) {
+    return kTRUE;
+  }*/
+	  if(TString(name).Contains("Sphere_in")) {
     return kTRUE;
   }
   return kFALSE;

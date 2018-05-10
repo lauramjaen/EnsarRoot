@@ -61,13 +61,14 @@ void runsim() {
   //-------------------------------------------------
 
   TMap detGeo;
-	detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_tomato_test3.geo.root"));   	//HPGe detector + Reaction	
+  detGeo.Add(new TObjString("HPGE"),  new TObjString("HPGedetector_and_chamber.geo.root"));//HPGe detector + ReacChamber	
+  //detGeo.Add(new TObjString("CALIFA"),new TObjString("califa_petals_box.geo.root"));// PETALS not included
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 2;
+   Int_t nEvents = 10;
 
 
    //-------------------------------------------------
@@ -75,7 +76,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kTRUE;//kTRUE info GeoTracks
+   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,
