@@ -45,7 +45,7 @@
   //OPEN & READ DATA FILES ------------------------------------
   
   //FILE 1 CrystalId and Theta angle
-  ifstream *File1 = new ifstream("/home/fpddv1/elisabet.galiana/Escritorio/ENSARRoot/EnsarRoot_source/ctn/macros/nov16/CrystalId_Theta.dat");//change data file path
+  ifstream *File1 = new ifstream("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/nov16/CrystalId_Theta.dat");//change data file path
   
   const Int_t nLevel=128;
   Double_t CryId[nLevel];
@@ -64,7 +64,7 @@
   //fclose(File1);
   
   //FILE 2 Number of gammas have been arrived to each Crystal -> Isotropic distribution
-  ifstream *File2 = new ifstream("/home/fpddv1/elisabet.galiana/Escritorio/ENSARRoot/EnsarRoot_source/ctn/macros/nov16/NumGammas_Cry_isotropic.dat");//change data file path
+  ifstream *File2 = new ifstream("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/nov16/Co_Numgam_Iso.data");//change data file path
   
   Double_t CryId2[nLevel];
   Double_t Gammas_iso[nLevel];
@@ -80,7 +80,7 @@
   }
   
   //FILE 3 Number of gammas have been arrived to each Crystal -> Angular Correlated distribution
-  ifstream *File3 = new ifstream("/home/fpddv1/elisabet.galiana/Escritorio/ENSARRoot/EnsarRoot_source/ctn/macros/nov16/NumGammas_Cry_AngularC.dat");//change data file path
+  ifstream *File3 = new ifstream("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/nov16/Co_Numgam_AngCor.data");//change data file path
 
   Double_t CryId3[nLevel];
   Double_t Gammas_W[nLevel];
@@ -145,9 +145,10 @@
   // 							the spin-parity of the transition in the gamma cascade
   
   //Normalized theoretical angular correlations function
-  TF1 *fa1 = new TF1("fa1","(1+[0]*pow((TMath::Cos(x)),2)+[0]*pow((TMath::Cos(x)),4))/[1]",0,2.15);
-  fa1->SetParameter(0, 0.95); //change 	this parameter represents the A2,A4 Angular Correlations coefficients
-  fa1->SetParameter(1, 1.5);  //change		normalization parameter
+  TF1 *fa1 = new TF1("fa1","(1+[0]*pow((TMath::Cos(x)),2)+[1]*pow((TMath::Cos(x)),4))/[2]",0,2.15);
+  fa1->SetParameter(0, 0.10204); //change 	A2, this parameter represents the A2,A4 Angular Correlations coefficients
+  fa1->SetParameter(1, 0.00907);  //change	A4
+	fa1->SetParameter(2, 1.03583);  //change		normalization parameter
   
   
   //CHANGE THETA UNITS grad->rad 

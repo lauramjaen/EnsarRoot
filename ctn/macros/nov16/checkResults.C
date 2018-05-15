@@ -122,7 +122,7 @@ void checkResults() {
   //	-Angular Correlations in gammas (ANG_CORRELATIONS = true)
   //	-Angles of the Cystals (CRY_ANGLES=true)
   Bool_t DET_RESPONSE = true;
-  Bool_t ANG_CORRELATIONS = false;
+  Bool_t ANG_CORRELATIONS = true;
   Bool_t CRY_ANGLES= false;
   
   ////////////////////////////////////////////////////////////////
@@ -345,26 +345,26 @@ void checkResults() {
       
       //LOOP in MC mother tracks ----
       for(Int_t h=0;h<MCtracksPerEvent;h++){
-	if(track[h]->GetMotherId()<0) { //Primary Particle is MotherId=-1
-	  h1->Fill(track[h]->GetPdgCode());
-	  h2->Fill(track[h]->GetEnergy()*1000);//MeV
-	  track[h]->GetMomentum(momentum);
-	  h3->Fill(momentum.Theta());
-	  h4->Fill(momentum.Phi());
-	} else {
-	  h1_2->Fill(track[h]->GetPdgCode());
-	}
+				if(track[h]->GetMotherId()<0) { //Primary Particle is MotherId=-1
+					h1->Fill(track[h]->GetPdgCode());
+					h2->Fill(track[h]->GetEnergy()*1000);//MeV
+					track[h]->GetMomentum(momentum);
+					h3->Fill(momentum.Theta());
+					h4->Fill(momentum.Phi());
+				} else {
+					h1_2->Fill(track[h]->GetPdgCode());
+				}
 	
-	//LOOP in HPGe Points
-	for(Int_t r=0;r<hpgePointsPerEvent;r++) { //LOOP in HPGe Points for each MCTrack
-	  hpgePoint[r]->PositionIn(vector3);
-	  X1=hpgePoint[r]->GetXIn();
-	  X2=hpgePoint[r]->GetYIn();
-	  X3=hpgePoint[r]->GetZIn();
-	  hyz_Ge->Fill(X2,X3);
-	  hxyz_Ge->Fill(X1,X2,X3);
-	  hxyz_both->Fill(X1,X2,X3);
-	}
+				//LOOP in HPGe Points
+				for(Int_t r=0;r<hpgePointsPerEvent;r++) { //LOOP in HPGe Points for each MCTrack
+					hpgePoint[r]->PositionIn(vector3);
+					X1=hpgePoint[r]->GetXIn();
+					X2=hpgePoint[r]->GetYIn();
+					X3=hpgePoint[r]->GetZIn();
+					hyz_Ge->Fill(X2,X3);
+					hxyz_Ge->Fill(X1,X2,X3);
+					hxyz_both->Fill(X1,X2,X3);
+				}
       }
       
       

@@ -139,8 +139,10 @@ Bool_t EnsarCascadeGen::ReadEvent(FairPrimaryGenerator* primGen)
   
   //Angles in the RS of Lab(1) and RS of first gamma emmited(2) 
   /*RS Lab*/ 
-  phi1 = 6.283185307  *gRandom->Rndm();//0-2*pi 
-  theta1    = TMath::ACos(1-2*gRandom->Rndm());//0-pi
+  //phi1 = 6.283185307  *gRandom->Rndm();//0-2*pi ORIGINAL
+  //theta1    = TMath::ACos(1-2*gRandom->Rndm());//0-pi ORIGINAL
+	phi1=TMath::Pi();
+	theta1=TMath::Pi()/2.;
   phi1_ch = phi1 + TMath::Pi()/2.; //add pi/2 for the change of RS gamma to LabRS
   
   /*RS gamma*/
