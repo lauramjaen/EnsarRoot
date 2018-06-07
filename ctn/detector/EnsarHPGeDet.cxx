@@ -374,12 +374,14 @@ void EnsarHPGeDet::ConstructGeometry()
 
 Bool_t EnsarHPGeDet::CheckIfSensitive(std::string name)
 {
-  if(TString(name).Contains("GE_TUB")) {
-    return kTRUE;
-  }
-	/*if(TString(name).Contains("Sphere_in")) {
+  /*if(TString(name).Contains("GE_TUB")) {
     return kTRUE;
   }*/
+//Sphere "Box_water"  NoActive_Back
+
+	if(TString(name).Contains("Box_water")) {
+    return kTRUE;
+  }
   return kFALSE;
 }
 // ----------------------------------------------------------------------------

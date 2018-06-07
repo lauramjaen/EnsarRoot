@@ -31,7 +31,7 @@ void checkResults_Co_gammaHPGe() {
   //Change the maximum energy (MeV), examples:
   //	Si-12900 cascade(12.9MeV): maxE=13.;
   //	Co-60 cascade(2.504MeV): maxE=3.;
-  Double_t maxE = 3.0;
+  Double_t maxE = 0.4;
   
   //Choose the type of analysis that you want:
   //	-Detectors Responses (DET_RESPONSE = true)
@@ -264,7 +264,7 @@ void checkResults_Co_gammaHPGe() {
 			Int_t entries;
 			Int_t integral;
 			entries=h_Califa_crystals[i]->GetEntries();
-			integral=h_Califa_crystals[i]->Integral (439, 450);
+			integral=h_Califa_crystals[i]->Integral (495, 506);
 			//cout<<"Crystal "<<i+1<<" Entries "<<entries<<" Integral "<<integral<<endl;
 			cout<<i+1<<"  "<<integral<<endl;
 		}

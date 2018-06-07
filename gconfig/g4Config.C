@@ -33,7 +33,7 @@ void Config()
     TGeant4 *geant4 = 0;
     TG4RunConfiguration* runConfiguration 
       = new TG4RunConfiguration("geomRoot", 
-          "emStandard", 
+          "emStandard",
           "specialCuts+stackPopper+stepLimiter+specialControls",
           true);
 

@@ -54,7 +54,7 @@ void create_geo(const char* geoTag = "test")
   
   
   // -------   Geometry file name (output)   ----------------------------------
-  TString geoFileName = geoPath + "/ctn/geometry/Cherry_tomato_";
+  TString geoFileName = geoPath + "/ctn/geometry/Cherry_";
   geoFileName = geoFileName + geoTag + ".geo.root";
   // --------------------------------------------------------------------------
 
@@ -150,58 +150,85 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedH2O, TGeoMedium *pMe
   
 
 	// ----------------------------------------------
+  // 1 Cherry tomato ACTIVE VOLUME
 	// Cherry sphere out
-	//TGeoVolume *sphere_out = gGeoManager->MakeSphere("Sphere_out",pMedH2O,0.5,0.51,0,180,0,360);
-  //sphere_out->SetFillColor(0);
-  //sphere_out->SetLineColor(0);
-  //sphere_out->SetTransparency(70);
-  //sphere_out->SetVisLeaves(kTRUE);
-	// ----------------------------------------------
-	
-	// ----------------------------------------------
+	/*TGeoVolume *sphere_out = gGeoManager->MakeSphere("Sphere_out",pMedH2O,0.,1.5,0,180,0,360);
+  sphere_out->SetFillColor(2);
+  sphere_out->SetLineColor(2);
+  sphere_out->SetTransparency(70);
+  sphere_out->SetVisLeaves(kTRUE);
+
 	// Cherry sphere in
-	TGeoVolume *sphere_in = gGeoManager->MakeSphere("Sphere_in",pMedH2O,0.0,1.5,0,180,0,360);
-  sphere_in->SetFillColor(2);//2
-  sphere_in->SetLineColor(2);//2
+	TGeoVolume *sphere_in = gGeoManager->MakeSphere("Sphere_in",pMedH2O,0.0,1.49,0,180,0,360);//100 micras skin
+  sphere_in->SetFillColor(2);
+  sphere_in->SetLineColor(2);
   sphere_in->SetTransparency(70);
-	//sphere_out->AddNode(sphere_in,1,new TGeoTranslation(0,0,0));
+	sphere_out->AddNode(sphere_in,1,new TGeoTranslation(0,0,0));
   sphere_in->SetVisLeaves(kTRUE);
+
 	// ----------------------------------------------
-  
- 
-  // ----------------------------------------------
-  // Cherry tomatoes
-  TGeoRotation *rot_1     = new TGeoRotation("rot_1",0,0,0);//Cherry tomato in the center
+
+
+	// ----------------------------------------------
+	// 6 Cherries NO active
+	// Cherry sphere out
+	TGeoVolume *NoActive_sphere_out = gGeoManager->MakeSphere("NoActive_sphere_out",pMedH2O,0.,1.5,0,180,0,360);
+  NoActive_sphere_out->SetFillColor(6);
+  NoActive_sphere_out->SetLineColor(6);
+  NoActive_sphere_out->SetTransparency(70);
+  NoActive_sphere_out->SetVisLeaves(kTRUE);
+
+	// Cherry sphere in
+	TGeoVolume *NoActive_sphere_in = gGeoManager->MakeSphere("NoActive_sphere_in",pMedH2O,0.0,1.49,0,180,0,360);//100 micras skin
+  NoActive_sphere_in->SetFillColor(6);
+  NoActive_sphere_in->SetLineColor(6);
+  NoActive_sphere_in->SetTransparency(70);
+	NoActive_sphere_out->AddNode(NoActive_sphere_in,1,new TGeoTranslation(0,0,0));
+  NoActive_sphere_in->SetVisLeaves(kTRUE);
+	// ----------------------------------------------
+
+	TGeoRotation *rot_1     = new TGeoRotation("rot_1",0,0,0);//Cherry tomato in the center
   TGeoCombiTrans *comb_1 = new TGeoCombiTrans("comb_1",0,0,58.5,rot_1);
-  pWorld->AddNode(sphere_in,1,comb_1); 
+  pWorld->AddNode(NoActive_sphere_out,1,comb_1); 
 
   TGeoRotation *rot_2     = new TGeoRotation("rot_2",0,0,0);
   TGeoCombiTrans *comb_2 = new TGeoCombiTrans("comb_2",0,3,58.5,rot_2);
-  pWorld->AddNode(sphere_in,2,comb_2); 
+  pWorld->AddNode(sphere_out,2,comb_2); 
 
   TGeoRotation *rot_3     = new TGeoRotation("rot_3",0,0,0);
   TGeoCombiTrans *comb_3 = new TGeoCombiTrans("comb_3",-2.598,1.5,58.5,rot_3);
-  pWorld->AddNode(sphere_in,3,comb_3); 
+  pWorld->AddNode(NoActive_sphere_out,3,comb_3); 
 
   TGeoRotation *rot_4     = new TGeoRotation("rot_4",0,0,0);
   TGeoCombiTrans *comb_4 = new TGeoCombiTrans("comb_4",-2.598,-1.5,58.5,rot_4);
-  pWorld->AddNode(sphere_in,4,comb_4); 
+  pWorld->AddNode(NoActive_sphere_out,4,comb_4); 
 
   TGeoRotation *rot_5     = new TGeoRotation("rot_5",0,0,0);
   TGeoCombiTrans *comb_5 = new TGeoCombiTrans("comb_5",0,-3,58.5,rot_5);
-  pWorld->AddNode(sphere_in,5,comb_5); 
+  pWorld->AddNode(NoActive_sphere_out,5,comb_5); 
 
   TGeoRotation *rot_6     = new TGeoRotation("rot_6",0,0,0);
   TGeoCombiTrans *comb_6 = new TGeoCombiTrans("comb_6",2.598,-1.5,58.5,rot_6);
-  pWorld->AddNode(sphere_in,6,comb_6); 
+  pWorld->AddNode(NoActive_sphere_out,6,comb_6); 
 
   TGeoRotation *rot_7     = new TGeoRotation("rot_7",0,0,0);
   TGeoCombiTrans *comb_7 = new TGeoCombiTrans("comb_7",2.598,1.5,58.5,rot_7);
-  pWorld->AddNode(sphere_in,7,comb_7); 
+  pWorld->AddNode(NoActive_sphere_out,7,comb_7);*/ 
 	// ----------------------------------------------
 
+	//Box of Water
+	TGeoVolume *box_water = gGeoManager->MakeBox("Box_water", pMedH2O,4.5,4.5,5.);//9x9x3 box of water
+	box_water->SetFillColor(7);
+  box_water->SetLineColor(7);
+  box_water->SetTransparency(70);
+  box_water->SetVisLeaves(kTRUE);
+
+	TGeoRotation *rot_water    = new TGeoRotation("rot_water",0,0,0);
+  TGeoCombiTrans *comb_water = new TGeoCombiTrans("comb_water",0.,0.,58.5,rot_water);
+  pWorld->AddNode(box_water,1,comb_water);
+
 	//Source layer "Al"
-	TGeoVolume *source_layer = gGeoManager->MakeBox("Source_layer", pMedAl,3.975,3.975,0.0002);//2 micrometers
+	TGeoVolume *source_layer = gGeoManager->MakeBox("Source_layer", pMedAl,3.975,3.975,0.002);//20 micrometers
 	source_layer->SetFillColor(9);
   source_layer->SetLineColor(9);
   source_layer->SetTransparency(70);
@@ -230,19 +257,19 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedH2O, TGeoMedium *pMe
 	//1st
 	TGeoRotation *rot = new TGeoRotation("rot",0,0,0);
   TGeoCombiTrans *comb_9 = new TGeoCombiTrans("comb_9",0.,0.,60.5,rot);
-  pWorld->AddNode(first_acry_layer,1,comb_9);
+  //pWorld->AddNode(first_acry_layer,1,comb_9);
 	//2nd
   TGeoCombiTrans *comb_10 = new TGeoCombiTrans("comb_10",0.,0.,61.5,rot);
-  pWorld->AddNode(other_acry_layer,1,comb_10);
+  //pWorld->AddNode(other_acry_layer,1,comb_10);
 	//3rd
 	TGeoCombiTrans *comb_11 = new TGeoCombiTrans("comb_11",0.,0.,62.5,rot);
-  pWorld->AddNode(other_acry_layer,2,comb_11);
+  //pWorld->AddNode(other_acry_layer,2,comb_11);
 	//4th
 	TGeoCombiTrans *comb_12 = new TGeoCombiTrans("comb_12",0.,0.,63.5,rot);
-  pWorld->AddNode(other_acry_layer,3,comb_12);
+  //pWorld->AddNode(other_acry_layer,3,comb_12);
 	//5th
 	TGeoCombiTrans *comb_13 = new TGeoCombiTrans("comb_13",0.,0.,64.5,rot);
-  pWorld->AddNode(other_acry_layer,4,comb_13);
+  //pWorld->AddNode(other_acry_layer,4,comb_13);
   // ----------------------------------------------
 
 
@@ -254,7 +281,7 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedH2O, TGeoMedium *pMe
   metal_support->SetVisLeaves(kTRUE);
 
   TGeoCombiTrans *comb_14 = new TGeoCombiTrans("comb_14",0.,0.,66.65,rot);
-  pWorld->AddNode(metal_support,1,comb_14);
+  //pWorld->AddNode(metal_support,1,comb_14);
 	// ----------------------------------------------
 	
 
