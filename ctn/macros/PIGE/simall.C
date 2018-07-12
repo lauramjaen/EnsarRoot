@@ -25,7 +25,7 @@ void simall(Int_t nEvents = 1,
             TMap* fDetList = NULL,
             Bool_t fVis = kFALSE,
             TString fMC = "TGeant4",
-            TString fGenerator = "Cascade",
+            TString fGenerator = "box",
             Bool_t fUserPList = kFALSE,
             TString OutFile = "outsim.root",
             TString ParFile = "outpar.root",
@@ -125,18 +125,20 @@ void simall(Int_t nEvents = 1,
   if (fGenerator.CompareTo("box") == 0  ) {
   // 2- Define the BOX generator
   Int_t pdgId          = 22;            // geant particle id of the photon beam
-  Double32_t theta1    = 0.;            // polar angle distribution (degrees)
-  Double32_t theta2    = 180.;
-	Double32_t phi1    	 = 0.;            // azimutal angle distribution (degrees)
-  Double32_t phi2      = 360.;
+  Double32_t theta1    = 0.;            // polar angle distribution (degrees) 70.
+  Double32_t theta2    = 0.;						// 110.
+	Double32_t phi1    	 = 0.;            // azimutal angle distribution (degrees) 160.
+  Double32_t phi2      = 40.;						// 200.
   Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
-  FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,1); //multiplicity
+  //FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,50); //multiplicity
+	EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,150); //multiplicity
   boxGen->SetThetaRange (theta1,theta2);
   boxGen->SetCosTheta();
-  boxGen->SetPRange     (0.0002,0.0002);// momentum of the beam GeV/c
+  boxGen->SetPRange     (0.0001634,0.0001634);// momentum of the beam GeV/c
   boxGen->SetPhiRange   (phi1,phi2);    // azimuthal angle (degrees)
-  boxGen->SetXYZ        (0.,0.,0.);     // origin of the beam in the center
-  
+  //boxGen->SetXYZ        (0.,0.,0.);     // Point source
+//SetBoxXYZ (Double32_t x1=0, Double32_t y1=0, Double32_t x2=0, Double32_t y2=0, Double32_t z=0)
+  boxGen->SetBoxXYZ  (-1.,-1.,1.,1.,0.); //Square source
   // add the box generator
   primGen->AddGenerator(boxGen);
   } 
@@ -178,24 +180,7 @@ void simall(Int_t nEvents = 1,
 
   FairLogger::GetLogger()->SetLogVerbosityLevel("LOW");
   
-  
-  
 
-// ----- Initialize CaloHitFinder task ------------------------------------
-  /*Bool_t fCaloHitFinder = true;
-  if(fCaloHitFinder) {
-    R3BCaloHitFinder* caloHF = new R3BCaloHitFinder();
-    caloHF->SetClusteringAlgorithm(1,0);    //square window
-    caloHF->SetDetectionThreshold(0.000050);//50 KeV
-    caloHF->SetExperimentalResolution(6.);  //percent @ 1 MeV
-    caloHF->SetComponentResolution(.25);    //sigma = 0.5 MeV
-    caloHF->SelectGeometryVersion(1116);
-    caloHF->SetAngularWindow(3.2,3.2);      //[0.25 around 14.3 degrees, 3.2 for the complete calorimeter]
-    run->AddTask(caloHF);
-  }*/
- 
- 
- 
 
 
   // -----   Initialize simulation run   ------------------------------------

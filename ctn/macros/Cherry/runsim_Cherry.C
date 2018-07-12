@@ -71,8 +71,8 @@ void runsim_Cherry() {
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_2ndCherryActive_skin_NoMetalBase.geo.root"));//1Active +skin +Setup
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Water_Box.geo.root"));//Water Box
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Air_Box.geo.root"));//Water Box
-	detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Water_100.geo.root"));//Water Box
-	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Cherry_15Layers.geo.root"));//Water Box
+	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Water_100.geo.root"));//Water Box
+	detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Cherry_15Layers.geo.root"));//Water Box
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Water_smallBlock.geo.root"));//Water smallBox as cherry
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("Cherry_Lala.geo.root"));//Active Cherry 2 made with layers
 	//detGeo.Add(new TObjString("HPGE"),  new TObjString("WaterAsCh_1Box_setup_NoLayers.geo.root"));//Water Box
@@ -81,7 +81,7 @@ void runsim_Cherry() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 100000;
+   Int_t nEvents = 100;
 
 
    //-------------------------------------------------

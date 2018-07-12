@@ -379,7 +379,7 @@ Bool_t EnsarHPGeDet::CheckIfSensitive(std::string name)
   }*/
 //Sphere "Box_water"  NoActive_Back
 
-	if(TString(name).Contains("Box_water")) {
+	if(TString(name).Contains("GE_TUB")) {
     return kTRUE;
   }
   return kFALSE;

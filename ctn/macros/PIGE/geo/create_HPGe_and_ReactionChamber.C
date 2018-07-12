@@ -230,15 +230,15 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
   
   // ----------------------------------------------
   // detector at 90 degrees
-  TGeoRotation *rot     = new TGeoRotation("rot",90,-90,0);
-  TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-13.295,0,0,rot);
-  pWorld->AddNode(main_tube,1,comb); 
+  //TGeoRotation *rot     = new TGeoRotation("rot",0,220,0);//change to 130º
+  //TGeoCombiTrans *comb = new TGeoCombiTrans("comb",0,6.7833,-5.6919,rot);//change to 5.55cm
+  //pWorld->AddNode(main_tube,1,comb); 
   // ----------------------------------------------
   
   
   //-------------------------------------------------------------------------------------------------------------------
-  //Create the Munich REACTION CHAMBER 
-  TGeoVolume *main_chamber = gGeoManager->MakeTube("main_chamber",pMedAir,0.0,6.59,13.5);
+  //Create random REACTION CHAMBER 
+  TGeoVolume *main_chamber = gGeoManager->MakeTube("main_chamber",pMedAir,0.0,11.5,13.5);//"name",pMed,rmin,rmax,height/2
   main_chamber->SetFillColor(14);
   main_chamber->SetLineColor(14);
   main_chamber->SetTransparency(70);
@@ -247,7 +247,7 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
   
   // ----------------------------------------------
   // Steel tube of the chamber (walls)
-  TGeoVolume *steel_chamber1 = gGeoManager->MakeTube("steel_chamber1", pMedSteel, 4.95, 5.09, 11.5);
+  TGeoVolume *steel_chamber1 = gGeoManager->MakeTube("steel_chamber1", pMedSteel, 9.5, 10., 11.5);
   steel_chamber1->SetFillColor(14);
   steel_chamber1->SetLineColor(14);
   main_chamber->AddNode(steel_chamber1,1,new TGeoTranslation(0,0,0));
@@ -256,7 +256,7 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
   
   // ----------------------------------------------
   // Vacuum inside the reaction chamber
-  TGeoVolume *vacuum_chamber = gGeoManager->MakeTube("vacuum_chamber", pMedVac, 0., 4.949, 11.5);
+  TGeoVolume *vacuum_chamber = gGeoManager->MakeTube("vacuum_chamber", pMedVac, 0.0, 9.499, 11.5);
   vacuum_chamber->SetFillColor(11);
   vacuum_chamber->SetLineColor(11);
   main_chamber->AddNode(vacuum_chamber,1,new TGeoTranslation(0,0,0));
@@ -265,7 +265,7 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
   
   // ----------------------------------------------
   // Steel basis of the chamber
-  TGeoVolume *steel_base1 = gGeoManager->MakeTube("steel_base1", pMedSteel, 0.0, 6.59, 1.0);
+  TGeoVolume *steel_base1 = gGeoManager->MakeTube("steel_base1", pMedSteel, 0.0, 11.5, 1.0);
   steel_base1->SetFillColor(14);
   steel_base1->SetLineColor(14);
   main_chamber->AddNode(steel_base1,1,new TGeoTranslation(0,0,12.5));
@@ -273,13 +273,23 @@ void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAl, TGeoMedium *pMed
   steel_base1->SetVisLeaves(kTRUE);
   // ----------------------------------------------
   
+	// ----------------------------------------------
+  // detector at 90 or 1t 130 degrees and at 5.55cm from the source
+  TGeoRotation *rot     = new TGeoRotation("rot",130,-90,0);//now at 130º or at 90º put(90,-90,0) okk
+  TGeoCombiTrans *comb = new TGeoCombiTrans("comb",-6.93653,-5.82044,0.,rot);//at 130º or at 90º put(-9.055,0.,0.,rot) okk
+	main_chamber->AddNodeOverlap(main_tube,1,comb);//AddNodeOverlap
+
+	
+  // ----------------------------------------------
+
   // ----------------------------------------------
   // reaction chamber in the origin 
   TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);
-  TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
+  TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);//
   pWorld->AddNode(main_chamber,1,comb_ch);
   // ----------------------------------------------
 
+	
   
 }
 
