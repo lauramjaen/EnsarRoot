@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////
+////                                                    ////
+////      232-Thorium Chain Natural Radioactivity  			////
+////      Energy and Branching Ratios of Gammas    			////
+////                                                    ////
+////////////////////////////////////////////////////////////
+Number of Gammas
+6                         
+Energy of gamma and its BranchingRatios
+0.277				0.023
+0.511				0.081
+0.583				0.304
+0.763				0.0065
+0.860				0.045
+2.614				0.356
+
+//Working with Ensar232ThoriumChainGen
+//Only change the values
+//don't modify the file structure 
