@@ -42,6 +42,7 @@ EnsarIonGenerator.cxx
 EnsarBoxGenerator.cxx
 EnsarSiGenerator.cxx
 EnsarCascadeGen.cxx
+Ensar232ThoriumChainGen.cxx
 )
 
 # fill list of header files from list of source files
