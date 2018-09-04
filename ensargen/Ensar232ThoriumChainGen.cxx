@@ -16,9 +16,6 @@
 #include "TParticlePDG.h"
 #include "TDatabasePDG.h"
 #include "TMath.h"
-#include "TF1.h"
-//#include "Math/WrappedTF1.h"
-//#include "Math/BrentRootFinder.h"
 
 #include <iostream>
 #include <fstream>
@@ -29,9 +26,29 @@
 
 using namespace std;
 
+/*
+Double_t* fenergy;			//Energy of gammas
+    Double_t* fprobability;	//Probability of each gamma
+
+		Bool_t     fPointVtxIsSet;       // True if point vertex is set
+    Bool_t     fBoxVtxIsSet;         // True if box vertex is set
+		Bool_t 		 fThetaRangeIsSet;			//True if Theta range is set
+		Bool_t		 fPhiRangeIsSet;				// True if Phi range is set
+		Double_t fX, fY, fZ;           // Point vertex coordinates [cm]
+    Double_t fX1, fY1, fX2, fY2;   // Box vertex coords (x1,y1)->(x2,y2)
+		Double_t fThetaMin, fThetaMax; // Polar angle range in lab system [degree]
+		Double_t fPhiMin, fPhiMax;     // Azimuth angle range [degree]
+*/
+
 // -----   Default constructor   ------------------------------------------
 Ensar232ThoriumChainGen::Ensar232ThoriumChainGen()  :
-  FairGenerator() 
+  FairGenerator(),
+	fPointVtxIsSet(0), fBoxVtxIsSet(0),
+  fThetaRangeIsSet(0), fPhiRangeIsSet(0),
+	fX(0), fY(0), fZ(0),
+	fX1(0), fY1(0), fX2(0), fY2(0),
+	fThetaMin(0), fThetaMax(0),
+	fPhiMin(0), fPhiMax(0)
 {
 }
 // ------------------------------------------------------------------------
@@ -39,7 +56,13 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen()  :
 
 // -----   Standard constructor   -----------------------------------------
 Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
-  FairGenerator() 
+  FairGenerator(),
+	fPointVtxIsSet(0), fBoxVtxIsSet(0),
+  fThetaRangeIsSet(0), fPhiRangeIsSet(0),
+	fX(0), fY(0), fZ(0),
+	fX1(0), fY1(0), fX2(0), fY2(0),
+	fThetaMin(0), fThetaMax(0),
+	fPhiMin(0), fPhiMax(0)
 {
   
   cout << "-I- Ensar232ThoriumChainGen: Opening input file " << inputFile << endl;
@@ -58,7 +81,18 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
 // -----   Inizialize generator   -----------------------------------------
 Bool_t  Ensar232ThoriumChainGen::Init()
 {
-
+	//Checking out the probabilities
+	Double_t sumProb;
+	sumProb=0;
+	for (Int_t i=0; i<fnumGammas; i++){
+		sumProb=sumProb+fprobability[i];
+	}
+	if (sumProb>1.001){
+		Fatal("Init()","Ensar232ThoriumChainGen: The sum of all probabilities is higher than 1! Modify it, please.");		
+	}
+	if (fPointVtxIsSet && fBoxVtxIsSet) {
+    Fatal("Init()","Ensar232ThoriumChainGen: Cannot set point and box vertices simultaneously");
+  }
 }
 // ------------------------------------------------------------------------
 
@@ -80,19 +114,15 @@ Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
     return kFALSE;
   }
   
-  cout<<"We are Here!"<<endl;
+  //cout<<"We are Here!"<<endl;
 
 	for(Int_t i = 0; i < fnumGammas; i++){
-		cout<<"Gamma i="<<i+1<<endl;
-		//Double_t e=0.;
-		//Double_t p=0.;
-		//e=fenergy;
-		//p=fprobability;
-    cout<<"Energy= "<<fenergy[i]<<endl;
-    cout<<"Probability= "<<fprobability[i]<<endl;
+		//cout<<"Gamma i="<<i<<endl;
+    //cout<<"Energy= "<<fenergy[i]<<endl;
+    //cout<<"Probability= "<<fprobability[i]<<endl;
   }  
 
-	//Limits calculation
+	//Limits calculation 
 	Double_t up_limit[fnumGammas+1];
 
 	for(Int_t i=0; i<fnumGammas+1; i++){
@@ -104,30 +134,66 @@ Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
 		}
 	}
 	
-	for(Int_t i=0; i<fnumGammas; i++){
-		cout<<"i="<<i<<"  up_limit ="<<up_limit[i]<<endl;
+	for(Int_t i=0; i<fnumGammas+1; i++){
+		//cout<<"i="<<i<<"  up_limit ="<<up_limit[i]<<endl;
 	}
 
-	//Gamma vertex in the origen 
-  Double_t X=0.;
-  Double_t Y=0.;
-  Double_t Z=0.;
+	Int_t whichGamma;
+ 	Float_t ran =gRandom->Rndm();
+  //cout<<"ran= "<<ran<<endl;
 
-	Double_t px1=0.5;
-  Double_t py1=0.5;
-  Double_t pz1=0.5;
-  
-	Double_t px2=0.5;
-  Double_t py2=0.5;
-  Double_t pz2=0.5;
-  
+	for (Int_t i=0; i<fnumGammas; i++){
+		if (ran>up_limit[i] && ran<up_limit[i+1]){
+			whichGamma=i;
+			//cout<<"whichGamma="<<whichGamma<<"   up_lim[i]="<<up_limit[i]<<"   up_lim[i+1]="<<up_limit[i+1]<<endl;
+		}
+	}
+
+	//Angles
+	Double_t phi;		//0-2pi
+	Double_t theta;	//0-pi
+									//Remember: we always consider the CosTheta
+									//if not it will be: theta = gRandom->Uniform(fThetaMin,fThetaMax) * TMath::DegToRad();
+
+	if (fThetaRangeIsSet==kTRUE){
+		theta = acos(gRandom->Uniform(cos(fThetaMin* TMath::DegToRad()),
+                                      cos(fThetaMax* TMath::DegToRad())));
+	}else { theta = TMath::ACos(1-2*gRandom->Rndm());}
+
+	if (fPhiRangeIsSet==kTRUE){
+		phi = gRandom->Uniform(fPhiMin,fPhiMax) * TMath::DegToRad();
+	}else{ phi = 6.283185307  *gRandom->Rndm();}
+	
+	//cout<<endl<<endl<<endl;
+	
+	//cout<<"theta2="<<theta*180/TMath::Pi()<<"  phi2="<<phi*180/TMath::Pi()<<endl;
+	//cout<<"theta3="<<TMath::ACos(1-2*gRandom->Rndm())<<"  phi3="<<6.283185307  *gRandom->Rndm()<<endl;
+
+  //Direction of gamma RS Lab
+  TVector3 direction;  
+  direction = TVector3(TMath::Sin(theta)*TMath::Cos(phi),
+			TMath::Sin(theta)*TMath::Sin(phi),
+			TMath::Cos(theta));	
+
+	//Momentum
+	Double_t px, py, pz;
+	px= fenergy[whichGamma]*direction.X();
+  py= fenergy[whichGamma]*direction.Y();
+  pz= fenergy[whichGamma]*direction.Z();  
+
+	//cout<<"fenergy[whichGamma]="<<fenergy[whichGamma]<<endl;
+	//cout<<"px="<<px<<"  py="<<py<<"  pz="<<pz<<endl;
+
+	if (fBoxVtxIsSet) {
+      fX = gRandom->Uniform(fX1,fX2);
+      fY = gRandom->Uniform(fY1,fY2);
+	}
+
+	//cout<<"fX="<<fX<<" fY="<<fY<<" fZ="<<fZ<<endl;
+
   //adding the gammas 232Th chain
-  primGen->AddTrack(fPDGType, px1, py1, pz1, X, Y, Z);
-  primGen->AddTrack(fPDGType, px2, py2, pz2, X, Y, Z);
-
-
-//
-
+  primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
+ 
   
   return kTRUE;
   
@@ -149,9 +215,9 @@ void Ensar232ThoriumChainGen::CloseInput() {
 // ------------------------------------------------------------------------
 
 // ---Read Si* Parameters File --------------------------------------------
-bool Ensar232ThoriumChainGen::ReadParameters() {
+void Ensar232ThoriumChainGen::ReadParameters() {
 
-  cout << "\n\n\t------ READING 232Th-chain PARAMETERS ------\n" << endl;
+  cout << "\n\n\t------ READING PARAMETERS ------\n" << endl;
     
 	fInputFile->ignore(256,'\n');
   fInputFile->ignore(256,'\n');
@@ -176,28 +242,12 @@ bool Ensar232ThoriumChainGen::ReadParameters() {
   
 	for(int i = 0; i < fnumGammas; i++){
     *fInputFile >> fenergy[i] >> fprobability[i];
-		cout<<"Gamma i="<<i+1<<endl;
-		//Double_t e=0.;
-		//Double_t p=0.;
-		//e=fenergy;
-		//p=fprobability;
-    cout<<"Energy= "<<fenergy[i]<<endl;
-    cout<<"Probability= "<<fprobability[i]<<endl;
+		//cout<<"Gamma i="<<i+1<<endl;
+    //cout<<"Energy= "<<fenergy[i]<<endl;
+    //cout<<"Probability= "<<fprobability[i]<<endl;
   }  
 
-	//Checking out the probabilities
-	Double_t sumProb;
-	sumProb=0;
-	for (Int_t i=0; i<fnumGammas; i++){
-		sumProb=sumProb+fprobability[i];
-	}
-	if(sumProb>1){
-		cout<<"-E- Ensar232ThoriumChainGen: The total probability is higher than 1!! Modify it, please."<<endl;//REvisar no va be
-		return kFALSE;
-	}else{
-		cout<<"-E- Ensar232ThoriumChainGen: The total probability is "<<sumProb<<endl;
-		return kTRUE;
-	}
+
 	cout << "-------------------------------------------------" << endl;  
 }
 //-------------------------------------------------------------------------
