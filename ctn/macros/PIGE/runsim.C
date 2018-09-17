@@ -39,11 +39,15 @@ void runsim() {
   // Si-12900 cascade generator: "SiOneCascade"
   // Co-60 cascade generator:    "Cocascade"
   // Gamma-200keV cascade generator: "Gamma_AngularC_200k"
-   TString fGene="box";
+	 // Gamma-200keV cascade generator: "Gamma_AngularC_200k"
+  //TString fGene="box";
   //TString fGene="Sicascade";
   //TString fGene="SiOneCascade";
   //TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
+		TString fGene="208Tldecay";
+	//TString fGene="232Thchain";
+
 
 
   //-------------------------------------------------
@@ -69,7 +73,7 @@ void runsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 10;
+   Int_t nEvents = 100;
 
 
    //-------------------------------------------------
@@ -77,7 +81,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kTRUE;//kTRUE info GeoTracks for evtvis.C
+   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks for evtvis.C
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,

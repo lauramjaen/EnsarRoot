@@ -1,10 +1,10 @@
 // *********************************************************************
 // *****   
-// *****             Ensar232ThoriumChainGen source file                                   
-// *****   							
+// *****             EnsarGammaCascadeGen source file         
+// ***** 		                              							
 // *********************************************************************
 
-#include "Ensar232ThoriumChainGen.h"
+#include "EnsarGammaCascadeGen.h"
 
 #include "FairPrimaryGenerator.h"
 
@@ -24,36 +24,38 @@ using namespace std;
 
 
 // -----   Default constructor   ------------------------------------------
-Ensar232ThoriumChainGen::Ensar232ThoriumChainGen()  :
+EnsarGammaCascadeGen::EnsarGammaCascadeGen()  :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
 	fX(0), fY(0), fZ(0),
 	fX1(0), fY1(0), fZ1(0), fX2(0), fY2(0), fZ2(0),
 	fThetaMin(0), fThetaMax(0),
-	fPhiMin(0), fPhiMax(0)
+	fPhiMin(0), fPhiMax(0),
+	ftrack(0)
 {
 }
 // ------------------------------------------------------------------------
 
 
 // -----   Standard constructor   -----------------------------------------
-Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
+EnsarGammaCascadeGen::EnsarGammaCascadeGen(const char* inputFile) :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
 	fX(0), fY(0), fZ(0),
 	fX1(0), fY1(0), fZ1(0), fX2(0), fY2(0), fZ2(0),
 	fThetaMin(0), fThetaMax(0),
-	fPhiMin(0), fPhiMax(0)
+	fPhiMin(0), fPhiMax(0),
+	ftrack(0)
 {
   
-  cout << "-I- Ensar232ThoriumChainGen: Opening input file " << inputFile << endl;
+  cout << "-I- EnsarGammaCascadeGen: Opening input file " << inputFile << endl;
   fFileName  = inputFile;
   
   fInputFile = new ifstream(fFileName);
   //fInputFile = new TFile(fFileName,"READ");
-  if ( ! fInputFile->is_open() ) Fatal("Ensar232ThoriumChainGen","Cannot open input file.");
+  if ( ! fInputFile->is_open() ) Fatal("EnsarGammaCascadeGen","Cannot open input file.");
    
   //Read Parameters File
   ReadParameters();
@@ -62,7 +64,7 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
 
 
 // -----   Inizialize generator   -----------------------------------------
-Bool_t  Ensar232ThoriumChainGen::Init()
+Bool_t  EnsarGammaCascadeGen::Init()
 {
 	//Checking out the probabilities
 	Double_t sumProb;
@@ -71,32 +73,33 @@ Bool_t  Ensar232ThoriumChainGen::Init()
 		sumProb=sumProb+fprobability[i];
 	}
 	if (sumProb>1.001){
-		Fatal("Init()","Ensar232ThoriumChainGen: The sum of all probabilities is higher than 1! Modify it, please.");		
+		Fatal("Init()","EnsarGammaCascadeGen: The sum of all probabilities is higher than 1! Modify it, please.");		
 	}
 	if (fPointVtxIsSet && fBoxVtxIsSet) {
-    Fatal("Init()","Ensar232ThoriumChainGen: Cannot set point and box vertices simultaneously");
+    Fatal("Init()","EnsarGammaCascadeGen: Cannot set point and box vertices simultaneously");
   }
 }
 // ------------------------------------------------------------------------
 
 
 // -----   Destructor   ---------------------------------------------------
-Ensar232ThoriumChainGen::~Ensar232ThoriumChainGen() {
+EnsarGammaCascadeGen::~EnsarGammaCascadeGen() {
   CloseInput();
 }
 // ------------------------------------------------------------------------
 
 // -----   Read events   --------------------------------------------------
-Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
+Bool_t EnsarGammaCascadeGen::ReadEvent(FairPrimaryGenerator* primGen)
 {
   
   
   //----- Check for input file -----
   if ( ! fInputFile->is_open() ) {
-    cout << "-E- Ensar232ThoriumChainGen: Input file not open!" << endl;
+    cout << "-E- EnsarGammaCascadeGen: Input file not open!" << endl;
     return kFALSE;
   }
   
+	ftrack=false;
   //cout<<"We are Here!"<<endl;
 
 	for(Int_t i = 0; i < fnumGammas; i++){
@@ -117,67 +120,77 @@ Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
 		}
 	}
 	
-	for(Int_t i=0; i<fnumGammas+1; i++){
+	//for(Int_t i=0; i<fnumGammas+1; i++){
 		//cout<<"i="<<i<<"  up_limit ="<<up_limit[i]<<endl;
-	}
+	//}
 
-	Int_t whichGamma;
- 	Float_t ran =gRandom->Rndm();
-  //cout<<"ran= "<<ran<<endl;
+	
+		Int_t whichGamma;
+	 	Float_t ran;
 
-	for (Int_t i=0; i<fnumGammas; i++){
-		if (ran>up_limit[i] && ran<up_limit[i+1]){
-			whichGamma=i;
-			//cout<<"whichGamma="<<whichGamma<<"   up_lim[i]="<<up_limit[i]<<"   up_lim[i+1]="<<up_limit[i+1]<<endl;
+		while(ftrack==false){
+			ran =gRandom->Rndm();
+			for (Int_t i=0; i<fnumGammas; i++){
+				if (ran>up_limit[i] && ran<up_limit[i+1]){
+					whichGamma=i;
+					ftrack=true;
+					//cout<<"whichGamma="<<whichGamma<<"   up_lim[i]="<<up_limit[i]<<"   up_lim[i+1]="<<up_limit[i+1]<<endl;
+				}
+			}
 		}
-	}
 
-	//Angles
-	Double_t phi;		//0-2pi
-	Double_t theta;	//0-pi
-									//Remember: we always consider the CosTheta
-									//if not it will be: theta = gRandom->Uniform(fThetaMin,fThetaMax) * TMath::DegToRad();
+		//Angles
+		Double_t phi;		//0-2pi
+		Double_t theta;	//0-pi
+										//Remember: we always consider the CosTheta
+										//if not it will be: theta = gRandom->Uniform(fThetaMin,fThetaMax) * TMath::DegToRad();
 
-	if (fThetaRangeIsSet==kTRUE){
-		theta = acos(gRandom->Uniform(cos(fThetaMin* TMath::DegToRad()),
-                                      cos(fThetaMax* TMath::DegToRad())));
-	}else { theta = TMath::ACos(1-2*gRandom->Rndm());}
+		if (fThetaRangeIsSet==kTRUE){
+			theta = acos(gRandom->Uniform(cos(fThetaMin* TMath::DegToRad()),
+		                                    cos(fThetaMax* TMath::DegToRad())));
+		}else { theta = TMath::ACos(1-2*gRandom->Rndm());}
 
-	if (fPhiRangeIsSet==kTRUE){
-		phi = gRandom->Uniform(fPhiMin,fPhiMax) * TMath::DegToRad();
-	}else{ phi = 6.283185307  *gRandom->Rndm();}
+		if (fPhiRangeIsSet==kTRUE){
+			phi = gRandom->Uniform(fPhiMin,fPhiMax) * TMath::DegToRad();
+		}else{ phi = 6.283185307  *gRandom->Rndm();}
 	
-	//cout<<endl<<endl<<endl;
-	
-	//cout<<"theta2="<<theta*180/TMath::Pi()<<"  phi2="<<phi*180/TMath::Pi()<<endl;
-	//cout<<"theta3="<<TMath::ACos(1-2*gRandom->Rndm())<<"  phi3="<<6.283185307  *gRandom->Rndm()<<endl;
+		
+		//cout<<"theta2="<<theta*180/TMath::Pi()<<"  phi2="<<phi*180/TMath::Pi()<<endl;
+		//cout<<"theta3="<<TMath::ACos(1-2*gRandom->Rndm())<<"  phi3="<<6.283185307  *gRandom->Rndm()<<endl;
 
-  //Direction of gamma RS Lab
-  TVector3 direction;  
-  direction = TVector3(TMath::Sin(theta)*TMath::Cos(phi),
-			TMath::Sin(theta)*TMath::Sin(phi),
-			TMath::Cos(theta));	
+		//Direction of gamma RS Lab
+		TVector3 direction;  
+		direction = TVector3(TMath::Sin(theta)*TMath::Cos(phi),
+				TMath::Sin(theta)*TMath::Sin(phi),
+				TMath::Cos(theta));	
 
-	//Momentum
-	Double_t px, py, pz;
-	px= fenergy[whichGamma]*direction.X();
-  py= fenergy[whichGamma]*direction.Y();
-  pz= fenergy[whichGamma]*direction.Z();  
+		//Momentum
+		Double_t px, py, pz;
+		px= fenergy[whichGamma]*direction.X();
+		py= fenergy[whichGamma]*direction.Y();
+		pz= fenergy[whichGamma]*direction.Z();  
 
-	//cout<<"fenergy[whichGamma]="<<fenergy[whichGamma]<<endl;
-	//cout<<"px="<<px<<"  py="<<py<<"  pz="<<pz<<endl;
+		//cout<<"fenergy[whichGamma]="<<fenergy[whichGamma]<<endl;
+		//cout<<"px="<<px<<"  py="<<py<<"  pz="<<pz<<endl;
 
-	if (fBoxVtxIsSet) {
-      fX = gRandom->Uniform(fX1,fX2);
-      fY = gRandom->Uniform(fY1,fY2);
-			fZ = gRandom->Uniform(fZ1,fZ2);
-	}
+		if (fBoxVtxIsSet) {
+		    fX = gRandom->Uniform(fX1,fX2);
+		    fY = gRandom->Uniform(fY1,fY2);
+				fZ = gRandom->Uniform(fZ1,fZ2);
+		}
 
-	//cout<<"fX="<<fX<<" fY="<<fY<<" fZ="<<fZ<<endl;
+		//cout<<"fX="<<fX<<" fY="<<fY<<" fZ="<<fZ<<endl;
 
-  //adding the gammas 232Th chain
-  primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
- 
+		//adding the gammas 232Th chain
+		//if (ran<=up_limit[fnumGammas]){
+		 primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
+			 //primGen->AddTrack(fPDGType, 0.0000001, 0.0000001, 0.0000001, 0., 0., 0.);
+		 //ftrack=true;
+		//}else{
+		// primGen->AddTrack(fPDGType, 0.0000001, 0.0000001, 0.0000001, 0., 0., 0.);
+		//}
+		//primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
+// }
   
   return kTRUE;
   
@@ -185,10 +198,10 @@ Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
 // ------------------------------------------------------------------------
 
 // -----   Private method CloseInput   ------------------------------------
-void Ensar232ThoriumChainGen::CloseInput() {
+void EnsarGammaCascadeGen::CloseInput() {
   if ( fInputFile ) {
     if ( fInputFile->is_open() ) {
-      cout << "-I- Ensar232ThoriumChainGenr: Closing input file " 
+      cout << "-I- EnsarGammaCascadeGen: Closing input file " 
 	   << fFileName << endl;
       fInputFile->close();
     }
@@ -199,7 +212,7 @@ void Ensar232ThoriumChainGen::CloseInput() {
 // ------------------------------------------------------------------------
 
 // ---Read Si* Parameters File --------------------------------------------
-void Ensar232ThoriumChainGen::ReadParameters() {
+void EnsarGammaCascadeGen::ReadParameters() {
 
   cout << "\n\n\t------ READING PARAMETERS ------\n" << endl;
     
@@ -236,4 +249,4 @@ void Ensar232ThoriumChainGen::ReadParameters() {
 }
 //-------------------------------------------------------------------------
 
-ClassImp(Ensar232ThoriumChainGen)
+ClassImp(EnsarGammaCascadeGen)

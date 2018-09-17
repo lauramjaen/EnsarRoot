@@ -31,7 +31,6 @@ void simall(Int_t nEvents = 1,
             TString ParFile = "outpar.root",
             TString InFile = "evt_gen.dat")
 {
-	// TString fGenerator = "box",
 
   TString dir = getenv("VMCWORKDIR");
   TString macrosdir = dir + "/ctn/macros/nov16";
@@ -125,20 +124,20 @@ void simall(Int_t nEvents = 1,
   if (fGenerator.CompareTo("box") == 0  ) {
   // 2- Define the BOX generator
   Int_t pdgId          = 22;            // geant particle id of the photon beam
-  Double32_t theta1    = 0.;            // polar angle distribution (degrees) 70.
-  Double32_t theta2    = 0.;						// 110.
-	Double32_t phi1    	 = 0.;            // azimutal angle distribution (degrees) 160.
-  Double32_t phi2      = 40.;						// 200.
+  Double32_t theta1    = 90.;            // polar angle distribution (degrees) 70.
+  Double32_t theta2    = 180.;						// 110.
+	Double32_t phi1    	 = 90.;            // azimutal angle distribution (degrees) 160.
+  Double32_t phi2      = 270.;						// 200.
   Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
   //FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,50); //multiplicity
-	EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,150); //multiplicity
+	EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,1); //multiplicity
   boxGen->SetThetaRange (theta1,theta2);
   boxGen->SetCosTheta();
-  boxGen->SetPRange     (0.0001634,0.0001634);// momentum of the beam GeV/c
+  boxGen->SetPRange     (0.002230,0.002230);// momentum of the beam GeV/c
   boxGen->SetPhiRange   (phi1,phi2);    // azimuthal angle (degrees)
-  //boxGen->SetXYZ        (0.,0.,0.);     // Point source
+  boxGen->SetXYZ        (0.,0.,0.);     // Point source
 //SetBoxXYZ (Double32_t x1=0, Double32_t y1=0, Double32_t x2=0, Double32_t y2=0, Double32_t z=0)
-  boxGen->SetBoxXYZ  (-1.,-1.,1.,1.,0.); //Square source
+  //boxGen->SetBoxXYZ  (-0.05,-0.05,0.05,0.05,0.); //Square source
   // add the box generator
   primGen->AddGenerator(boxGen);
   } 
@@ -160,17 +159,31 @@ void simall(Int_t nEvents = 1,
     primGen->AddGenerator(CascadeGen);
   }
   
-  //add the Co cascade generator
+  //add the Gamma cascade generator with Angular Correlations, 60Co in this case
    if (fGenerator.CompareTo("Cocascade") == 0  ) {
     EnsarCascadeGen* CascadeGen = new EnsarCascadeGen("Co_cascade.dat",1);   
     primGen->AddGenerator(CascadeGen);
   }
 
-  //add the Gamma cascade generator
-   if (fGenerator.CompareTo("Gamma_AngularC_200k") == 0  ) {
-    EnsarCascadeGen* CascadeGen = new EnsarCascadeGen("Gamma_AngularC_200k.dat",1);   
-    primGen->AddGenerator(CascadeGen);
+  //add the Gamma cascade generator, the 208Tl decay
+  if (fGenerator.CompareTo("208Tldecay") == 0  ) {
+    EnsarGammaCascadeGen* GammaGen = new EnsarGammaCascadeGen("208Tldecay.dat");   
+		//ThGen->SetXYZ(-10.,-10.,-10.);
+		GammaGen->SetBoxXYZ(15.,-10.,15.,-15.,-10.,-15.);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15)
+		GammaGen->SetThetaRange(90,90);
+		GammaGen->SetPhiRange(90,90);
+    primGen->AddGenerator(GammaGen);
   }
+
+  //add the 232Th chain of natural background cascade generator
+  /*if (fGenerator.CompareTo("232Thchain") == 0  ) {
+    Ensar232ThoriumChainGen* ThGen = new Ensar232ThoriumChainGen("232ThChain.dat");   
+		//ThGen->SetXYZ(-10.,-10.,-10.);
+		ThGen->SetBoxXYZ(15.,-10.,15.,-15.,-10.,-15.);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15)
+		ThGen->SetThetaRange(90,90);
+		ThGen->SetPhiRange(90,90);
+    primGen->AddGenerator(ThGen);
+  }*/
   
   run->SetGenerator(primGen);
 
