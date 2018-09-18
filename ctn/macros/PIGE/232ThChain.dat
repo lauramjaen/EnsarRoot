@@ -4,18 +4,11 @@
 ////      Energy and Branching Ratios of Gammas    			////
 ////                                                    ////
 ////////////////////////////////////////////////////////////
-Number of Gammas
-1    
-16
-1
-1
-4
-2
-5
-
-Energy of gamma (keV) and its BranchingRatios
+228Th nuclei: total num gammas, energy (keV) and its BranchingRatios
+1   
 84.4		0.013
-
+228Ac
+16	 	
 1631		0.016
 1588		0.033
 99.5		0.013
@@ -32,25 +25,29 @@ Energy of gamma (keV) and its BranchingRatios
 328			0.03
 270			0.034
 129			0.025
-
+228Ra
+1	
 13.5		0.016
-
+224Ra	
+1		
 241			0.04
-
+212Bi
+4			
 1621		0.015
 785			0.011
 727			0.067
 39.9		0.011
-
+212Pb
+2			
 300			0.033
 239			0.436
-
-
+208Tl
+5	
 511			0.081
 277			0.023
 861			0.045
 583			0.304
-2615		0.356
+2615		0.356		
 
 //Working with Ensar232ThoriumChainGen
 //Only change the values

@@ -13,8 +13,8 @@
 // *****   							
 // *********************************************************************
 
-#ifndef ENSAR_232THORIUMCHAINGENERATOR_H
-#define ENSAR_232THORIUMCHAINGENERATOR_H
+#ifndef ENSAR_GAMMACASCADEGENERATOR_H
+#define ENSAR_GAMMACASCADEGENERATOR_H
 
 #include "FairGenerator.h"
 

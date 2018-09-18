@@ -45,8 +45,8 @@ void runsim() {
   //TString fGene="SiOneCascade";
   //TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
-		TString fGene="208Tldecay";
-	//TString fGene="232Thchain";
+	//TString fGene="208Tldecay";
+	TString fGene="232Thchain";
 
 
 

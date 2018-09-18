@@ -89,6 +89,7 @@ class Ensar232ThoriumChainGen : public FairGenerator
     Double_t* fenergy_228Th;	//Energy of gammas
     Double_t* fenergy_228Ac;
     Double_t* fenergy_228Ra;
+		Double_t* fenergy_224Ra;
     Double_t* fenergy_212Bi;
     Double_t* fenergy_212Pb;
     Double_t* fenergy_208Tl;
@@ -96,6 +97,7 @@ class Ensar232ThoriumChainGen : public FairGenerator
     Double_t* fprob_228Th;	//Probability of gammas
     Double_t* fprob_228Ac;
     Double_t* fprob_228Ra;
+    Double_t* fprob_224Ra;
     Double_t* fprob_212Bi;
     Double_t* fprob_212Pb;
     Double_t* fprob_208Tl;
@@ -104,13 +106,21 @@ class Ensar232ThoriumChainGen : public FairGenerator
     Bool_t     fBoxVtxIsSet;         // True if box vertex is set
 		Bool_t 		 fThetaRangeIsSet;			//True if Theta range is set
 		Bool_t		 fPhiRangeIsSet;				// True if Phi range is set
+		Bool_t		 ftrack_228Th;
+		Bool_t		 ftrack_228Ac;
+		Bool_t		 ftrack_228Ra;
+		Bool_t		 ftrack_224Ra;
+		Bool_t		 ftrack_212Bi;
+		Bool_t		 ftrack_212Pb;
+		Bool_t		 ftrack_208Tl;
+		Bool_t		 fanytrack;
 		Double_t fX, fY, fZ;           // Point vertex coordinates [cm]
     Double_t fX1, fY1, fZ1, fX2, fY2, fZ2;   // Box vertex coords (x1,y1,z1)->(x2,y2,z2)
 		Double_t fThetaMin, fThetaMax; // Polar angle range in lab system [degree]
 		Double_t fPhiMin, fPhiMax;     // Azimuth angle range [degree]
     
    
-    ClassDef(Ensar232ThoriumChainGen,2);
+    ClassDef(Ensar232ThoriumChainGen,1);
     void CloseInput();
     void ReadParameters();
     

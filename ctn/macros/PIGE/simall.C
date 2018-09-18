@@ -176,14 +176,14 @@ void simall(Int_t nEvents = 1,
   }
 
   //add the 232Th chain of natural background cascade generator
-  /*if (fGenerator.CompareTo("232Thchain") == 0  ) {
+ if (fGenerator.CompareTo("232Thchain") == 0  ) {
     Ensar232ThoriumChainGen* ThGen = new Ensar232ThoriumChainGen("232ThChain.dat");   
-		//ThGen->SetXYZ(-10.,-10.,-10.);
-		ThGen->SetBoxXYZ(15.,-10.,15.,-15.,-10.,-15.);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15)
+		ThGen->SetXYZ(-10.,-10.,-10.);
+		//ThGen->SetBoxXYZ(15.,-10.,15.,-15.,-10.,-15.);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15)
 		ThGen->SetThetaRange(90,90);
 		ThGen->SetPhiRange(90,90);
     primGen->AddGenerator(ThGen);
-  }*/
+  }
   
   run->SetGenerator(primGen);
 
