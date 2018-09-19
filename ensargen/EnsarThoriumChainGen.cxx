@@ -1,10 +1,10 @@
 // *********************************************************************
 // *****   
-// *****             Ensar232ThoriumChainGen source file                                   
+// *****             EnsarThoriumChainGen source file                                   
 // *****   							
 // *********************************************************************
 
-#include "Ensar232ThoriumChainGen.h"
+#include "EnsarThoriumChainGen.h"
 
 #include "FairPrimaryGenerator.h"
 
@@ -25,7 +25,7 @@ using namespace std;
 
 
 // -----   Default constructor   ------------------------------------------
-Ensar232ThoriumChainGen::Ensar232ThoriumChainGen()  :
+EnsarThoriumChainGen::EnsarThoriumChainGen()  :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -48,7 +48,7 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen()  :
 
 
 // -----   Standard constructor   -----------------------------------------
-Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
+EnsarThoriumChainGen::EnsarThoriumChainGen(const char* inputFile) :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -67,11 +67,11 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
 	ftrack_212Bi(0), ftrack_212Pb(0), ftrack_208Tl(0), fanytrack(0)
 {
   
-  cout << "-I- Ensar232ThoriumChainGen: Opening input file " << inputFile << endl;
+  cout << "-I- EnsarThoriumChainGen: Opening input file " << inputFile << endl;
   fFileName  = inputFile;
   
   fInputFile = new ifstream(fFileName);
-  if ( ! fInputFile->is_open() ) Fatal("Ensar232ThoriumChainGen","Cannot open input file.");
+  if ( ! fInputFile->is_open() ) Fatal("EnsarThoriumChainGen","Cannot open input file.");
    
   //Read Parameters File
   ReadParameters();
@@ -80,7 +80,7 @@ Ensar232ThoriumChainGen::Ensar232ThoriumChainGen(const char* inputFile) :
 
 
 // -----   Inizialize generator   -----------------------------------------
-Bool_t  Ensar232ThoriumChainGen::Init()
+Bool_t  EnsarThoriumChainGen::Init()
 {
 		
 	//Checking out the probabilities
@@ -90,10 +90,10 @@ Bool_t  Ensar232ThoriumChainGen::Init()
 		sumProb=sumProb+fprobability[i];
 	}
 	if (sumProb>1.001){
-		Fatal("Init()","Ensar232ThoriumChainGen: The sum of all probabilities is higher than 1! Modify it, please.");		
+		Fatal("Init()","EnsarThoriumChainGen: The sum of all probabilities is higher than 1! Modify it, please.");		
 	}*/
 	if (fPointVtxIsSet && fBoxVtxIsSet) {
-    Fatal("Init()","Ensar232ThoriumChainGen: Cannot set point and box vertices simultaneously");
+    Fatal("Init()","EnsarThoriumChainGen: Cannot set point and box vertices simultaneously");
   }
 	
 }
@@ -101,19 +101,35 @@ Bool_t  Ensar232ThoriumChainGen::Init()
 
 
 // -----   Destructor   ---------------------------------------------------
-Ensar232ThoriumChainGen::~Ensar232ThoriumChainGen() {
+EnsarThoriumChainGen::~EnsarThoriumChainGen() {
+
+	delete fenergy_228Th;
+	delete fenergy_228Ac;
+	delete fenergy_228Ra;
+	delete fenergy_224Ra;
+	delete fenergy_212Bi;
+	delete fenergy_212Pb;
+	delete fenergy_208Tl;
+
+  delete fprob_228Th;
+	delete fprob_228Ac;
+	delete fprob_228Ra;
+	delete fprob_224Ra;
+	delete fprob_212Bi;
+	delete fprob_212Pb;
+	delete fprob_208Tl	;
   CloseInput();
 }
 // ------------------------------------------------------------------------
 
 // -----   Read events   --------------------------------------------------
-Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
+Bool_t EnsarThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
 {
   
   
   //----- Check for input file -----
   if ( ! fInputFile->is_open() ) {
-    cout << "-E- Ensar232ThoriumChainGen: Input file not open!" << endl;
+    cout << "-E- EnsarThoriumChainGen: Input file not open!" << endl;
     return kFALSE;
   }
  
@@ -172,27 +188,27 @@ Bool_t Ensar232ThoriumChainGen::ReadEvent(FairPrimaryGenerator* primGen)
 	}
 
 
-cout<<"  --- Checking out the Limits  -------------------"<<endl<<endl;	
+//cout<<"  --- Checking out the Limits  -------------------"<<endl<<endl;	
 	for(Int_t i=0; i<fnumGammas_228Th+1; i++){
-		cout<<"Th: i="<<i<<"  limit ="<<limit_228Th[i]<<endl;
+		//cout<<"Th: i="<<i<<"  limit ="<<limit_228Th[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_228Ac+1; i++){
-		cout<<"Ac: i="<<i<<"  limit ="<<limit_228Ac[i]<<endl;
+		//cout<<"Ac: i="<<i<<"  limit ="<<limit_228Ac[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_228Ra+1; i++){
-		cout<<"i="<<i<<"228Ra  limit ="<<limit_228Ra[i]<<endl;
+		//cout<<"i="<<i<<"228Ra  limit ="<<limit_228Ra[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_224Ra+1; i++){
-		cout<<"i="<<i<<"224Ra  limit ="<<limit_224Ra[i]<<endl;
+		//cout<<"i="<<i<<"224Ra  limit ="<<limit_224Ra[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_212Bi+1; i++){
-		cout<<"i="<<i<<"Bi  limit ="<<limit_212Bi[i]<<endl;
+		//cout<<"i="<<i<<"Bi  limit ="<<limit_212Bi[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_212Pb+1; i++){
-		cout<<"i="<<i<<"Pb  limit ="<<limit_212Pb[i]<<endl;
+		//cout<<"i="<<i<<"Pb  limit ="<<limit_212Pb[i]<<endl;
 	}
 	for(Int_t i=0; i<fnumGammas_208Tl+1; i++){
-		cout<<"i="<<i<<"  limit ="<<limit_208Tl[i]<<endl;
+		//cout<<"i="<<i<<"  limit ="<<limit_208Tl[i]<<endl;
 	}
 
 	Int_t Gamma_228Th;
@@ -295,7 +311,7 @@ cout<<"  --- Checking out the Limits  -------------------"<<endl<<endl;
 
 	//cout<<"fX="<<fX<<" fY="<<fY<<" fZ="<<fZ<<endl;
 
-  //adding the gammas 232Th chain
+  //adding the gammas Th chain
   primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);
  
  */ 
@@ -306,10 +322,10 @@ cout<<"  --- Checking out the Limits  -------------------"<<endl<<endl;
 // ------------------------------------------------------------------------
 
 // -----   Private method CloseInput   ------------------------------------
-void Ensar232ThoriumChainGen::CloseInput() {
+void EnsarThoriumChainGen::CloseInput() {
   if ( fInputFile ) {
     if ( fInputFile->is_open() ) {
-      cout << "-I- Ensar232ThoriumChainGenr: Closing input file " 
+      cout << "-I- EnsarThoriumChainGenr: Closing input file " 
 	   << fFileName << endl;
       fInputFile->close();
     }
@@ -321,7 +337,7 @@ void Ensar232ThoriumChainGen::CloseInput() {
 
 
 // ---Read Parameters File --------------------------------------------
-void Ensar232ThoriumChainGen::ReadParameters() {
+void EnsarThoriumChainGen::ReadParameters() {
 
  	//def dynamic vectors	
   fenergy_228Th		= new Double_t [fnumGammas_228Th];
@@ -431,7 +447,7 @@ void Ensar232ThoriumChainGen::ReadParameters() {
 
 
 // --- Track Momentum Calculus --------------------------------------------
-/*void Ensar232ThoriumChainGen::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
+/*void EnsarThoriumChainGen::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
 
 	//Angles
 	Double_t phi;		//0-2pi
@@ -463,4 +479,4 @@ void Ensar232ThoriumChainGen::ReadParameters() {
 }*/
 //-------------------------------------------------------------------------
 
-ClassImp(Ensar232ThoriumChainGen)
+ClassImp(EnsarThoriumChainGen)
