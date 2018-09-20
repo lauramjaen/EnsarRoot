@@ -43,7 +43,7 @@ EnsarBoxGenerator.cxx
 EnsarSiGenerator.cxx
 EnsarCascadeGen.cxx
 EnsarGammaCascadeGen.cxx
-#EnsarThoriumChainGen.cxx
+EnsarThoriumChainGen.cxx
 EnsarUraniumChainGen.cxx
 )
 

@@ -3,9 +3,7 @@
 // *****             EnsarUraniumChainGen header file         
 // ***** 		     
 // *****  	The generator creates the 238U chain of natural background
-// ***** 		It reads the energies and the probabilities from a text
-// *****		file. This file could be modified with different num of 
-// ***** 		gammas, energies and probabilities, p.ex. 208Tldecay.txt		
+// ***** 		It has the gamma energies and probabilities of each nucleus.	
 // ***** 	
 // ***** created by E.Galiana		
 // ***** elisabet.galiana@usc.es eligaliana@lip.pt                             

@@ -1,0 +1,12 @@
+////////////////////////////////////////////////////////////
+////                                                    ////
+////      235-Uranium Chain Natural Radioactivity  			////
+////      Energy and Branching Ratios of Gammas    			////
+////                                                    ////
+////////////////////////////////////////////////////////////
+235U nuclei: total num gammas, energy (keV) and its BranchingRatios
+2 
+186	 0.025
+42	 0.012
+
+//Data included in Ensar235UraniumChainGen

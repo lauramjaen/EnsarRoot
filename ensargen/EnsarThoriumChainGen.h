@@ -2,10 +2,8 @@
 // *****   
 // *****             EnsarThoriumChainGen header file         
 // ***** 		     
-// *****  	The generator creates the 232Th chain of natural background
-// ***** 		It reads the energies and the probabilities from a text
-// *****		file. This file could be modified with different num of 
-// ***** 		gammas, energies and probabilities, p.ex. 208Tldecay.txt		
+// *****  	The generator creates the 238U chain of natural background
+// ***** 		It has the gamma energies and probabilities of each nucleus.	
 // ***** 	
 // ***** created by E.Galiana		
 // ***** elisabet.galiana@usc.es eligaliana@lip.pt                             
@@ -13,11 +11,9 @@
 // *********************************************************************
 
 
-//#ifndef ENSAR_232THORIUMCHAINGENERATOR_H
-//#define ENSAR_232THORIUMCHAINGENERATOR_H
 
-#ifndef ENSAR_THORIUMCHAINGENERATOR_H
-#define ENSAR_THORIUMCHAINGENERATOR_H
+#ifndef ENSAR_THORIUMGENERATOR_H
+#define ENSAR_THORIUMGENERATOR_H
 
 #include "FairGenerator.h"
 
@@ -81,42 +77,10 @@ class EnsarThoriumChainGen : public FairGenerator
 		ifstream*     fInputFile; //! Input file stream
     const Char_t* fFileName; 	//! Input file Name
 
-		Int_t fnumGammas_228Th;		//total number of gammas in each decay
-		Int_t fnumGammas_228Ac;
-		Int_t fnumGammas_228Ra;
-		Int_t fnumGammas_224Ra;
-		Int_t fnumGammas_212Bi;
-		Int_t fnumGammas_212Pb;
-		Int_t fnumGammas_208Tl;
-
-    Double_t* fenergy_228Th;	//Energy of gammas
-    Double_t* fenergy_228Ac;
-    Double_t* fenergy_228Ra;
-		Double_t* fenergy_224Ra;
-    Double_t* fenergy_212Bi;
-    Double_t* fenergy_212Pb;
-    Double_t* fenergy_208Tl;
-
-    Double_t* fprob_228Th;	//Probability of gammas
-    Double_t* fprob_228Ac;
-    Double_t* fprob_228Ra;
-    Double_t* fprob_224Ra;
-    Double_t* fprob_212Bi;
-    Double_t* fprob_212Pb;
-    Double_t* fprob_208Tl;
-
 		Bool_t     fPointVtxIsSet;       // True if point vertex is set
     Bool_t     fBoxVtxIsSet;         // True if box vertex is set
 		Bool_t 		 fThetaRangeIsSet;			//True if Theta range is set
 		Bool_t		 fPhiRangeIsSet;				// True if Phi range is set
-		Bool_t		 ftrack_228Th;
-		Bool_t		 ftrack_228Ac;
-		Bool_t		 ftrack_228Ra;
-		Bool_t		 ftrack_224Ra;
-		Bool_t		 ftrack_212Bi;
-		Bool_t		 ftrack_212Pb;
-		Bool_t		 ftrack_208Tl;
-		Bool_t		 fanytrack;
 		Double_t fX, fY, fZ;           // Point vertex coordinates [cm]
     Double_t fX1, fY1, fZ1, fX2, fY2, fZ2;   // Box vertex coords (x1,y1,z1)->(x2,y2,z2)
 		Double_t fThetaMin, fThetaMax; // Polar angle range in lab system [degree]
@@ -126,8 +90,9 @@ class EnsarThoriumChainGen : public FairGenerator
     ClassDef(EnsarThoriumChainGen,1);
     void CloseInput();
     void ReadParameters();
+		void TrackMomentum(Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz);
     
-    
+
 };
 
 

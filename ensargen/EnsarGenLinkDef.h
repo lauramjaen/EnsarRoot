@@ -13,7 +13,7 @@
 #pragma link C++ class  EnsarSiGenerator+;
 #pragma link C++ class  EnsarCascadeGen+;
 #pragma link C++ class  EnsarGammaCascadeGen+;
-//#pragma link C++ class  EnsarThoriumChainGen+;
+#pragma link C++ class  EnsarThoriumChainGen+;
 #pragma link C++ class  EnsarUraniumChainGen+;
 
 #endif

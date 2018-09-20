@@ -46,8 +46,8 @@ void runsim() {
   //TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
 	//TString fGene="208Tldecay";
-	//TString fGene="232Thchain";
-	TString fGene="Uchain";
+	TString fGene="232Thchain";
+	//TString fGene="238Uchain";
 
 
 
@@ -74,7 +74,7 @@ void runsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 500000;
+   Int_t nEvents = 1000000;
 
 
    //-------------------------------------------------
