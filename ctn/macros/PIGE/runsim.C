@@ -46,8 +46,10 @@ void runsim() {
   //TString fGene="Cocascade";
   //TString fGene="Gamma_AngularC_200k";
 	//TString fGene="208Tldecay";
-	TString fGene="232Thchain";
+	//TString fGene="232Thchain";
 	//TString fGene="238Uchain";
+	//TString fGene="ascii";
+		TString fGene="238Uchain_last";
 
 
 
@@ -74,7 +76,7 @@ void runsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 1000000;
+   Int_t nEvents = 10;
 
 
    //-------------------------------------------------
@@ -82,7 +84,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks for evtvis.C
+   Bool_t fEventDisplay=kTRUE;//kTRUE info GeoTracks for evtvis.C
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,

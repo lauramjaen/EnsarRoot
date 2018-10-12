@@ -29,8 +29,9 @@ void simall(Int_t nEvents = 1,
             Bool_t fUserPList = kFALSE,
             TString OutFile = "outsim.root",
             TString ParFile = "outpar.root",
-            TString InFile = "evt_gen.dat")
+            TString InFile = "ascii_test.dat")
 {
+//TString InFile = "evt_gen.dat")
 
   TString dir = getenv("VMCWORKDIR");
   TString macrosdir = dir + "/ctn/macros/nov16";
@@ -143,7 +144,9 @@ void simall(Int_t nEvents = 1,
   } 
   
    if (fGenerator.CompareTo("ascii") == 0  ) {
-    FairAsciiGenerator* gen = new FairAsciiGenerator((dir+"/input/"+InFile).Data());
+    EnsarAsciiGenerator* gen = new EnsarAsciiGenerator((dir+"/ctn/macros/PIGE/ascii_test2.dat").Data());
+		//FairAsciiGenerator* gen = new FairAsciiGenerator((dir+"/ctn/macros/PIGE/"+InFile).Data());
+		//FairAsciiGenerator* gen = new FairAsciiGenerator(("ascii_test.dat").Data());
     primGen->AddGenerator(gen);
   }
   
@@ -193,6 +196,16 @@ void simall(Int_t nEvents = 1,
 		UGen->SetThetaRange(90,90);
 		UGen->SetPhiRange(90,90);
     primGen->AddGenerator(UGen);
+  }
+
+  //add the 238U chain of natural background cascade generator
+ if (fGenerator.CompareTo("238Uchain_last") == 0  ) {
+    EnsarUraniumChainGen_238U* UGen_238U = new EnsarUraniumChainGen_238U("238UChain.dat");   
+		//UGen->SetXYZ(0.,0.,0.);
+		UGen_238U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15), (15.,-10.,15.,-15.,-10.,-15.)
+		UGen_238U->SetThetaRange(90,90);
+		UGen_238U->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_238U);
   }
   
   run->SetGenerator(primGen);

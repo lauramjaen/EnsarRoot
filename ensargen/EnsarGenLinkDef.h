@@ -15,5 +15,7 @@
 #pragma link C++ class  EnsarGammaCascadeGen+;
 #pragma link C++ class  EnsarThoriumChainGen+;
 #pragma link C++ class  EnsarUraniumChainGen+;
+#pragma link C++ class  EnsarAsciiGenerator+;
+#pragma link C++ class  EnsarUraniumChainGen_238U+;
 
 #endif

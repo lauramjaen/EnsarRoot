@@ -45,6 +45,8 @@ EnsarCascadeGen.cxx
 EnsarGammaCascadeGen.cxx
 EnsarThoriumChainGen.cxx
 EnsarUraniumChainGen.cxx
+EnsarAsciiGenerator.cxx
+EnsarUraniumChainGen_238U.cxx
 )
 
 # fill list of header files from list of source files
