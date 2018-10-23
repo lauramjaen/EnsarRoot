@@ -1,9 +1,9 @@
 // *********************************************************************
 // *****   
-// *****             EnsarUraniumChainGen_238U header file         
+// *****             EnsarUraniumChainGen_210Pb header file         
 // ***** 		     
-// *****  	The generator creates the 238U->alpha + 234Th* and 
-// ***** 		234Th*->234Th+gamma reactions
+// *****  	The generator creates the 210Pb->beta + 210Bi* and 
+// ***** 		210Bi*->210Bi+gamma reactions
 // ***** 		from the 238U chain of natural background	
 // ***** 	
 // ***** created by E.Galiana		
@@ -13,8 +13,8 @@
 
 
 
-#ifndef ENSAR_URANIUMCHAIN_238U_H
-#define ENSAR_URANIUMCHAIN_238U_H
+#ifndef ENSAR_URANIUMCHAIN_210PB_H
+#define ENSAR_URANIUMCHAIN_210PB_H
 
 #include "FairGenerator.h"
 #include "TArrayF.h"
@@ -29,18 +29,18 @@ using namespace std;
 
 class FairPrimaryGenerator;
 
-class EnsarUraniumChainGen_238U : public FairGenerator
+class EnsarUraniumChainGen_210Pb : public FairGenerator
 {
   public:
 
     /** Default constructor. **/
-    EnsarUraniumChainGen_238U();
+    EnsarUraniumChainGen_210Pb();
 
     /** Constructor.  **/
-    EnsarUraniumChainGen_238U(const char* inputFile);
+    EnsarUraniumChainGen_210Pb(const char* inputFile);
 
     /** Destructor. **/
-    virtual ~EnsarUraniumChainGen_238U();
+    virtual ~EnsarUraniumChainGen_210Pb();
   
     /** Initializer **/
     Bool_t Init();
@@ -79,11 +79,6 @@ class EnsarUraniumChainGen_238U : public FairGenerator
 		ifstream*     fInputFile; //! Input file stream
     const Char_t* fFileName; 	//! Input file Name
 
-		//Int_t 		f_numAlphas_238U;
-		//Double_t f_EnergyAlphas_238U;
-		//Double_t f_ProbabilityAlphas_238U;
-		//Double_t	f_FinalState_238U;
-
 		Bool_t     fPointVtxIsSet;       // True if point vertex is set
     Bool_t     fBoxVtxIsSet;         // True if box vertex is set
 		Bool_t 		 fThetaRangeIsSet;			//True if Theta range is set
@@ -94,7 +89,7 @@ class EnsarUraniumChainGen_238U : public FairGenerator
 		Double_t fPhiMin, fPhiMax;     // Azimuth angle range [degree]
     
    
-    ClassDef(EnsarUraniumChainGen_238U,1);
+    ClassDef(EnsarUraniumChainGen_210Pb,1);
     void CloseInput();
     void ReadParameters();
 		void TrackMomentum(Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz);

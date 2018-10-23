@@ -17,5 +17,14 @@
 #pragma link C++ class  EnsarUraniumChainGen+;
 #pragma link C++ class  EnsarAsciiGenerator+;
 #pragma link C++ class  EnsarUraniumChainGen_238U+;
+#pragma link C++ class  EnsarUraniumChainGen_234Th+;
+#pragma link C++ class  EnsarUraniumChainGen_234U+;
+#pragma link C++ class  EnsarUraniumChainGen_230Th+;
+#pragma link C++ class  EnsarUraniumChainGen_226Ra+;
+#pragma link C++ class  EnsarUraniumChainGen_210Pb+;
+#pragma link C++ class  EnsarUraniumChainGen_234Pa+;
+#pragma link C++ class  EnsarUraniumChainGen_214Pb+;
+#pragma link C++ class  EnsarUraniumChainGen_214Bi+;
+#pragma link C++ class  EnsarDecayGenerator+;
 
 #endif

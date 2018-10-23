@@ -177,13 +177,22 @@ void simall(Int_t nEvents = 1,
 		GammaGen->SetPhiRange(90,90);
     primGen->AddGenerator(GammaGen);
   }
+	
+	//add the Decay generator which emmits gammas from the de-excitation of daughter nucleus
+ if (fGenerator.CompareTo("DecayGen") == 0  ) {
+    EnsarDecayGenerator* DecayGen = new EnsarDecayGenerator("238UChain.dat");
+		//DecayGen->SetXYZ(0.,0.,0.);
+		DecayGen->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		DecayGen->SetThetaRange(90,90);
+		DecayGen->SetPhiRange(90,90);
+    primGen->AddGenerator(DecayGen);
+  }
 
   //add the 232Th chain of natural background cascade generator
  if (fGenerator.CompareTo("232Thchain") == 0  ) {
     EnsarThoriumChainGen* ThGen = new EnsarThoriumChainGen("232ThChain.dat");   
 		//ThGen->SetXYZ(-10.,-10.,-10.);
-		ThGen->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15)
-		ThGen->SetThetaRange(90,90);
+		ThGen->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
 		ThGen->SetPhiRange(90,90);
     primGen->AddGenerator(ThGen);
   }
@@ -192,22 +201,98 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("238Uchain") == 0  ) {
     EnsarUraniumChainGen* UGen = new EnsarUraniumChainGen("238UChain.dat");   
 		//UGen->SetXYZ(0.,0.,0.);
-		UGen->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15), (15.,-10.,15.,-15.,-10.,-15.)
+		UGen->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
 		UGen->SetThetaRange(90,90);
 		UGen->SetPhiRange(90,90);
     primGen->AddGenerator(UGen);
   }
-
-  //add the 238U chain of natural background cascade generator
- if (fGenerator.CompareTo("238Uchain_last") == 0  ) {
+//------------------------------------------------------------------------------------------------
+	//add the 238U nucleus of URANIUM chain generator
+ if (fGenerator.CompareTo("URANIUMchain_238U") == 0  ) {
     EnsarUraniumChainGen_238U* UGen_238U = new EnsarUraniumChainGen_238U("238UChain.dat");   
 		//UGen->SetXYZ(0.,0.,0.);
-		UGen_238U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//(x1,y1,x2,y2)=(-20,-20,0.,-20); HPGe_only=(-1,-10,-1,-15,-10,-15), (15.,-10.,15.,-15.,-10.,-15.)
+		UGen_238U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
 		UGen_238U->SetThetaRange(90,90);
 		UGen_238U->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_238U);
   }
+
+	//add the 234Th nucleus
+ if (fGenerator.CompareTo("URANIUMchain_234Th") == 0  ) {
+    EnsarUraniumChainGen_234Th* UGen_234Th = new EnsarUraniumChainGen_234Th("238UChain.dat");
+		//UGen_234Th->SetXYZ(0.,0.,0.);
+		UGen_234Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234Th->SetThetaRange(90,90);
+		UGen_234Th->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_234Th);
+  }
   
+	//add the 234U nucleus
+ if (fGenerator.CompareTo("URANIUMchain_234U") == 0  ) {
+    EnsarUraniumChainGen_234U* UGen_234U = new EnsarUraniumChainGen_234U("238UChain.dat");
+		//UGen_234U->SetXYZ(0.,0.,0.);
+		UGen_234U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234U->SetThetaRange(90,90);
+		UGen_234U->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_234U);
+  }
+
+	//add the 230Th nucleus
+ if (fGenerator.CompareTo("URANIUMchain_230Th") == 0  ) {
+    EnsarUraniumChainGen_230Th* UGen_230Th = new EnsarUraniumChainGen_230Th("238UChain.dat");
+		//UGen_230Th->SetXYZ(0.,0.,0.);
+		UGen_230Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_230Th->SetThetaRange(90,90);
+		UGen_230Th->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_230Th);
+  }
+	//add the 226Ra nucleus
+ if (fGenerator.CompareTo("URANIUMchain_226Ra") == 0  ) {
+    EnsarUraniumChainGen_226Ra* UGen_226Ra = new EnsarUraniumChainGen_226Ra("238UChain.dat");
+		//UGen_226Ra->SetXYZ(0.,0.,0.);
+		UGen_226Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_226Ra->SetThetaRange(90,90);
+		UGen_226Ra->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_226Ra);
+  }
+	//add the 210Pb nucleus
+ if (fGenerator.CompareTo("URANIUMchain_210Pb") == 0  ) {
+    EnsarUraniumChainGen_210Pb* UGen_210Pb = new EnsarUraniumChainGen_210Pb("238UChain.dat");
+		//UGen_210Pb->SetXYZ(0.,0.,0.);
+		UGen_210Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_210Pb->SetThetaRange(90,90);
+		UGen_210Pb->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_210Pb);
+  }
+	//add the 234Pa nucleus
+ if (fGenerator.CompareTo("URANIUMchain_234Pa") == 0  ) {
+    EnsarUraniumChainGen_234Pa* UGen_234Pa = new EnsarUraniumChainGen_234Pa("238UChain.dat");
+		//UGen_234Pa->SetXYZ(0.,0.,0.);
+		UGen_234Pa->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234Pa->SetThetaRange(90,90);
+		UGen_234Pa->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_234Pa);
+  }
+	//add the 214Pb nucleus
+ if (fGenerator.CompareTo("URANIUMchain_214Pb") == 0  ) {
+    EnsarUraniumChainGen_214Pb* UGen_214Pb = new EnsarUraniumChainGen_214Pb("238UChain.dat");
+		//UGen_214Pb->SetXYZ(0.,0.,0.);
+		UGen_214Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_214Pb->SetThetaRange(90,90);
+		UGen_214Pb->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_214Pb);
+  }
+	//add the 214Bi nucleus
+ if (fGenerator.CompareTo("URANIUMchain_214Bi") == 0  ) {
+    EnsarUraniumChainGen_214Bi* UGen_214Bi = new EnsarUraniumChainGen_214Bi("238UChain.dat");
+		//UGen_214Bi->SetXYZ(0.,0.,0.);
+		UGen_214Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_214Bi->SetThetaRange(90,90);
+		UGen_214Bi->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_214Bi);
+  }
+
+//------------------------------------------------------------------------------------------------
   run->SetGenerator(primGen);
 
 

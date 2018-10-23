@@ -49,9 +49,15 @@ void runsim() {
 	//TString fGene="232Thchain";
 	//TString fGene="238Uchain";
 	//TString fGene="ascii";
-		TString fGene="238Uchain_last";
-
-
+	//	TString fGene="URANIUMchain_238U";//done
+	//	TString fGene="URANIUMchain_234Th";//done
+	//	TString fGene="URANIUMchain_234Pa";//done
+	//	TString fGene="URANIUMchain_234U";//done
+	//	TString fGene="URANIUMchain_230Th";//done
+	//	TString fGene="URANIUMchain_226Ra";//done
+	//	TString fGene="URANIUMchain_214Pb";//done
+	//	TString fGene="URANIUMchain_214Bi";//done
+		TString fGene="URANIUMchain_210Pb";//done
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -76,7 +82,7 @@ void runsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 10;
+   Int_t nEvents = 1000000;
 
 
    //-------------------------------------------------
@@ -84,7 +90,7 @@ void runsim() {
    //-------------------------------------------------
    //   connected:              kTRUE
    //   not connected:          kFALSE
-   Bool_t fEventDisplay=kTRUE;//kTRUE info GeoTracks for evtvis.C
+   Bool_t fEventDisplay=kFALSE;//kTRUE info GeoTracks for evtvis.C
 
    // Main Sim function call
    simall(nEvents, &detGeo, fEventDisplay, fMC, fGene, fUserPList,

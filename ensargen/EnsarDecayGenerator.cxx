@@ -1,10 +1,10 @@
 // *********************************************************************
 // *****   
-// *****             EnsarUraniumChainGen_238U source file                                   
+// *****             EnsarDecayGenerator source file                                   
 // *****   							
 // *********************************************************************
 
-#include "EnsarUraniumChainGen_238U.h"
+#include "EnsarDecayGenerator.h"
 
 #include "FairPrimaryGenerator.h"
 
@@ -19,13 +19,14 @@
 #include <istream>
 #include <string>
 
+#define fPDGBetaType 11
 #define fPDGType 22
 
 using namespace std;
 
 
 // -----   Default constructor   ------------------------------------------
-EnsarUraniumChainGen_238U::EnsarUraniumChainGen_238U()  :
+EnsarDecayGenerator::EnsarDecayGenerator()  :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -39,7 +40,7 @@ EnsarUraniumChainGen_238U::EnsarUraniumChainGen_238U()  :
 
 
 // -----   Standard constructor   -----------------------------------------
-EnsarUraniumChainGen_238U::EnsarUraniumChainGen_238U(const char* inputFile) :
+EnsarDecayGenerator::EnsarDecayGenerator(const char* inputFile) :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -49,11 +50,11 @@ EnsarUraniumChainGen_238U::EnsarUraniumChainGen_238U(const char* inputFile) :
 	fPhiMin(0), fPhiMax(0)
 {
   
-  cout << "-I- EnsarUraniumChainGen_238U: Opening input file " << inputFile << endl;
+  cout << "-I- EnsarDecayGenerator: Opening input file " << inputFile << endl;
   fFileName  = inputFile;
   
   fInputFile = new ifstream(fFileName);
-  if ( ! fInputFile->is_open() ) Fatal("EnsarUraniumChainGen_238U","Cannot open input file.");
+  if ( ! fInputFile->is_open() ) Fatal("EnsarDecayGenerator","Cannot open input file.");
    
   //Read Parameters File
   ReadParameters();
@@ -62,11 +63,11 @@ EnsarUraniumChainGen_238U::EnsarUraniumChainGen_238U(const char* inputFile) :
 
 
 // -----   Inizialize generator   -----------------------------------------
-Bool_t  EnsarUraniumChainGen_238U::Init()
+Bool_t  EnsarDecayGenerator::Init()
 {
 		
 	if (fPointVtxIsSet && fBoxVtxIsSet) {
-    Fatal("Init()","EnsarUraniumChainGen_238U: Cannot set point and box vertices simultaneously");
+    Fatal("Init()","EnsarDecayGenerator: Cannot set point and box vertices simultaneously");
   }
 	
 }
@@ -74,20 +75,21 @@ Bool_t  EnsarUraniumChainGen_238U::Init()
 
 
 // -----   Destructor   ---------------------------------------------------
-EnsarUraniumChainGen_238U::~EnsarUraniumChainGen_238U() {
+EnsarDecayGenerator::~EnsarDecayGenerator() {
 
   CloseInput();
+
 }
 // ------------------------------------------------------------------------
 
 // -----   Read events   --------------------------------------------------
-Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
+Bool_t EnsarDecayGenerator::ReadEvent(FairPrimaryGenerator* primGen)
 {
   
   
   //----- Check for input file -----
   if ( ! fInputFile->is_open() ) {
-    cout << "-E- EnsarUraniumChainGen_238U: Input file not open!" << endl;
+    cout << "-E- EnsarDecayGenerator: Input file not open!" << endl;
     return kFALSE;
   }
  
@@ -99,16 +101,25 @@ Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
 			fZ = gRandom->Uniform(fZ1,fZ2);
 	}
 
-	Int_t numInicialCases=2;
+	Int_t numInicialCases=4;//3
 
-	Double_t Probability_emmittedParticles [numInicialCases];
-	Probability_emmittedParticles [0]=0.791 ;
-	Probability_emmittedParticles [1]=0.209;
+	Double_t ProbabilityBetas_234Th [numInicialCases];
+	//ProbabilityBetas_234Th [0]=0.5;
+	//ProbabilityBetas_234Th [1]=0.25;
+	//ProbabilityBetas_234Th [2]=0.25;
+	ProbabilityBetas_234Th [0]=0.2;
+	ProbabilityBetas_234Th [1]=0.2;
+	ProbabilityBetas_234Th [2]=0.15;
+	ProbabilityBetas_234Th [3]=0.45;
 
-	Double_t FinalState_daughter [numInicialCases];
-	FinalState_daughter [0]=0;
-	FinalState_daughter [1]=1;
-
+	Double_t FinalState_234Th [numInicialCases];
+	//FinalState_234Th [0]=2;
+	//FinalState_234Th [1]=1;
+	//FinalState_234Th [2]=0;
+	FinalState_234Th [0]=0;
+	FinalState_234Th [1]=1;
+	FinalState_234Th [2]=2;
+	FinalState_234Th [3]=3;
 			
 	Double_t limits[numInicialCases+1];
 	limits[0]=0;
@@ -116,33 +127,42 @@ Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
 	for (Int_t i=1;i<numInicialCases+1;i++){
 		Double_t lim1, prob1;
 		lim1=limits[i-1];
-		prob1=Probability_emmittedParticles[i-1];
+		prob1=ProbabilityBetas_234Th[i-1];
 		limits[i]= lim1+ prob1;
 		//cout<<"limits["<<i<<"]"<<limits[i]<<endl;//ok!
 	}
 
 	Float_t ran_ini =gRandom->Rndm();
-	//cout<<"ran_ini="<<ran_ini<<endl;
+	cout<<"ran_ini="<<ran_ini<<endl;
 	Int_t j=0;
 	Int_t Case;
 	int finalstate;
 
 	if (ran_ini>limits[j] && ran_ini<limits[j+1]){
-			Case=0;	
+			Case=0;	//2
 			//cout<<"Limits "<<limits[j]<<" - "<<limits[j+1]<<endl;//ok
 	}
 	else if (ran_ini>limits[j+1] && ran_ini<limits[j+2]){
-			Case=1;			
+			Case=1;//1			
 			//cout<<"Limits "<<limits[j+1]<<" - "<<limits[j+2]<<endl;//ok
 	}
+	else if (ran_ini>limits[j+2] && ran_ini<limits[j+3]){
+			Case=2;//0		
+			//cout<<"Limits "<<limits[j+2]<<" - "<<limits[j+3]<<endl;//ok
+	}
+	else if (ran_ini>limits[j+3] && ran_ini<limits[j+4]){
+			Case=3;	
+			//cout<<"Limits "<<limits[j+3]<<" - "<<limits[j+4]<<endl;//ok
+	}
 
-	finalstate=FinalState_daughter[Case];
+	finalstate=FinalState_234Th[Case];
 	
 	Bool_t kINFO;
-	kINFO=false;
+	kINFO=true;
 	if (kINFO==true){cout<<"Case="<<Case<<"  the nucleus is in the state="<<finalstate<<endl;}
 	
-	Int_t Counter=1;
+
+	Int_t Contador=1;
 
 	while(finalstate>0){
 		
@@ -158,7 +178,7 @@ Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
 		primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);		
 				
 		if (kINFO==true){
-			cout<<endl<<"Counter of gammas="<<Counter<<endl;
+			cout<<endl<<"Counter of gammas="<<Contador<<endl;
 			cout<<"		Energy_array size="<<Energy_gammas_array->GetSize()<<endl;
 			cout<<"		Energy_gamma="<<Energy_gammas_array->GetAt(0)<<endl;
 			cout<<"		Final state="<<finalstate2<<endl;
@@ -166,7 +186,7 @@ Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
 		}
 
 		finalstate=finalstate2;
-		Counter++;
+		Contador++;
 	}
 
 	primGen->AddTrack(fPDGType, 0.0000001, 0.0000001, 0.0000001, 0., 0., 0.);
@@ -178,10 +198,10 @@ Bool_t EnsarUraniumChainGen_238U::ReadEvent(FairPrimaryGenerator* primGen)
 // ------------------------------------------------------------------------
 
 // -----   Private method CloseInput   ------------------------------------
-void EnsarUraniumChainGen_238U::CloseInput() {
+void EnsarDecayGenerator::CloseInput() {
   if ( fInputFile ) {
     if ( fInputFile->is_open() ) {
-      cout << "-I- EnsarUraniumChainGen_238U: Closing input file " 
+      cout << "-I- EnsarDecayGenerator: Closing input file " 
 	   << fFileName << endl;
       fInputFile->close();
     }
@@ -193,34 +213,78 @@ void EnsarUraniumChainGen_238U::CloseInput() {
 
 
 // ---Read Parameters File --------------------------------------------
-void EnsarUraniumChainGen_238U::ReadParameters() {
+void EnsarDecayGenerator::ReadParameters() {
 
 }
 
 
-
 // --- De-excitation Process --------------------------------------------
-TArrayF* EnsarUraniumChainGen_238U::Deexcitation(Int_t InicialState, Int_t & FinalState) {
+TArrayF* EnsarDecayGenerator::Deexcitation(Int_t InicialState, Int_t & FinalState) {
 	
-	// --- NUCLEAR DATA, deexcitation --- //
+	// --- NUCLEAR DATA, deexcitation--- //
 	Double_t Probability	[50][50];//[Nucleus inicial state][number of gammas]
 	Double_t Energygammas	[50][50];
 	Int_t 	 NucleusFinalState		[50][50];
 
 	//1st excited state with 1 gamma
 	Probability					[1][1]=1.;
-	Energygammas				[1][1]=0.00004955;//MeV
+	Energygammas				[1][1]=0.001;//1MeV  0.002
 	NucleusFinalState		[1][1]=0;
+
+	//2nd excited state with 2 gamma
+	//Probability					[2][1]=0.25;
+	//Energygammas				[2][1]=0.003;//  0.005
+	//NucleusFinalState		[2][1]=0;
+	//Probability					[2][2]=0.75;
+	//Energygammas				[2][2]=0.002;//  0.003
+	//NucleusFinalState		[2][2]=1;
+	Probability					[2][1]=1.;
+	Energygammas				[2][1]=0.0025;
+	NucleusFinalState		[2][1]=1;
+
+	//3rd excited state with 3 gammas
+	Probability					[3][1]=0.5;
+	Energygammas				[3][1]=0.005;
+	NucleusFinalState		[3][1]=0;
+	Probability					[3][2]=0.4;
+	Energygammas				[3][2]=0.004;
+	NucleusFinalState		[3][2]=1;
+	Probability					[3][3]=0.1;
+	Energygammas				[3][3]=0.0015;
+	NucleusFinalState		[3][3]=2;
+
+	//ok!
+	//cout<<"FUNCTION: Deexcitation:parameters"<<endl;	
+	//cout<<Probability[1][1]<<endl;
+	//cout<<Energygammas[1][1]<<endl;
+	//cout<<NucleusFinalState[1][1]<<endl<<endl;
+
+	//cout<<Probability[2][1]<<endl;
+	//cout<<Energygammas[2][1]<<endl;
+	//cout<<NucleusFinalState[2][1]<<endl<<endl;
+
+	//cout<<Probability[3][1]<<endl;
+	//cout<<Energygammas[3][1]<<endl;
+	//cout<<NucleusFinalState[3][1]<<endl;
+	//cout<<Probability[3][2]<<endl;
+	//cout<<Energygammas[3][2]<<endl;
+	//cout<<NucleusFinalState[3][2]<<endl;
+	//cout<<Probability[3][3]<<endl;
+	//cout<<Energygammas[3][3]<<endl;
+	//cout<<NucleusFinalState[3][3]<<endl;
 
 	Int_t numGammas;
 	Float_t random =gRandom->Rndm();
 
 	if (InicialState==1){numGammas=1;}
+	//else if (InicialState==2){numGammas=2;}
+	else if (InicialState==2){numGammas=1;}
+	else if (InicialState==3){numGammas=3;}
 	else{
-		cout << "-E- EnsarUraniumChainGen_238U: Incorrect final state!" << endl;
+		cout << "-E- EnsarDecayGenerator: Incorrect final state!" << endl;
 	}
 	
-	//cout<<"		Entering into the Deexcitation function with an Inicial state="<<InicialState<<" which has a numGamma="<<numGammas<<endl;	
+	cout<<"		Entering into the Deexcitation function with an Inicial state="<<InicialState<<" which has a numGamma="<<numGammas<<endl;	
 
 	TArrayF* EnergyGamma_array;
 	EnergyGamma_array= new TArrayF();
@@ -238,19 +302,18 @@ TArrayF* EnsarUraniumChainGen_238U::Deexcitation(Int_t InicialState, Int_t & Fin
 	for (Int_t i=0;i<numGammas;i++){
 		if (random>limits2[i] && random<limits2[i+1]){
 				//cout<<"		Inside loop: "<<random<<" exists between "<<limits2[i]<<" and "<<limits2[i+1]<<endl;
-				//cout<<"		Inside loop: the Gamma emmited is the "<<i+1<<endl;
+				cout<<"		Inside loop: the Gamma emmited is the "<<i+1<<endl;
 				EnergyGamma_array->SetAt(Energygammas[InicialState][i+1],0);
 				FinalState=NucleusFinalState[InicialState][i+1];
-				//cout<<"		Inside loop: FinalState="<<NucleusFinalState[InicialState][i+1]<<endl;
+				cout<<"		Inside loop: FinalState="<<NucleusFinalState[InicialState][i+1]<<endl;
 		}
 	}
 	
 	return EnergyGamma_array;
 }
 
-
 // --- Track Momentum Calculus --------------------------------------------
-void EnsarUraniumChainGen_238U::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
+void EnsarDecayGenerator::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
 
 	//Angles
 	Double_t phi;		//0-2pi
@@ -284,4 +347,4 @@ void EnsarUraniumChainGen_238U::TrackMomentum( Double_t Energy, Double_t & Px, D
 }
 //-------------------------------------------------------------------------
 
-ClassImp(EnsarUraniumChainGen_238U)
+ClassImp(EnsarDecayGenerator)

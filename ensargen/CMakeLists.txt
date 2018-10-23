@@ -47,6 +47,15 @@ EnsarThoriumChainGen.cxx
 EnsarUraniumChainGen.cxx
 EnsarAsciiGenerator.cxx
 EnsarUraniumChainGen_238U.cxx
+EnsarUraniumChainGen_234Th.cxx
+EnsarUraniumChainGen_234U.cxx
+EnsarUraniumChainGen_230Th.cxx
+EnsarUraniumChainGen_226Ra.cxx
+EnsarUraniumChainGen_210Pb.cxx
+EnsarUraniumChainGen_234Pa.cxx
+EnsarUraniumChainGen_214Pb.cxx
+EnsarUraniumChainGen_214Bi.cxx
+EnsarDecayGenerator.cxx
 )
 
 # fill list of header files from list of source files

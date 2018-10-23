@@ -1,20 +1,20 @@
-// *********************************************************************
+// ***********************************************************************************
 // *****   
-// *****             EnsarUraniumChainGen_238U header file         
+// *****             EnsarDecayGenerator header file         
 // ***** 		     
-// *****  	The generator creates the 238U->alpha + 234Th* and 
-// ***** 		234Th*->234Th+gamma reactions
-// ***** 		from the 238U chain of natural background	
+// *****  	The generator creates the  
+// ***** 		Mother_Nucleus->particle + *Daughter_Nucleus reaction and the subsequent  
+// ***** 		Daughter_Nucleus*->Daughter_Nucleus+gamma de-excitation	
 // ***** 	
 // ***** created by E.Galiana		
 // ***** elisabet.galiana@usc.es eligaliana@lip.pt                             
 // *****   							
-// *********************************************************************
+// ************************************************************************************
 
 
 
-#ifndef ENSAR_URANIUMCHAIN_238U_H
-#define ENSAR_URANIUMCHAIN_238U_H
+#ifndef ENSAR_DECAYGENERATOR_H
+#define ENSAR_DECAYGENERATOR_H
 
 #include "FairGenerator.h"
 #include "TArrayF.h"
@@ -29,18 +29,18 @@ using namespace std;
 
 class FairPrimaryGenerator;
 
-class EnsarUraniumChainGen_238U : public FairGenerator
+class EnsarDecayGenerator : public FairGenerator
 {
   public:
 
     /** Default constructor. **/
-    EnsarUraniumChainGen_238U();
+    EnsarDecayGenerator();
 
     /** Constructor.  **/
-    EnsarUraniumChainGen_238U(const char* inputFile);
+    EnsarDecayGenerator(const char* inputFile);
 
     /** Destructor. **/
-    virtual ~EnsarUraniumChainGen_238U();
+    virtual ~EnsarDecayGenerator();
   
     /** Initializer **/
     Bool_t Init();
@@ -79,11 +79,6 @@ class EnsarUraniumChainGen_238U : public FairGenerator
 		ifstream*     fInputFile; //! Input file stream
     const Char_t* fFileName; 	//! Input file Name
 
-		//Int_t 		f_numAlphas_238U;
-		//Double_t f_EnergyAlphas_238U;
-		//Double_t f_ProbabilityAlphas_238U;
-		//Double_t	f_FinalState_238U;
-
 		Bool_t     fPointVtxIsSet;       // True if point vertex is set
     Bool_t     fBoxVtxIsSet;         // True if box vertex is set
 		Bool_t 		 fThetaRangeIsSet;			//True if Theta range is set
@@ -94,7 +89,7 @@ class EnsarUraniumChainGen_238U : public FairGenerator
 		Double_t fPhiMin, fPhiMax;     // Azimuth angle range [degree]
     
    
-    ClassDef(EnsarUraniumChainGen_238U,1);
+    ClassDef(EnsarDecayGenerator,1);
     void CloseInput();
     void ReadParameters();
 		void TrackMomentum(Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz);
