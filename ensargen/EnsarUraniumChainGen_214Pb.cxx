@@ -229,15 +229,15 @@ TArrayF* EnsarUraniumChainGen_214Pb::Deexcitation(Int_t InicialState, Int_t & Fi
 	Energygammas				[1][1]=0.0000532284;
 	NucleusFinalState		[1][1]=0;
 
-	//2 excited state (empty)
-	//Probability					[2][1]=1.;
-	//Energygammas				[2][1]=0.0;
-	//NucleusFinalState		[2][1]=1;
+	//2 excited state (empty at NNDC, we filled it)
+	Probability					[2][1]=1.;
+	Energygammas				[2][1]=0.00006269;
+	NucleusFinalState		[2][1]=0;
 
 	//3 excited state
 	Probability					[3][1]=0.109;
 	Energygammas				[3][1]=0.00019619;
-	NucleusFinalState		[3][1]=0;//2
+	NucleusFinalState		[3][1]=2;
 
 	Probability					[3][2]=0.0188;
 	Energygammas				[3][2]=0.00020568;
@@ -327,7 +327,7 @@ TArrayF* EnsarUraniumChainGen_214Pb::Deexcitation(Int_t InicialState, Int_t & Fi
 	Int_t numGammas;
 	Float_t random =gRandom->Rndm();
 
-	if (InicialState==1 ){numGammas=1;}
+	if (InicialState==1 || InicialState==2){numGammas=1;}
 	else if(InicialState==3 ){numGammas=3;}
 	else if(InicialState==4 || InicialState==5 || InicialState==6){numGammas=2;}
 	else if(InicialState==7 ){numGammas=5;}

@@ -1,15 +1,10 @@
 // *********************************************************************
 // *****   
-// *****             EnsarUraniumChainGen_234Th source file                                   
-// *****   	
-// *****  Due to the 234Pa and 234mPa have an internal transition of
-// *****  IT=0.16%, we are not going to consider the gamma of the 
-// *****  73.9(3+)->0(4*) transition that has an energy of 73.9keV,	
-// *****  so, insted of 2 as a final state we are going to put 0.
-// *****  					
+// *****             EnsarActiniumChainGen_223Fr source file                                   
+// *****   							
 // *********************************************************************
 
-#include "EnsarUraniumChainGen_234Th.h"
+#include "EnsarActiniumChainGen_223Fr.h"
 
 #include "FairPrimaryGenerator.h"
 
@@ -24,14 +19,13 @@
 #include <istream>
 #include <string>
 
-#define fPDGBetaType 11
 #define fPDGType 22
 
 using namespace std;
 
 
 // -----   Default constructor   ------------------------------------------
-EnsarUraniumChainGen_234Th::EnsarUraniumChainGen_234Th()  :
+EnsarActiniumChainGen_223Fr::EnsarActiniumChainGen_223Fr()  :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -45,7 +39,7 @@ EnsarUraniumChainGen_234Th::EnsarUraniumChainGen_234Th()  :
 
 
 // -----   Standard constructor   -----------------------------------------
-EnsarUraniumChainGen_234Th::EnsarUraniumChainGen_234Th(const char* inputFile) :
+EnsarActiniumChainGen_223Fr::EnsarActiniumChainGen_223Fr(const char* inputFile) :
   FairGenerator(),
 	fPointVtxIsSet(0), fBoxVtxIsSet(0),
   fThetaRangeIsSet(0), fPhiRangeIsSet(0),
@@ -55,11 +49,11 @@ EnsarUraniumChainGen_234Th::EnsarUraniumChainGen_234Th(const char* inputFile) :
 	fPhiMin(0), fPhiMax(0)
 {
   
-  cout << "-I- EnsarUraniumChainGen_234Th: Opening input file " << inputFile << endl;
+  cout << "-I- EnsarActiniumChainGen_223Fr: Opening input file " << inputFile << endl;
   fFileName  = inputFile;
   
   fInputFile = new ifstream(fFileName);
-  if ( ! fInputFile->is_open() ) Fatal("EnsarUraniumChainGen_234Th","Cannot open input file.");
+  if ( ! fInputFile->is_open() ) Fatal("EnsarActiniumChainGen_223Fr","Cannot open input file.");
    
   //Read Parameters File
   ReadParameters();
@@ -68,11 +62,11 @@ EnsarUraniumChainGen_234Th::EnsarUraniumChainGen_234Th(const char* inputFile) :
 
 
 // -----   Inizialize generator   -----------------------------------------
-Bool_t  EnsarUraniumChainGen_234Th::Init()
+Bool_t  EnsarActiniumChainGen_223Fr::Init()
 {
 		
 	if (fPointVtxIsSet && fBoxVtxIsSet) {
-    Fatal("Init()","EnsarUraniumChainGen_234Th: Cannot set point and box vertices simultaneously");
+    Fatal("Init()","EnsarActiniumChainGen_223Fr: Cannot set point and box vertices simultaneously");
   }
 	
 }
@@ -80,7 +74,7 @@ Bool_t  EnsarUraniumChainGen_234Th::Init()
 
 
 // -----   Destructor   ---------------------------------------------------
-EnsarUraniumChainGen_234Th::~EnsarUraniumChainGen_234Th() {
+EnsarActiniumChainGen_223Fr::~EnsarActiniumChainGen_223Fr() {
 
   CloseInput();
 
@@ -88,13 +82,13 @@ EnsarUraniumChainGen_234Th::~EnsarUraniumChainGen_234Th() {
 // ------------------------------------------------------------------------
 
 // -----   Read events   --------------------------------------------------
-Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
+Bool_t EnsarActiniumChainGen_223Fr::ReadEvent(FairPrimaryGenerator* primGen)
 {
   
   
   //----- Check for input file -----
   if ( ! fInputFile->is_open() ) {
-    cout << "-E- EnsarUraniumChainGen_234Th: Input file not open!" << endl;
+    cout << "-E- EnsarActiniumChainGen_223Fr: Input file not open!" << endl;
     return kFALSE;
   }
  
@@ -106,19 +100,23 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 			fZ = gRandom->Uniform(fZ1,fZ2);
 	}
 
-	Int_t numInicialCases=4;
+	Int_t numInicialCases=6;
 
 	Double_t Probability_emmittedParticles [numInicialCases];
-	Probability_emmittedParticles [0]=0.703;
-	Probability_emmittedParticles [1]=0.192;
-	Probability_emmittedParticles [2]=0.076;
-	Probability_emmittedParticles [3]=0.029;
+	Probability_emmittedParticles [0]=0.01;
+	Probability_emmittedParticles [1]=0.01;
+	Probability_emmittedParticles [2]=0.7;
+	Probability_emmittedParticles [3]=0.15;
+	Probability_emmittedParticles [4]=0.101;
+	Probability_emmittedParticles [5]=0.017;
 
-	Double_t FinalState_daughter [numInicialCases];//final state of 234Pa*
-	FinalState_daughter [0]=0;//it would be 2
-	FinalState_daughter [1]=4;
-	FinalState_daughter [2]=5;
-	FinalState_daughter [3]=6;
+	Double_t FinalState_daughter [numInicialCases];
+	FinalState_daughter [0]=0;
+	FinalState_daughter [1]=1;
+	FinalState_daughter [2]=2;
+	FinalState_daughter [3]=4;
+	FinalState_daughter [4]=8;
+	FinalState_daughter [5]=10;
 			
 	Double_t limits[numInicialCases+1];
 	limits[0]=0;
@@ -128,7 +126,7 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 		lim1=limits[i-1];
 		prob1=Probability_emmittedParticles[i-1];
 		limits[i]= lim1+ prob1;
-		//cout<<"limits["<<i<<"]"<<limits[i]<<endl;//ok!
+		//cout<<"limits["<<i<<"]"<<limits[i]<<endl;
 	}
 
 	Float_t ran_ini =gRandom->Rndm();
@@ -138,20 +136,28 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 	int finalstate;
 
 	if (ran_ini>limits[j] && ran_ini<limits[j+1]){
-			Case=0;	//2
-			//cout<<"Limits "<<limits[j]<<" - "<<limits[j+1]<<endl;//ok
+			Case=0;	
+			//cout<<"Limits "<<limits[j]<<" - "<<limits[j+1]<<endl;
 	}
 	else if (ran_ini>limits[j+1] && ran_ini<limits[j+2]){
-			Case=1;//1			
-			//cout<<"Limits "<<limits[j+1]<<" - "<<limits[j+2]<<endl;//ok
+			Case=1;			
+			//cout<<"Limits "<<limits[j+1]<<" - "<<limits[j+2]<<endl;
 	}
 	else if (ran_ini>limits[j+2] && ran_ini<limits[j+3]){
-			Case=2;//0		
-			//cout<<"Limits "<<limits[j+2]<<" - "<<limits[j+3]<<endl;//ok
+			Case=2;			
+			//cout<<"Limits "<<limits[j+2]<<" - "<<limits[j+3]<<endl;
 	}
 	else if (ran_ini>limits[j+3] && ran_ini<limits[j+4]){
-			Case=3;	
-			//cout<<"Limits "<<limits[j+3]<<" - "<<limits[j+4]<<endl;//ok
+			Case=3;			
+			//cout<<"Limits "<<limits[j+3]<<" - "<<limits[j+4]<<endl;
+	}
+	else if (ran_ini>limits[j+4] && ran_ini<limits[j+5]){
+			Case=4;			
+			//cout<<"Limits "<<limits[j+4]<<" - "<<limits[j+5]<<endl;
+	}
+	else if (ran_ini>limits[j+5] && ran_ini<limits[j+6]){
+			Case=5;			
+			//cout<<"Limits "<<limits[j+5]<<" - "<<limits[j+6]<<endl;
 	}
 
 	finalstate=FinalState_daughter[Case];
@@ -161,7 +167,7 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 	if (kINFO==true){cout<<"Case="<<Case<<"  the nucleus is in the state="<<finalstate<<endl;}
 	
 
-	Int_t Contador=1;
+	Int_t Counter=1;
 
 	while(finalstate>0){
 		
@@ -177,7 +183,7 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 		primGen->AddTrack(fPDGType, px, py, pz, fX, fY, fZ);		
 				
 		if (kINFO==true){
-			cout<<endl<<"Counter of gammas="<<Contador<<endl;
+			cout<<endl<<"Counter of gammas="<<Counter<<endl;
 			cout<<"		Energy_array size="<<Energy_gammas_array->GetSize()<<endl;
 			cout<<"		Energy_gamma="<<Energy_gammas_array->GetAt(0)<<endl;
 			cout<<"		Final state="<<finalstate2<<endl;
@@ -185,7 +191,7 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 		}
 
 		finalstate=finalstate2;
-		Contador++;
+		Counter++;
 	}
 
 	primGen->AddTrack(fPDGType, 0.0000001, 0.0000001, 0.0000001, 0., 0., 0.);
@@ -197,10 +203,10 @@ Bool_t EnsarUraniumChainGen_234Th::ReadEvent(FairPrimaryGenerator* primGen)
 // ------------------------------------------------------------------------
 
 // -----   Private method CloseInput   ------------------------------------
-void EnsarUraniumChainGen_234Th::CloseInput() {
+void EnsarActiniumChainGen_223Fr::CloseInput() {
   if ( fInputFile ) {
     if ( fInputFile->is_open() ) {
-      cout << "-I- EnsarUraniumChainGen_234Th: Closing input file " 
+      cout << "-I- EnsarActiniumChainGen_223Fr: Closing input file " 
 	   << fFileName << endl;
       fInputFile->close();
     }
@@ -212,68 +218,196 @@ void EnsarUraniumChainGen_234Th::CloseInput() {
 
 
 // ---Read Parameters File --------------------------------------------
-void EnsarUraniumChainGen_234Th::ReadParameters() {
+void EnsarActiniumChainGen_223Fr::ReadParameters() {
 
 }
 
 // --- De-excitation Process --------------------------------------------
-TArrayF* EnsarUraniumChainGen_234Th::Deexcitation(Int_t InicialState, Int_t & FinalState) {
+TArrayF* EnsarActiniumChainGen_223Fr::Deexcitation(Int_t InicialState, Int_t & FinalState) {
 	
-	// --- NUCLEAR DATA, deexcitation of 234Pa --- //
+	// --- NUCLEAR DATA, deexcitation --- //
 	Double_t Probability	[50][50];//[Nucleus inicial state][number of gammas]
 	Double_t Energygammas	[50][50];
-	Int_t 	 NucleusFinalState		[50][50];
+	Int_t 	 NucleusFinalState	[50][50];
 
-	//2st excited state with 1 gamma
-	Probability					[2][1]=1.;
-	Energygammas				[2][1]=0.00007392;//MeV
-	NucleusFinalState		[2][1]=0;
+	//Excited states
+	Energygammas				[1][1]=0.00002986;
+	Probability					[1][1]=1.;
+	NucleusFinalState		[1][1]=0;
 
 
-	//3rd excited state with 1 gamma
-	Probability					[3][1]=1.;
-	Energygammas				[3][1]=0.00002949;
-	NucleusFinalState		[3][1]=0;//it would be 2
+	Energygammas				[2][1]=0.00002025;
+	Probability					[2][1]=0.0272;
+	NucleusFinalState		[2][1]=1;
 
-	//4th excited state with 2 gammas
-	Probability					[4][1]=0.9926;
-	Energygammas				[4][1]=0.00009238;
-	NucleusFinalState		[4][1]=0;//it would be 2
+	Energygammas				[2][2]=0.00005013;
+	Probability					[2][2]=0.9728;
+	NucleusFinalState		[2][2]=0;
 
-	Probability					[4][2]=0.0074;
-	Energygammas				[4][2]=0.00006286;
-	NucleusFinalState		[4][2]=3;
 
-	//5th excited state with 2 gammas
-	Probability					[5][1]=0.6369;
-	Energygammas				[5][1]=0.00006329;
+
+	Energygammas				[3][1]=0.00003158;
+	Probability					[3][1]=0.4318;
+	NucleusFinalState		[3][1]=1;
+
+	Energygammas				[3][2]=0.000061441;
+	Probability					[3][2]=0.5682;
+	NucleusFinalState		[3][2]=0;
+
+
+
+	Energygammas				[4][1]=0.0000296;
+	Probability					[4][1]=0.0025;
+	NucleusFinalState		[4][1]=2;
+
+	Energygammas				[4][2]=0.00004982;
+	Probability					[4][2]=0.1799;
+	NucleusFinalState		[4][2]=1;
+
+	Energygammas				[4][3]=0.00007969;
+	Probability					[4][3]=0.8176;//0.8177 to Prob=1
+	NucleusFinalState		[4][3]=0;
+
+
+
+	Energygammas				[5][1]=0.0000438;
+	Probability					[5][1]=0.6711;
 	NucleusFinalState		[5][1]=3;
 
-	Probability					[5][2]=0.3631;
-	Energygammas				[5][2]=0.00009280;
-	NucleusFinalState		[5][2]=0;//it would be 2
+	Energygammas				[5][2]=0.00007501;
+	Probability					[5][2]=0.3289;
+	NucleusFinalState		[5][2]=1;
 
-	//6th excited state with 3 gammas
-	Probability					[6][1]=0.7564;
-	Energygammas				[6][1]=0.00011281;
-	NucleusFinalState		[6][1]=0;//it would be 2
 
-	Probability					[6][2]=0.2163;
-	Energygammas				[6][2]=0.00008330;
+
+
+	Energygammas				[6][1]=0.00004422;
+	Probability					[6][1]=0.0297;
+	NucleusFinalState		[6][1]=4;
+
+	Energygammas				[6][2]=0.00006245;
+	Probability					[6][2]=0.1138;
 	NucleusFinalState		[6][2]=3;
 
-	Probability					[6][3]=0.0272;
-	Energygammas				[6][3]=0.00002002;
-	NucleusFinalState		[6][3]=5;
+	Energygammas				[6][3]=0.00007363;
+	Probability					[6][3]=0.0076;
+	NucleusFinalState		[6][3]=2;
+
+	Energygammas				[6][4]=0.00009388;
+	Probability					[6][4]=0.8489;
+	NucleusFinalState		[6][4]=1;
+
+
+
+	Energygammas				[7][1]=0.0000065;
+	Probability					[7][1]=0.3891;
+	NucleusFinalState		[7][1]=6;
+
+	Energygammas				[7][2]=0.00006874;
+	Probability					[7][2]=0.249;
+	NucleusFinalState		[7][2]=3;
+
+	Energygammas				[7][3]=0.00010027;
+	Probability					[7][3]=0.3619;
+	NucleusFinalState		[7][3]=1;
+
+
+
+
+	Energygammas				[8][1]=0.00011105;
+	Probability					[8][1]=0.0012;
+	NucleusFinalState		[8][1]=6;
+
+	Energygammas				[8][2]=0.0001555;
+	Probability					[8][2]=0.0007;
+	NucleusFinalState		[8][2]=4;
+
+	Energygammas				[8][3]=0.00017345;
+	Probability					[8][3]=0.0263;
+	NucleusFinalState		[8][3]=3;
+
+	Energygammas				[8][4]=0.00018465;
+	Probability					[8][4]=0.054;
+	NucleusFinalState		[8][4]=2;
+
+	Energygammas				[8][5]=0.00020498;
+	Probability					[8][5]=0.2429;
+	NucleusFinalState		[8][5]=1;
+
+	Energygammas				[8][6]=0.00023476;
+	Probability					[8][6]=0.6749;
+	NucleusFinalState		[8][6]=0;
+
+
+
+
+	Energygammas				[9][1]=0.00015014;
+	Probability					[9][1]=0.0644;
+	NucleusFinalState		[9][1]=7;
+
+	Energygammas				[9][2]=0.0001758;
+	Probability					[9][2]=0.1223;
+	NucleusFinalState		[9][2]=5;
+
+	Energygammas				[9][3]=0.0002005;
+	Probability					[9][3]=0.0772;
+	NucleusFinalState		[9][3]=4;
+
+	Energygammas				[9][4]=0.0002189;
+	Probability					[9][4]=0.6435;
+	NucleusFinalState		[9][4]=3;
+
+	Energygammas				[9][5]=0.00025015;
+	Probability					[9][5]=0.0521;
+	NucleusFinalState		[9][5]=1;
+
+	Energygammas				[9][6]=0.0002807;
+	Probability					[9][6]=0.0405;
+	NucleusFinalState		[9][6]=0;
+	
+
+
+
+	Energygammas				[10][1]=0.00008908;
+	Probability					[10][1]=0.0449;
+	NucleusFinalState		[10][1]=9;
+
+	Energygammas				[10][2]=0.0001346;
+	Probability					[10][2]=0.3978;
+	NucleusFinalState		[10][2]=8;
+
+	Energygammas				[10][3]=0.0002456;
+	Probability					[10][3]=0.0215;
+	NucleusFinalState		[10][3]=6;
+
+	Energygammas				[10][4]=0.00030778;
+	Probability					[10][4]=0.0119;
+	NucleusFinalState		[10][4]=3;
+
+	Energygammas				[10][5]=0.00031924;
+	Probability					[10][5]=0.3978;
+	NucleusFinalState		[10][5]=2;
+
+	Energygammas				[10][6]=0.0003395;
+	Probability					[10][6]=0.0505;
+	NucleusFinalState		[10][6]=1;
+
+	Energygammas				[10][7]=0.00036935;
+	Probability					[10][7]=0.0756;
+	NucleusFinalState		[10][7]=0;
+
 
 	Int_t numGammas;
 	Float_t random =gRandom->Rndm();
 
-	if (InicialState==2 || InicialState==3){numGammas=1;}
-	else if (InicialState==4 || InicialState==5){numGammas=2;}
-	else if (InicialState==6){numGammas=3;}
+	if (InicialState==1){numGammas=1;}
+	else if (InicialState==2 || InicialState==3 || InicialState==5){numGammas=2;}
+	else if (InicialState==4 || InicialState==7){numGammas=3;}
+	else if (InicialState==6){numGammas=4;}
+	else if (InicialState==8 || InicialState==9){numGammas=6;}
+	else if (InicialState==10){numGammas=7;}
 	else{
-		cout << "-E- EnsarUraniumChainGen_234Th: Incorrect final state!" << endl;
+		cout << "-E- EnsarActiniumChainGen_223Fr: Incorrect final state!" << endl;
 	}
 	
 	//cout<<"		Entering into the Deexcitation function with an Inicial state="<<InicialState<<" which has a numGamma="<<numGammas<<endl;	
@@ -305,7 +439,7 @@ TArrayF* EnsarUraniumChainGen_234Th::Deexcitation(Int_t InicialState, Int_t & Fi
 }
 
 // --- Track Momentum Calculus --------------------------------------------
-void EnsarUraniumChainGen_234Th::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
+void EnsarActiniumChainGen_223Fr::TrackMomentum( Double_t Energy, Double_t & Px, Double_t & Py, Double_t & Pz ) {
 
 	//Angles
 	Double_t phi;		//0-2pi
@@ -339,4 +473,4 @@ void EnsarUraniumChainGen_234Th::TrackMomentum( Double_t Energy, Double_t & Px, 
 }
 //-------------------------------------------------------------------------
 
-ClassImp(EnsarUraniumChainGen_234Th)
+ClassImp(EnsarActiniumChainGen_223Fr)

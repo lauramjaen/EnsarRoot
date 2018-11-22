@@ -49,15 +49,38 @@ void runsim() {
 	//TString fGene="232Thchain";
 	//TString fGene="238Uchain";
 	//TString fGene="ascii";
-	//	TString fGene="URANIUMchain_238U";//done
-	//	TString fGene="URANIUMchain_234Th";//done
-	//	TString fGene="URANIUMchain_234Pa";//done
-	//	TString fGene="URANIUMchain_234U";//done
-	//	TString fGene="URANIUMchain_230Th";//done
-	//	TString fGene="URANIUMchain_226Ra";//done
-	//	TString fGene="URANIUMchain_214Pb";//done
-	//	TString fGene="URANIUMchain_214Bi";//done
-		TString fGene="URANIUMchain_210Pb";//done
+	//	TString fGene="URANIUMchain_238U";
+	//	TString fGene="URANIUMchain_234Th";
+	//	TString fGene="URANIUMchain_234Pa";
+	//	TString fGene="URANIUMchain_234U";
+	//	TString fGene="URANIUMchain_230Th";
+	//	TString fGene="URANIUMchain_226Ra";
+	//	TString fGene="URANIUMchain_214Pb";
+	//	TString fGene="URANIUMchain_214Bi";
+	//	TString fGene="URANIUMchain_210Pb";
+	//TString fGene="Potassium";
+	//	TString fGene="THORIUMchain_232Th";
+	//	TString fGene="THORIUMchain_228Ra";
+	//	TString fGene="THORIUMchain_228Th";
+	//	TString fGene="THORIUMchain_224Ra";
+	//	TString fGene="THORIUMchain_212Pb";
+	//	TString fGene="THORIUMchain_212Bi";
+	//	TString fGene="THORIUMchain_208Tl";
+	//	TString fGene="THORIUMchain_228Ac";//Problem
+
+
+	//	TString fGene="ACTINIUMchain_235U"; ok
+	//	TString fGene="ACTINIUMchain_231Th";ok
+	//	TString fGene="ACTINIUMchain_231Pa";ok
+	//	TString fGene="ACTINIUMchain_227Ac";ok
+	//	TString fGene="ACTINIUMchain_227Th";ok
+	//	TString fGene="ACTINIUMchain_223Ra";ok
+	//	TString fGene="ACTINIUMchain_219Rn";ok
+	//	TString fGene="ACTINIUMchain_211Pb";ok
+		TString fGene="ACTINIUMchain_211Bi";
+	//	TString fGene="ACTINIUMchain_223Fr";ok
+
+
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -65,7 +88,7 @@ void runsim() {
   // ----------------------------------------------
   //     VMC Standard           kFALSE
   //     R3B Special            kTRUE;
-   Bool_t fUserPList= kTRUE;
+   Bool_t fUserPList= kFALSE;
 
 
   //-------------------------------------------------
@@ -82,7 +105,7 @@ void runsim() {
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 1000000;
+   Int_t nEvents = 997199;//208T:348800, 1395200 999998
 
 
    //-------------------------------------------------
