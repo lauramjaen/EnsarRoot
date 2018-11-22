@@ -309,12 +309,12 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 
 
 	Energygammas				[5][1]=0.00033832;
-	Probability					[5][1]=0.74488;
+	Probability					[5][1]=1.;//0.74488 to Prob=1
 	NucleusFinalState		[5][1]=1;
 
 
 	Energygammas				[9][1]=0.000503823;
-	Probability					[9][1]=0.75472;
+	Probability					[9][1]=1.;//0.75472 to Prob=1
 	NucleusFinalState		[9][1]=3;
 
 
@@ -323,7 +323,7 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[10][1]=5;
 
 	Energygammas				[10][2]=0.00054645;
-	Probability					[10][2]=0.35957;
+	Probability					[10][2]=0.60048;//0.35957 to Prob=1
 	NucleusFinalState		[10][2]=3;
 
 
@@ -332,7 +332,7 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[15][1]=5;
 
 	Energygammas				[15][2]=0.0009106;
-	Probability					[15][2]=0.4135;
+	Probability					[15][2]=0.57806;//0.4135 to Prob=1
 	NucleusFinalState		[15][2]=1;
 
 
@@ -341,17 +341,17 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[17][1]=1;
 
 	Energygammas				[17][2]=0.000968974;
-	Probability					[17][2]=0.37575;
+	Probability					[17][2]=0.38703;//0.37575 to Prob=1
 	NucleusFinalState		[17][2]=0;
 
 
 	Energygammas				[20][1]=0.000964777;
-	Probability					[20][1]=0.75131;
+	Probability					[20][1]=1.;//0.75131 to Prob=1
 	NucleusFinalState		[20][1]=1;
 
 
 	Energygammas				[26][1]=0.000794948;
-	Probability					[26][1]=0.72653;
+	Probability					[26][1]=1.;//0.72653 to Prob=1
 	NucleusFinalState		[26][1]=3;
 
 	
@@ -368,7 +368,7 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[28][3]=1;
 
 	Energygammas				[28][4]=0.00115352;
-	Probability					[28][4]=0.18291;
+	Probability					[28][4]=0.32234;//0.18291 to Prob=1
 	NucleusFinalState		[28][4]=0;
 
 
@@ -378,12 +378,12 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[30][1]=5;
 
 	Energygammas				[30][2]=0.00084038;
-	Probability					[30][2]=0.27351;
+	Probability					[30][2]=0.55885;//0.27351 to Prob=1
 	NucleusFinalState		[30][2]=3;
 
 	
 	Energygammas				[49][1]=0.000463005;
-	Probability					[49][1]=0.56551;
+	Probability					[49][1]=1.;//0.56551 to Prob=1
 	NucleusFinalState		[49][1]=17;
 
 	
@@ -393,7 +393,7 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[60][1]=49;
 
 	Energygammas				[60][2]=0.0005625;
-	Probability					[60][2]=0.31493;
+	Probability					[60][2]=0.55644;//0.31493 to Prob=1
 	NucleusFinalState		[60][2]=17;
 
 
@@ -404,17 +404,17 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[70][1]=1;
 
 	Energygammas				[70][2]=0.00163828;
-	Probability					[70][2]=0.42017;
+	Probability					[70][2]=0.50568;//0.42017 to Prob=1
 	NucleusFinalState		[70][2]=0;
 
 
 	Energygammas				[71][1]=0.00124708;
-	Probability					[71][1]=0.44851;
+	Probability					[71][1]=1.;//0.44851 to Prob=1
 	NucleusFinalState		[71][1]=5;
 
 
 	Energygammas				[73][1]=0.00158819;//=0.00158819 Problem¿?
-	Probability					[73][1]=0.57094;
+	Probability					[73][1]=1.;//0.57094 to Prob=1
 	NucleusFinalState		[73][1]=1;
 
 
@@ -423,17 +423,17 @@ TArrayF* EnsarThoriumChainGen_228Ac::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[78][1]=5;
 
 	Energygammas				[78][2]=0.00149603;
-	Probability					[78][2]=0.45314;
+	Probability					[78][2]=0.58764;//0.45314 to Prob=1
 	NucleusFinalState		[78][2]=2;
 
 
 	Energygammas				[80][1]=0.001630627;
-	Probability					[80][1]=0.7566;
+	Probability					[80][1]=1.;//0.7566 to Prob=1
 	NucleusFinalState		[80][1]=1;
 
 
 	Energygammas				[84][1]=0.000755315;
-	Probability					[84][1]=0.45259;
+	Probability					[84][1]=1.;//0.45259 to Prob=1
 	NucleusFinalState		[84][1]=15;
 
 	Int_t numGammas;

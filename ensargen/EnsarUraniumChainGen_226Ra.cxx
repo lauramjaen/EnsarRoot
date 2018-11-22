@@ -211,7 +211,7 @@ TArrayF* EnsarUraniumChainGen_226Ra::Deexcitation(Int_t InicialState, Int_t & Fi
 
 	//1st excited state with 1 gamma
 	Probability					[1][1]=1.;
-	Energygammas				[1][1]=0.000186211;//MeV
+	Energygammas				[1][1]=0.000186211;//GeV
 	NucleusFinalState		[1][1]=0;
 
 	Int_t numGammas;

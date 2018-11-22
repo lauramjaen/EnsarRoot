@@ -261,7 +261,7 @@ TArrayF* EnsarThoriumChainGen_208Tl::Deexcitation(Int_t InicialState, Int_t & Fi
 	NucleusFinalState		[5][2]=3;
 
 	Energygammas				[5][3]=0.000763429;
-	Probability					[5][3]=0.71023;
+	Probability					[5][3]=0.71022;//0.71023 to Prob=1
 	NucleusFinalState		[5][3]=2;
 
 	Int_t numGammas;

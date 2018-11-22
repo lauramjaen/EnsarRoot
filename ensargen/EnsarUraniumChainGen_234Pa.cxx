@@ -247,7 +247,7 @@ TArrayF* EnsarUraniumChainGen_234Pa::Deexcitation(Int_t InicialState, Int_t & Fi
 	Energygammas				[5][3]=0.0008082;
 	NucleusFinalState		[5][3]=1;
 
-	Probability					[5][4]=0.5229;
+	Probability					[5][4]=0.523045;//0.5229 to Prob=1
 	Energygammas				[5][4]=0.0008517;
 	NucleusFinalState		[5][4]=0;
 
