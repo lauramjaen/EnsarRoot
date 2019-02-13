@@ -340,7 +340,7 @@ void NaIDetector::ConstructGeometry()
 
 Bool_t NaIDetector::CheckIfSensitive(std::string name)
 {
-  if(TString(name).Contains("")) {
+  if(TString(name).Contains("CrystalNaI")) {//for the original NaI detector this must be empty, ""
     return kTRUE;
   }
   return kFALSE;

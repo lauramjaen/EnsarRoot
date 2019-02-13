@@ -28,7 +28,44 @@ void runsim() {
   //-------------------------------------------------
   // Box  generator:             "box"
   // Ascii generator:          "ascii"
-  TString fGene="box";
+  //TString fGene="box";
+
+	//-------------------------------------------------
+	// Environmental Background Generator
+	// It includes: Uranium, Thorium, Actinium chains
+	// 							and Potassium decay
+	//-------------------------------------------------
+	//		TString fGene="URANIUMchain_238U";
+	//	TString fGene="URANIUMchain_234Th";
+	//	TString fGene="URANIUMchain_234Pa";
+	//	TString fGene="URANIUMchain_234U";
+	//	TString fGene="URANIUMchain_230Th";
+	//	TString fGene="URANIUMchain_226Ra";
+	//	TString fGene="URANIUMchain_214Pb";
+	//	TString fGene="URANIUMchain_214Bi";
+	//	TString fGene="URANIUMchain_210Pb";
+
+		TString fGene="Potassium";
+
+	//	TString fGene="THORIUMchain_232Th";
+	//	TString fGene="THORIUMchain_228Ra";
+	//	TString fGene="THORIUMchain_228Th";
+	//	TString fGene="THORIUMchain_224Ra";
+	//	TString fGene="THORIUMchain_212Pb";//peak of 265 keV
+	//	TString fGene="THORIUMchain_212Bi";
+	//	TString fGene="THORIUMchain_208Tl"; 
+	//	TString fGene="THORIUMchain_228Ac";
+
+	//	TString fGene="ACTINIUMchain_235U";
+	//	TString fGene="ACTINIUMchain_231Th";
+	//	TString fGene="ACTINIUMchain_231Pa";
+	//	TString fGene="ACTINIUMchain_227Ac";
+	//	TString fGene="ACTINIUMchain_227Th";
+	//	TString fGene="ACTINIUMchain_223Ra";
+	//	TString fGene="ACTINIUMchain_219Rn";
+	//	TString fGene="ACTINIUMchain_211Pb";
+	//	TString fGene="ACTINIUMchain_211Bi";
+	//	TString fGene="ACTINIUMchain_223Fr";
 
   //-------------------------------------------------
   // Secondaries  generation (G4 only)
@@ -45,13 +82,14 @@ void runsim() {
 
   TMap detGeo;
   detGeo.Add(new TObjString("NAI"),
-       new TObjString("NaIdetector_test.geo.root"));
+  	     new TObjString("NaIdetector_LuisLab.geo.root"));
+
 
    //-------------------------------------------------
    //- N# of Sim. Events   |    nEvents     (Int_t)
    //-------------------------------------------------
 
-   Int_t nEvents = 4;
+   Int_t nEvents = 5000000;
 
    //-------------------------------------------------
    //- EventDisplay        |    fEventDisplay (Bool_t)

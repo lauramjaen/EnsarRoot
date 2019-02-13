@@ -105,15 +105,6 @@ void simall(Int_t nEvents = 1,
   hpgedetector->SetVerboseLevel(0); //screen info
   run->AddModule(hpgedetector);
 
-  // CALIFA definition
-  //EnsarDetector* calo = new R3BCalo("Califa", kTRUE);
-  //((R3BCalo *)calo)->SelectGeometryVersion(1116);//version to single petal with copies
-  //Selecting the Non-uniformity of the crystals (1 means +-1% max deviation)
-  //((R3BCalo *)calo)->SetNonUniformity(1.0);//change Resolution 5%, more realistic case
-  //calo->SetGeometryFileName(((TObjString*)fDetList->GetValue("CALIFA"))->GetString().Data());
-  //calo->SetVerboseLevel(0); //screen info
-  //run->AddModule(calo);
-
 
 
   // -----   Create PrimaryGenerator   --------------------------------------
@@ -126,19 +117,19 @@ void simall(Int_t nEvents = 1,
   // 2- Define the BOX generator
   Int_t pdgId          = 22;            // geant particle id of the photon beam
   Double32_t theta1    = 90.;            // polar angle distribution (degrees) 70.
-  Double32_t theta2    = 180.;						// 110.
+  Double32_t theta2    = 90.;						// 110.
 	Double32_t phi1    	 = 90.;            // azimutal angle distribution (degrees) 160.
-  Double32_t phi2      = 270.;						// 200.
+  Double32_t phi2      = 90.;						// 200.
   Double32_t momentum  = 0.006068;      // GeV/c 6048keV energy of the beam
   //FairBoxGenerator* boxGen = new FairBoxGenerator(pdgId,50); //multiplicity
-	EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,1); //multiplicity
+	EnsarBoxGenerator* boxGen = new EnsarBoxGenerator(pdgId,5); //multiplicity
   boxGen->SetThetaRange (theta1,theta2);
   boxGen->SetCosTheta();
-  boxGen->SetPRange     (0.002230,0.002230);// momentum of the beam GeV/c
+  boxGen->SetPRange     (0.002230,0.00100);// momentum of the beam GeV/c
   boxGen->SetPhiRange   (phi1,phi2);    // azimuthal angle (degrees)
-  boxGen->SetXYZ        (0.,0.,0.);     // Point source
+  //boxGen->SetXYZ        (0.,0.,0.);     // Point source
 //SetBoxXYZ (Double32_t x1=0, Double32_t y1=0, Double32_t x2=0, Double32_t y2=0, Double32_t z=0)
-  //boxGen->SetBoxXYZ  (-0.05,-0.05,0.05,0.05,0.); //Square source
+  boxGen->SetBoxXYZ  (-0.05,-0.05,0.05,0.05,0.); //Square source
   // add the box generator
   primGen->AddGenerator(boxGen);
   } 
@@ -215,7 +206,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("URANIUMchain_238U") == 0  ) {
     EnsarUraniumChainGen_238U* UGen_238U = new EnsarUraniumChainGen_238U("dummy.dat");   
 		//UGen->SetXYZ(0.,0.,0.);
-		UGen_238U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_238U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_238U->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_238U->SetThetaRange(90,90);
 		UGen_238U->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_238U);
@@ -225,17 +217,30 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("URANIUMchain_234Th") == 0  ) {
     EnsarUraniumChainGen_234Th* UGen_234Th = new EnsarUraniumChainGen_234Th("dummy.dat");
 		//UGen_234Th->SetXYZ(0.,0.,0.);
-		UGen_234Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_234Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_234Th->SetThetaRange(90,90);
 		UGen_234Th->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_234Th);
+  }
+
+	//add the 234Pa nucleus
+ if (fGenerator.CompareTo("URANIUMchain_234Pa") == 0  ) {
+    EnsarUraniumChainGen_234Pa* UGen_234Pa = new EnsarUraniumChainGen_234Pa("dummy.dat");
+		//UGen_234Pa->SetXYZ(0.,0.,0.);
+		//UGen_234Pa->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234Pa->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
+		UGen_234Pa->SetThetaRange(90,90);
+		UGen_234Pa->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_234Pa);
   }
   
 	//add the 234U nucleus
  if (fGenerator.CompareTo("URANIUMchain_234U") == 0  ) {
     EnsarUraniumChainGen_234U* UGen_234U = new EnsarUraniumChainGen_234U("dummy.dat");
 		//UGen_234U->SetXYZ(0.,0.,0.);
-		UGen_234U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_234U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_234U->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_234U->SetThetaRange(90,90);
 		UGen_234U->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_234U);
@@ -245,7 +250,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("URANIUMchain_230Th") == 0  ) {
     EnsarUraniumChainGen_230Th* UGen_230Th = new EnsarUraniumChainGen_230Th("dummy.dat");
 		//UGen_230Th->SetXYZ(0.,0.,0.);
-		UGen_230Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_230Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_230Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_230Th->SetThetaRange(90,90);
 		UGen_230Th->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_230Th);
@@ -254,47 +260,45 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("URANIUMchain_226Ra") == 0  ) {
     EnsarUraniumChainGen_226Ra* UGen_226Ra = new EnsarUraniumChainGen_226Ra("dummy.dat");
 		//UGen_226Ra->SetXYZ(0.,0.,0.);
-		UGen_226Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_226Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_226Ra->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_226Ra->SetThetaRange(90,90);
 		UGen_226Ra->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_226Ra);
-  }
-	//add the 210Pb nucleus
- if (fGenerator.CompareTo("URANIUMchain_210Pb") == 0  ) {
-    EnsarUraniumChainGen_210Pb* UGen_210Pb = new EnsarUraniumChainGen_210Pb("dummy.dat");
-		//UGen_210Pb->SetXYZ(0.,0.,0.);
-		UGen_210Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
-		UGen_210Pb->SetThetaRange(90,90);
-		UGen_210Pb->SetPhiRange(90,90);
-    primGen->AddGenerator(UGen_210Pb);
-  }
-	//add the 234Pa nucleus
- if (fGenerator.CompareTo("URANIUMchain_234Pa") == 0  ) {
-    EnsarUraniumChainGen_234Pa* UGen_234Pa = new EnsarUraniumChainGen_234Pa("dummy.dat");
-		//UGen_234Pa->SetXYZ(0.,0.,0.);
-		UGen_234Pa->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
-		UGen_234Pa->SetThetaRange(90,90);
-		UGen_234Pa->SetPhiRange(90,90);
-    primGen->AddGenerator(UGen_234Pa);
   }
 	//add the 214Pb nucleus
  if (fGenerator.CompareTo("URANIUMchain_214Pb") == 0  ) {
     EnsarUraniumChainGen_214Pb* UGen_214Pb = new EnsarUraniumChainGen_214Pb("dummy.dat");
 		//UGen_214Pb->SetXYZ(0.,0.,0.);
-		UGen_214Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_214Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_214Pb->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_214Pb->SetThetaRange(90,90);
 		UGen_214Pb->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_214Pb);
   }
+
 	//add the 214Bi nucleus
  if (fGenerator.CompareTo("URANIUMchain_214Bi") == 0  ) {
     EnsarUraniumChainGen_214Bi* UGen_214Bi = new EnsarUraniumChainGen_214Bi("dummy.dat");
 		//UGen_214Bi->SetXYZ(0.,0.,0.);
-		UGen_214Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//UGen_214Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_214Bi->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		UGen_214Bi->SetThetaRange(90,90);
 		UGen_214Bi->SetPhiRange(90,90);
     primGen->AddGenerator(UGen_214Bi);
-  }//------------------------------------------------------------------------------------------------
+  }
+
+	//add the 210Pb nucleus
+ if (fGenerator.CompareTo("URANIUMchain_210Pb") == 0  ) {
+    EnsarUraniumChainGen_210Pb* UGen_210Pb = new EnsarUraniumChainGen_210Pb("dummy.dat");
+		//UGen_210Pb->SetXYZ(0.,0.,0.);
+		//UGen_210Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		UGen_210Pb->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
+		UGen_210Pb->SetThetaRange(90,90);
+		UGen_210Pb->SetPhiRange(90,90);
+    primGen->AddGenerator(UGen_210Pb);
+  }
+//------------------------------------------------------------------------------------------------
 	
 
 	//add Potassium generator
@@ -315,7 +319,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_232Th") == 0  ) {
     EnsarThoriumChainGen_232Th* Thorium_232Th = new EnsarThoriumChainGen_232Th("dummy.dat");
 		//Thorium_232Th->SetXYZ(0.,0.,0.);
-		Thorium_232Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_232Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_232Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_232Th->SetThetaRange(90,90);
 		Thorium_232Th->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_232Th);
@@ -324,7 +329,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_228Ra") == 0  ) {
     EnsarThoriumChainGen_228Ra* Thorium_228Ra = new EnsarThoriumChainGen_228Ra("dummy.dat");
 		//Thorium_228Ra->SetXYZ(0.,0.,0.);
-		Thorium_228Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_228Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_228Ra->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_228Ra->SetThetaRange(90,90);
 		Thorium_228Ra->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_228Ra);
@@ -333,7 +339,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_228Th") == 0  ) {
     EnsarThoriumChainGen_228Th* Thorium_228Th = new EnsarThoriumChainGen_228Th("dummy.dat");
 		//Thorium_228Th->SetXYZ(0.,0.,0.);
-		Thorium_228Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_228Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_228Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_228Th->SetThetaRange(90,90);
 		Thorium_228Th->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_228Th);
@@ -342,7 +349,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_224Ra") == 0  ) {
     EnsarThoriumChainGen_224Ra* Thorium_224Ra = new EnsarThoriumChainGen_224Ra("dummy.dat");
 		//Thorium_224Ra->SetXYZ(0.,0.,0.);
-		Thorium_224Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_224Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_224Ra->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_224Ra->SetThetaRange(90,90);
 		Thorium_224Ra->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_224Ra);
@@ -351,7 +359,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_212Pb") == 0  ) {
     EnsarThoriumChainGen_212Pb* Thorium_212Pb = new EnsarThoriumChainGen_212Pb("dummy.dat");
 		//Thorium_212Pb->SetXYZ(0.,0.,0.);
-		Thorium_212Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_212Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_212Pb->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_212Pb->SetThetaRange(90,90);
 		Thorium_212Pb->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_212Pb);
@@ -360,7 +369,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_212Bi") == 0  ) {
     EnsarThoriumChainGen_212Bi* Thorium_212Bi = new EnsarThoriumChainGen_212Bi("dummy.dat");
 		//Thorium_212Bi->SetXYZ(0.,0.,0.);
-		Thorium_212Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_212Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Thorium_212Bi->SetBoxXYZ(13,-200,13,-15,-200,-15);//earth effect
 		Thorium_212Bi->SetThetaRange(90,90);
 		Thorium_212Bi->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_212Bi);
@@ -369,9 +379,13 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_208Tl") == 0  ) {
     EnsarThoriumChainGen_208Tl* Thorium_208Tl = new EnsarThoriumChainGen_208Tl("dummy.dat");
 		//Thorium_208Tl->SetXYZ(0.,0.,0.);
-		Thorium_208Tl->SetBoxXYZ(13,-10,13,-15,-10,-15);
-		//Thorium_208Tl->SetThetaRange(90,90);
-		//Thorium_208Tl->SetPhiRange(90,90);
+		//Thorium_208Tl->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//prop BoxA
+		//Thorium_208Tl->SetBoxXYZ(-1,-10036,-1,-15,-10036,-15);//lluny BoxB
+		//Thorium_208Tl->SetBoxXYZ(13,-10036,13,-15,-10036,-15);, with more sup BoxC
+		//Thorium_208Tl->SetBoxXYZ(-1,-200,-1,-15,-200,-15);// BoxD
+		Thorium_208Tl->SetBoxXYZ(13,-200,13,-15,-200,-15);//BoxE
+		//Thorium_208Tl->SetBoxXYZ(13,-40,13,-15,-40,-15);//BoxF
+		//Thorium_208Tl->SetBoxXYZ(13,-350,13,-15,-350,-15);//BoxG
 		Thorium_208Tl->SetThetaRange(90,90);
 		Thorium_208Tl->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_208Tl);
@@ -380,7 +394,8 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("THORIUMchain_228Ac") == 0  ) {
     EnsarThoriumChainGen_228Ac* Thorium_228Ac = new EnsarThoriumChainGen_228Ac("dummy.dat");
 		//Thorium_228Ac->SetXYZ(0.,0.,0.);
-		Thorium_228Ac->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		//Thorium_228Ac->SetBoxXYZ(-1,-10,-1,-15,-10,-15);//prop
+		Thorium_228Ac->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Thorium_228Ac->SetThetaRange(90,90);
 		Thorium_228Ac->SetPhiRange(90,90);
     primGen->AddGenerator(Thorium_228Ac);
@@ -395,7 +410,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_235U") == 0  ) {
     EnsarActiniumChainGen_235U* Actinium_235U = new EnsarActiniumChainGen_235U("dummy.dat");
 		//Actinium_235U->SetXYZ(0.,0.,0.);
-		Actinium_235U->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_235U->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_235U->SetThetaRange(90,90);
 		Actinium_235U->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_235U);
@@ -405,7 +420,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_231Th") == 0  ) {
     EnsarActiniumChainGen_231Th* Actinium_231Th = new EnsarActiniumChainGen_231Th("dummy.dat");
 		//Actinium_231Th->SetXYZ(0.,0.,0.);
-		Actinium_231Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_231Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_231Th->SetThetaRange(90,90);
 		Actinium_231Th->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_231Th);
@@ -415,7 +430,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_231Pa") == 0  ) {
     EnsarActiniumChainGen_231Pa* Actinium_231Pa = new EnsarActiniumChainGen_231Pa("dummy.dat");
 		//Actinium_231Pa->SetXYZ(0.,0.,0.);
-		Actinium_231Pa->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_231Pa->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_231Pa->SetThetaRange(90,90);
 		Actinium_231Pa->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_231Pa);
@@ -425,7 +440,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_227Ac") == 0  ) {
     EnsarActiniumChainGen_227Ac* Actinium_227Ac = new EnsarActiniumChainGen_227Ac("dummy.dat");
 		//Actinium_227Ac->SetXYZ(0.,0.,0.);
-		Actinium_227Ac->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_227Ac->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_227Ac->SetThetaRange(90,90);
 		Actinium_227Ac->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_227Ac);
@@ -435,7 +450,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_227Th") == 0  ) {
     EnsarActiniumChainGen_227Th* Actinium_227Th = new EnsarActiniumChainGen_227Th("dummy.dat");
 		//Actinium_227Th->SetXYZ(0.,0.,0.);
-		Actinium_227Th->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_227Th->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_227Th->SetThetaRange(90,90);
 		Actinium_227Th->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_227Th);
@@ -445,7 +460,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_223Ra") == 0  ) {
     EnsarActiniumChainGen_223Ra* Actinium_223Ra = new EnsarActiniumChainGen_223Ra("dummy.dat");
 		//Actinium_223Ra->SetXYZ(0.,0.,0.);
-		Actinium_223Ra->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_223Ra->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_223Ra->SetThetaRange(90,90);
 		Actinium_223Ra->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_223Ra);
@@ -455,7 +470,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_219Rn") == 0  ) {
     EnsarActiniumChainGen_219Rn* Actinium_219Rn = new EnsarActiniumChainGen_219Rn("dummy.dat");
 		//Actinium_219Rn->SetXYZ(0.,0.,0.);
-		Actinium_219Rn->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_219Rn->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_219Rn->SetThetaRange(90,90);
 		Actinium_219Rn->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_219Rn);
@@ -465,7 +480,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_211Pb") == 0  ) {
     EnsarActiniumChainGen_211Pb* Actinium_211Pb = new EnsarActiniumChainGen_211Pb("dummy.dat");
 		//Actinium_211Pb->SetXYZ(0.,0.,0.);
-		Actinium_211Pb->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_211Pb->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_211Pb->SetThetaRange(90,90);
 		Actinium_211Pb->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_211Pb);
@@ -475,7 +490,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_211Bi") == 0  ) {
     EnsarActiniumChainGen_211Bi* Actinium_211Bi = new EnsarActiniumChainGen_211Bi("dummy.dat");
 		//Actinium_211Bi->SetXYZ(0.,0.,0.);
-		Actinium_211Bi->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_211Bi->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_211Bi->SetThetaRange(90,90);
 		Actinium_211Bi->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_211Bi);
@@ -485,7 +500,7 @@ void simall(Int_t nEvents = 1,
  if (fGenerator.CompareTo("ACTINIUMchain_223Fr") == 0  ) {
     EnsarActiniumChainGen_223Fr* Actinium_223Fr = new EnsarActiniumChainGen_223Fr("dummy.dat");
 		//Actinium_223Fr->SetXYZ(0.,0.,0.);
-		Actinium_223Fr->SetBoxXYZ(-1,-10,-1,-15,-10,-15);
+		Actinium_223Fr->SetBoxXYZ(13,-200,13,-15,-200,-15);//lluny
 		Actinium_223Fr->SetThetaRange(90,90);
 		Actinium_223Fr->SetPhiRange(90,90);
     primGen->AddGenerator(Actinium_223Fr);

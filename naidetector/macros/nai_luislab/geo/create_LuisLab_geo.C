@@ -1,8 +1,14 @@
+///////////////////////////////////////////////////////////////////////
+////																				       	
+////	--- Simulation of NaI detector of Luis Lab ---							
+////
+///////////////////////////////////////////////////////////////////////
 
 #include <iomanip>
 #include <iostream>
 #include "TGeoManager.h"
 #include "TMath.h"
+//#include <AxisAngle.h>
 
 
 // Create Matrix Unity
@@ -14,7 +20,6 @@ TGeoRotation *fRefRot = NULL;
 
 TGeoManager* gGeoMan = NULL;
 TGeoVolume* gTop;
-
 
 Double_t fThetaX = 0.;
 Double_t fThetaY = 0.;
@@ -30,15 +35,15 @@ Bool_t fLabTrans = kFALSE;
 
 TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef);
 
+
 void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAir, TGeoMedium *pMedAl, TGeoMedium *pMedSteel, TGeoMedium *pMedNaI);
 
 
-
-void create_test_geo(const char* geoTag = "test")
+void create_geo(const char* geoTag = "test")
 {
   fGlobalTrans->SetTranslation(0.0,0.0,0.0);
 
-  // -------   Load media from media file   -----------------------------------
+  // -------   Load media from media file   ----------------------------------- 
   FairGeoLoader*    geoLoad = new FairGeoLoader("TGeo","FairGeoLoader");
   FairGeoInterface* geoFace = geoLoad->getGeoInterface();
   TString geoPath = gSystem->Getenv("VMCWORKDIR");
@@ -47,17 +52,16 @@ void create_test_geo(const char* geoTag = "test")
   geoFace->readMedia();
   gGeoMan = gGeoManager;
   // --------------------------------------------------------------------------
-
-
-
+  
+  
+  
   // -------   Geometry file name (output)   ----------------------------------
   TString geoFileName = geoPath + "/naidetector/geometry/NaIdetector_";
   geoFileName = geoFileName + geoTag + ".geo.root";
   // --------------------------------------------------------------------------
 
-
-
-
+  
+  
   // -----------------   Get and create the required media    ----------------- 
   FairGeoMedia* gGeoMedia = geoFace->getMedia(); 
   FairGeoBuilder* gGeoBuild = geoLoad->getGeoBuilder(); 
@@ -92,26 +96,28 @@ void create_test_geo(const char* geoTag = "test")
   TGeoMedium* pMedNaI = gGeoMan->GetMedium("NaI");
   if ( ! pMedNaI ) Fatal("Main", "Medium NaI not found");
   // --------------------------------------------------------------------------
-
-
-
-  // --------------   Create geometry and top volume  -------------------------
+  
+  
+  
+  // --------------   Create geometry and top volume  ------------------------- 
   gGeoMan = (TGeoManager*)gROOT->FindObject("FAIRGeom");
-  gGeoMan->SetName("TARGETgeom");
+  gGeoMan->SetName("NaI");//look out!!
   gTop = new TGeoVolumeAssembly("TOP");
   gGeoMan->SetTopVolume(gTop);
+  
+  
   // --------------------------------------------------------------------------
-
-
-  //if (0 == strncmp(geoTag, "test", 6))  ConstructGeometry(pMedVac, pMedAir, pMedAl, pMedSteel, pMedNaI); 	//?¿
-	ConstructGeometry(pMedVac, pMedAir, pMedAl, pMedSteel, pMedNaI);
-
-  // ---------------   Finish   -----------------------------------------------
+  
+  
+  ConstructGeometry(pMedVac, pMedAir, pMedAl, pMedSteel, pMedNaI); 	
+  
+  
+  // ---------------   Finish   ----------------------------------------------- 
   gGeoMan->CloseGeometry();
   gGeoMan->CheckOverlaps(0.001);
   gGeoMan->PrintOverlaps();
   gGeoMan->Test();
-
+  
   TFile* geoFile = new TFile(geoFileName, "RECREATE");
   gTop->Write();
   geoFile->Close();
@@ -122,36 +128,50 @@ void create_test_geo(const char* geoTag = "test")
 void ConstructGeometry(TGeoMedium *pMedVac, TGeoMedium *pMedAir, TGeoMedium *pMedAl, TGeoMedium *pMedSteel, TGeoMedium *pMedNaI)
 {
   cout << endl;
-  cout << "-I- R3BTest::ConstructGeometry() "<< endl;
-  cout << "-I- R3BTest NaI crystal "<< endl;
+  cout << "-I- Ensar::ConstructGeometry() "<< endl;
+  cout << "-I- Ensar NaI detector "<< endl;
   cout << endl;
-
-
-  Double_t dx, dy, dz;
-  Double_t thx, thy, thz;
-  Double_t phx, phy, phz;
-
-
-  // Combi transformation: 
-  dx = 0.000000;
-  dy = 0.000000;
-  dz = 0.000000;       //-(0.15cm+half thickness)
-  // Rotation: 
-  thx = 90.000000;    phx = 0.000000;
-  thy = 90.000000;    phy = 90.000000;
-  thz = 0.000000;     phz = 0.000000;
-  TGeoRotation *pRot = new TGeoRotation("",thx,phx,thy,phy,thz,phz);
-  TGeoCombiTrans *pMatrix = new TGeoCombiTrans("", dx,dy,dz,pRot);
-
-  TGeoVolume *ptest_log = gGeoManager->MakeTube("TUBE",pMed16, 0.0,5.1,14.6);
-  ptest_log->SetVisLeaves(kTRUE);
   
-  TGeoVolumeAssembly *keep = new TGeoVolumeAssembly("Target");
-  keep->AddNode(ptest_log, 0, pMatrix);
+  
+  // Defintion of the Mother Volume
+  Double_t length = 100.;
+  TGeoShape *pNaIWorld = new TGeoBBox("NaIWorldBox",length/2.0,length/2.0,length/2.0);
+  TGeoVolume* pWorld = new TGeoVolume("Target", pNaIWorld, pMedAir);//you must call it "Target" 
+																																		//otherwise not works with NaIDetector.cxx
+  TGeoCombiTrans *t0 = new TGeoCombiTrans();
+  TGeoCombiTrans *pGlobalc = GetGlobalPosition(t0);
+  gTop->AddNode(pWorld,0,pGlobalc);
+  
+  //-----------------------------------------------
+  
+  // ----------------------------------------------
+  // Auxiliar vacuum volume holding all important volumes as daugthers
+  // The easiest way to rotate all volumes to the final position
+  TGeoVolume *main_tube = gGeoManager->MakeTube("main_tube",pMedVac,0.0,3.81,3.81);
+  main_tube->SetFillColor(5);
+  main_tube->SetLineColor(5);
+  main_tube->SetTransparency(70);
+  main_tube->SetVisLeaves(kTRUE);
+  // ----------------------------------------------
+  
+  // ----------------------------------------------
+  // NaI Crystal
+	TGeoVolume *crystalNaI = gGeoManager->MakeTube("CrystalNaI",pMedNaI,0.0,3.81,3.81);
+ 	crystalNaI->SetFillColor(50);
+  crystalNaI->SetLineColor(50);
+ 	main_tube->AddNode(crystalNaI,1,new TGeoTranslation(0,0,0));
+  crystalNaI->SetVisLeaves(kTRUE);
 
-  TGeoCombiTrans* pGlobal = GetGlobalPosition(pMatrix);
-  gTop->AddNode(keep, 0, pGlobal);
+
+  // ----------------------------------------------
+  // main tube in the origin 
+  TGeoRotation *rot_ch     = new TGeoRotation("rot_ch",0,90,0);//0,90,0);
+  TGeoCombiTrans *comb_ch = new TGeoCombiTrans("comb_ch",0,0,0,rot_ch);
+  pWorld->AddNode(main_tube,1,comb_ch);
+  // ----------------------------------------------
+  
 }
+
 
 TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
 {
@@ -205,8 +225,6 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
       pRot->SetMatrix(fRotable);
       TGeoCombiTrans *pTmp = new TGeoCombiTrans(*fGlobalTrans,*pRot);
       
-      // ne peut pas etre applique ici
-      // il faut differencier trans et rot dans la multi.
       TGeoRotation rot_id;
       rot_id.SetAngles(0.0,0.0,0.0);
       
@@ -238,9 +256,9 @@ TGeoCombiTrans* GetGlobalPosition(TGeoCombiTrans *fRef)
       
     }else{
       
-      cout << "-E- R3BDetector::GetGlobalPosition() \
+      cout << "-E- EnsarDetector::GetGlobalPosition() \
 	      No. Ref. Transformation defined ! " << endl;
-      cout << "-E- R3BDetector::GetGlobalPosition() \
+      cout << "-E- EnsarDetector::GetGlobalPosition() \
 	      cannot create Local Transformation " << endl;
       return NULL;
     } //! fRefRot

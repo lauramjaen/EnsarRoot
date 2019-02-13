@@ -11,6 +11,7 @@
 #include "TDatabasePDG.h"
 #include "TMath.h"
 
+
 // ------------------------------------------------------------------------
 EnsarBoxGenerator::EnsarBoxGenerator() :
   FairGenerator(),
@@ -86,6 +87,7 @@ Bool_t EnsarBoxGenerator::ReadEvent(FairPrimaryGenerator* primGen)
   // those kinematics variables which were limitted by setters.
   // if SetCosTheta() function is used, the distribution will be uniform in
   // cos(theta)
+
 
   Double32_t pabs=0, phi, pt=0, theta=0, eta, y, mt, px, py, pz=0;
 

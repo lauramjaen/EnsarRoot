@@ -1,0 +1,27 @@
+////////////////////////////////////////////////////////////
+////                                                    ////
+////    Cascade of 60-Co with Angular Correlations      ////
+////            (60-Co->60-Ni)                          ////
+////           2504->1332->0 keV                        ////
+////////////////////////////////////////////////////////////
+Energy(GeV), Number of Levels
+0.002504     1                         
+Energy of the transitions (initial -->  final)
+0.002504	0.001332			
+Energy of gamma emmited in the transition
+0.001172       		        
+Branching Ratios
+1
+Angular correlations coefficients (A2 and A4)
+0.125	        0.0416
+
+
+//It works with ensargen/EnsarCascadeGen.h & EnsarCascadeGen.cxx
+//
+//Only change the values
+//don't modify the file structure 
+//change A2=0 & A4=0 to generate an ISOTROPIC distribution of gammas (without Angular Correlations)
+//
+//elisabet.galiana@usc.es
+//Universidad de Santiago de Compostela
+//Dpto. Física de Partículas

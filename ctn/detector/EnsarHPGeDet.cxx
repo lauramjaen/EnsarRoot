@@ -241,7 +241,7 @@ void EnsarHPGeDet::EndOfEvent()
 void EnsarHPGeDet::Register()
 {
 
-  FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
+  //FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
   FairRootManager::Instance()->Register("HPGeDetHit", GetName(), fHitCollection, kTRUE);
 
 }

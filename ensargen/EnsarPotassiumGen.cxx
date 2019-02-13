@@ -110,7 +110,7 @@ Bool_t EnsarPotassiumGen::ReadEvent(FairPrimaryGenerator* primGen)
 	Double_t Probability_emmittedParticles [numInicialCases];
 	Probability_emmittedParticles [0]=0.8927;
 	Probability_emmittedParticles [1]=0.1067;
-	Probability_emmittedParticles [2]=0.00046;
+	Probability_emmittedParticles [2]=0.0006;//0.00046 to get Prob=1
 
 	Double_t FinalState_daughter [numInicialCases];
 	FinalState_daughter [0]=0;
@@ -150,11 +150,11 @@ Bool_t EnsarPotassiumGen::ReadEvent(FairPrimaryGenerator* primGen)
 	kINFO=false;
 	if (kINFO==true){cout<<"Case="<<Case<<"  the nucleus is in the state="<<finalstate<<endl;}
 	
-
+	
 	Int_t Counter=1;
 
 	while(finalstate>0){
-		
+
 		int finalstate2;
 		Int_t size=0;
 		TArrayF* Energy_gammas_array;
@@ -221,6 +221,8 @@ TArrayF* EnsarPotassiumGen::Deexcitation(Int_t InicialState, Int_t & FinalState)
 
 	Int_t numGammas;
 	Float_t random =gRandom->Rndm();
+
+	cout<<"InicialState="<<InicialState<<endl;
 
 	if (InicialState==1){numGammas=1;}
 	else{

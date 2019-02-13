@@ -311,7 +311,7 @@ void FairStack::Reset() {
 
 // -----   Public method Register   ----------------------------------------
 void FairStack::Register() {
-  FairRootManager::Instance()->Register("MCTrack", "Stack", fTracks,kTRUE);
+  //FairRootManager::Instance()->Register("MCTrack", "Stack", fTracks,kTRUE);
 }
 // -------------------------------------------------------------------------
 

@@ -252,9 +252,9 @@ TArrayF* EnsarUraniumChainGen_214Pb::Deexcitation(Int_t InicialState, Int_t & Fi
 	Energygammas				[4][1]=0.000241995;
 	NucleusFinalState		[4][1]=1;
 
-	Probability					[4][1]=0.7176;
-	Energygammas				[4][1]=0.0002952228;
-	NucleusFinalState		[4][1]=0;
+	Probability					[4][2]=0.7176;
+	Energygammas				[4][2]=0.0002952228;
+	NucleusFinalState		[4][2]=0;
 
 	//5 excited state
 	Probability					[5][1]=0.0007;
@@ -268,7 +268,7 @@ TArrayF* EnsarUraniumChainGen_214Pb::Deexcitation(Int_t InicialState, Int_t & Fi
 	//6 excited state
 	Probability					[6][1]=0.7299;
 	Energygammas				[6][1]=0.00031433;
-	NucleusFinalState		[6][1]=0;//2
+	NucleusFinalState		[6][1]=2;//2
 
 	Probability					[6][2]=0.2701;
 	Energygammas				[6][2]=0.00032384;
@@ -316,13 +316,13 @@ TArrayF* EnsarUraniumChainGen_214Pb::Deexcitation(Int_t InicialState, Int_t & Fi
 	Energygammas				[9][5]=0.00058014;
 	NucleusFinalState		[9][5]=3;
 
-	Probability					[9][4]=0.3894;
-	Energygammas				[9][4]=0.00078596;
-	NucleusFinalState		[9][4]=1;
+	Probability					[9][6]=0.3894;
+	Energygammas				[9][6]=0.00078596;
+	NucleusFinalState		[9][6]=1;
 
-	Probability					[9][5]=0.213;
-	Energygammas				[9][5]=0.00083907;
-	NucleusFinalState		[9][5]=0;
+	Probability					[9][7]=0.213;
+	Energygammas				[9][7]=0.00083907;
+	NucleusFinalState		[9][7]=0;
 
 	Int_t numGammas;
 	Float_t random =gRandom->Rndm();

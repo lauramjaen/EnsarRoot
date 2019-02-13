@@ -20,7 +20,7 @@
 //				->FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
 //	Then, you have to do "make" again in the EnsarRoot build directory and execute runsim.C  
 
-void openRoots_Uraniumbackground() {
+void openRoots_THbackground() {
 
 
   //ROOT ENVIRONMENT
@@ -36,8 +36,8 @@ void openRoots_Uraniumbackground() {
 
 	//CHAIN INPUT
 	TChain *fChain = new TChain("ensartree");
-//fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Uranium_last/outsim*.root",0); 
-fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/earth_Roots_UraniumChain/10cm/outsim*.root",0); 
+	fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Thorium_last/outsim*.root",0); 
+//fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/earth_Roots_ThoriumChain/12p20/outsim*.root",0); 
 //fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Roots_UraniumChain/outsim_214Bi.root",0);
 //fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Roots_UraniumChain/outsim_226Ra.root",0); 
 //fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Roots_UraniumChain/outsim_234Th.root",0); 
@@ -45,18 +45,13 @@ fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIG
 //fChain->Add("/home/elizabet/Escritorio/EnsarRoot/EnsarRoot_source/ctn/macros/PIGE/Roots_UraniumChain/outsim_214Pb.root",0);  
 
 
-/*Pam:
-char if_root[150]; 
-sprintf(if_root,"/lstore/nucria/pteubig/CALIFA2016/root_files/run%d/run%d_f*.root", run, run); 
-fChain->Add(if_root,0);
-*/
-
-	//HISTOGRAMS
+	//HISTOGRAMS def
+  //TH1F* hHPGe_energy   = new TH1F("hHPGe_energy ","HPGe Energy",6000,0,3000);
 	//Energy Cal Pam bins=8193 emin=0.41 emax=3331.49
 	//Energy cal 2 8192 -1.466902, 3328.528038
-  //TH1F* hHPGe_energy   = new TH1F("hHPGe_energy ","HPGe Energy",6000,0,3000);
 	TH1F* hHPGe_energy   = new TH1F("hHPGe_energy ","HPGe Energy",8192,-1.466902,3328.528038);
- 
+  
+  
   //HPGe (input)   -------------------------------------------------------
   //HPGe Hit
   TClonesArray* hpgeHitCA;
@@ -75,9 +70,8 @@ fChain->Add(if_root,0);
 
   //TREE ENTRIES--------------------------------------------------------------------
   //Long64_t nevents = tree->GetEntries();
- 	//Long64_t nentries = fChain->GetEntriesFast();
   Long64_t nevents = fChain->GetEntries();
-	cout << "1.Entries: "<<nevents << endl;
+cout << "1.Entries: "<<nevents << endl;
 
   //LOOP IN THE EVENTS--------------------------------------------------------------
   for(int i=0;i<nevents;i++){
@@ -85,11 +79,11 @@ fChain->Add(if_root,0);
     energy = 0.;
     energySmearing = 0.;
 
-		//hpgeHitCA->Clear(); provar
     //tree->GetEvent(i);
 		fChain->GetEvent(i);
- 
+
     hpgeHitsPerEvent    = hpgeHitCA->GetEntries();
+
 
     if(hpgeHitsPerEvent>0) {
       hpgeHit = new EnsarHPGeDetHit*[hpgeHitsPerEvent];
@@ -98,48 +92,22 @@ fChain->Add(if_root,0);
 	hpgeHit[j] = (EnsarHPGeDetHit*) hpgeHitCA->At(j);
       }
     }
-/*
 
-// -----   Private method NUSmearing  --------------------------------------------
-Double_t R3BCalifaPoint2CrystalCal::NUSmearing(Double_t inputEnergy) {
-  // Very simple preliminary scheme where the NU is introduced as a flat random
-  // distribution with limits fNonUniformity (%) of the energy value.
-  //
-  return gRandom->Uniform(inputEnergy - inputEnergy * fNonUniformity / 100,
-			  inputEnergy + inputEnergy * fNonUniformity / 100);
-}
-*/
-
-//Ask Dani about the Smearing?
-//Double_t NonUniformity;
-//Double_t inputEnergy;
-//Double_t energy;
-
-//NonUniformity=3.;
-//inputEnergy=5.;
-
-//TRandom* random= new TRandom();
-//energy=random->Uniform (inputEnergy - inputEnergy * NonUniformity / 100,
-//			  inputEnergy + inputEnergy * NonUniformity / 100);
-//cout<<"Smearing energy="<<energy<<endl;
 
     //LOOP in hpgeHits-------------------------------------------------------
     for(Int_t h=0;h<hpgeHitsPerEvent;h++){     
 			energy = hpgeHit[h]->GetEnergy()*1000000;//keV
 			energySmearing=gRandom->Gaus(energy, 0.0008*energy);
-      hHPGe_energy ->Fill(energySmearing,1/0.9216);//weight of 1/1.47
-			//hHPGe_energy ->Fill(energy);
-			//cout<<"hpgeHits h="<<h<<endl;
+      hHPGe_energy ->Fill(energySmearing,1/1.297);//weight of 1/0.596, last weight 1/1.297
     }
     
-
   }
   // END LOOP IN THE EVENTS---------------------------------------------------------
 
 
 	//Open a file
 
-	TFile *MyFile = new TFile("Uraniumchain_earth10cm.root","NEW");
+	TFile *MyFile = new TFile("ThoriumChain_earth12p2_8192bins_Res0p0008_weight1p297_powerp.root","NEW");
 	if ( MyFile->IsOpen() ) printf("File opened successfully\n");
 	
 	hHPGe_energy ->Write();

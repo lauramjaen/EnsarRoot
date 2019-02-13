@@ -95,7 +95,7 @@ Bool_t EnsarCascadeGen::ReadEvent(FairPrimaryGenerator* primGen)
     return kFALSE;
   }
   
-  
+
   //Cascade Generation of 12643 Si* state 	
   Double_t Egamma1=0.;
   Double_t Egamma2=0.;

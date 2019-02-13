@@ -2,7 +2,7 @@
 ////																	
 ////		--- Natural Radioactivity Background ---				
 ////																	
-////			Read the HPGe data, generate an Energy histo and save it					
+////			Read the nai data, generate an Energy histo and save it					
 ////																	
 ////																	
 ////																	
@@ -11,13 +11,13 @@
 //// ** Faculdade de Ciencias da Universidade de Lisboa 										
 ////////////////////////////////////////////////////////////////////////////
 
-//NOTE: if you want to analyze the HPGePoint 
+//NOTE: if you want to analyze the naiPoint 
 //      you have to activate it before to execute runsim.C,
 //	in order to create its branch
 //
 //	How to activate it: comment/descomment this line
-//		HPGe: ctn/detector/EnsarHPGeDet.cxx 
-//				->FairRootManager::Instance()->Register("HPGeDetPoint", GetName(), fPointCollection, kTRUE);
+//		nai: ctn/detector/EnsarnaiDet.cxx 
+//				->FairRootManager::Instance()->Register("naiDetPoint", GetName(), fPointCollection, kTRUE);
 //	Then, you have to do "make" again in the EnsarRoot build directory and execute runsim.C  
 
 void openRoots_Potassiumbackground() {
@@ -39,7 +39,7 @@ void openRoots_Potassiumbackground() {
 	//HISTOGRAMS def
 	//Energy Cal Pam bins=8193 emin=0.41 emax=3331.49
 	//Energy cal 2 8192, -1.466902, 3328.528038
-  TH1F* hHPGe_energy_Potassium   = new TH1F("hHPGe_energy_Potassium ","HPGe Energy",8192, -1.466902, 3328.528038);
+  TH1F* hnai_energy_Potassium   = new TH1F("hnai_energy_Potassium ","nai Energy",8192, -1.466902, 3328.528038);
   TH1F* hMCTrack_energy   = new TH1F("hMCTrack_energy","MCTrack Energy",8192,-1.466902,3328.528038);
 
   
@@ -50,24 +50,17 @@ void openRoots_Potassiumbackground() {
   TBranch *branchMCTrack = tree ->GetBranch("MCTrack");
   branchMCTrack->SetAddress(&MCTrackCA);
   
-  //HPGe (input)   -------------------------------------------------------
-  //HPGe Hit
-  TClonesArray* hpgeHitCA;
-  EnsarHPGeDetHit** hpgeHit;
-  hpgeHitCA = new TClonesArray("EnsarHPGeDetHit",5);
-  TBranch *branchEnsarHPGeDetHit = tree ->GetBranch("HPGeDetHit");
-  branchEnsarHPGeDetHit->SetAddress(&hpgeHitCA );
-  
-  //HPGe Point
-  /*TClonesArray* hpgePointCA;
-  EnsarHPGeDetPoint** hpgePoint;
-  hpgePointCA = new TClonesArray("EnsarHPGeDetPoint",5);
-  TBranch *branchEnsarHPGeDetPoint = tree ->GetBranch("HPGeDetPoint");
-  branchEnsarHPGeDetPoint->SetAddress(&hpgePointCA );*/
+  //nai (input)   -------------------------------------------------------
+  //nai Hit
+  TClonesArray* naiHitCA;
+  NaIHit** naiHit;//EnsarnaiDetHit
+  naiHitCA = new TClonesArray("naiHit",5);
+  TBranch *branchnaiHit = tree ->GetBranch("NaIHit");
+  branchnaiHit->SetAddress(&naiHitCA );
+
 	
   Int_t MCtracksPerEvent = 0;
-  Int_t hpgeHitsPerEvent = 0;
-  //Int_t hpgePointsPerEvent = 0;
+  Int_t naiHitsPerEvent = 0;
   Double_t energy = 0.0;
   Double_t energySmearing = 0.0;
 
@@ -84,8 +77,7 @@ cout<<"nevents="<<nevents<<endl;
     tree->GetEvent(i);
     
     MCtracksPerEvent    = MCTrackCA->GetEntries();
-    hpgeHitsPerEvent    = hpgeHitCA->GetEntries();
-    //hpgePointsPerEvent  = hpgePointCA->GetEntries();
+    naiHitsPerEvent    = naiHitCA->GetEntries();
     
     if(MCtracksPerEvent>0) {
       track = new EnsarMCTrack*[MCtracksPerEvent];
@@ -94,28 +86,28 @@ cout<<"nevents="<<nevents<<endl;
 	track[j] = (EnsarMCTrack*) MCTrackCA->At(j);
       }
     }
-    if(hpgeHitsPerEvent>0) {
-      hpgeHit = new EnsarHPGeDetHit*[hpgeHitsPerEvent];
-      for(Int_t j=0;j<hpgeHitsPerEvent;j++){
-	hpgeHit[j] = new EnsarHPGeDetHit;
-	hpgeHit[j] = (EnsarHPGeDetHit*) hpgeHitCA->At(j);
+    if(naiHitsPerEvent>0) {
+      naiHit = new naiHit*[naiHitsPerEvent];
+      for(Int_t j=0;j<naiHitsPerEvent;j++){
+	naiHit[j] = new EnsarnaiDetHit;
+	naiHit[j] = (EnsarnaiDetHit*) naiHitCA->At(j);
       }
     }
-    /*if(hpgePointsPerEvent>0) {
-      hpgePoint = new EnsarHPGeDetPoint*[hpgePointsPerEvent];
-      for(Int_t j=0;j<hpgePointsPerEvent;j++){
-	hpgePoint[j] = new EnsarHPGeDetPoint;
-	hpgePoint[j] = (EnsarHPGeDetPoint*) hpgePointCA->At(j);
+    /*if(naiPointsPerEvent>0) {
+      naiPoint = new EnsarnaiDetPoint*[naiPointsPerEvent];
+      for(Int_t j=0;j<naiPointsPerEvent;j++){
+	naiPoint[j] = new EnsarnaiDetPoint;
+	naiPoint[j] = (EnsarnaiDetPoint*) naiPointCA->At(j);
       }
 		}*/
 
-    //LOOP in hpgeHits-------------------------------------------------------
-    for(Int_t h=0;h<hpgeHitsPerEvent;h++){     
-			energy = hpgeHit[h]->GetEnergy()*1000000;//keV
+    //LOOP in naiHits-------------------------------------------------------
+    for(Int_t h=0;h<naiHitsPerEvent;h++){     
+			energy = naiHit[h]->GetEnergy()*1000000;//keV
 			energySmearing=gRandom->Gaus(energy, 0.0008*energy);
-      hHPGe_energy_Potassium ->Fill(energySmearing,1/1.53);//with Oldweight=1/1.53. NewWeight=1/1.5089
-			//hHPGe_energy_Potassium ->Fill(energySmearing);//no weight
-			//hHPGe_energy_Potassium ->Fill(energy);
+      hnai_energy_Potassium ->Fill(energySmearing,1/1.53);//with Oldweight=1/1.53. NewWeight=1/1.5089
+			//hnai_energy_Potassium ->Fill(energySmearing);//no weight
+			//hnai_energy_Potassium ->Fill(energy);
     }
     
     //LOOP in MC mother tracks------------------------------------------------
@@ -132,7 +124,7 @@ cout<<"nevents="<<nevents<<endl;
 	TFile *MyFile = new TFile("Potassium_noearth_8192bins_Res0p0008_Weight1p53.root","NEW");
 	if ( MyFile->IsOpen() ) printf("File opened successfully\n");
 	
-	hHPGe_energy_Potassium ->Write();
+	hnai_energy_Potassium ->Write();
 	//hMCTrack_energy->Write();
 	MyFile->Close(); 
 }
