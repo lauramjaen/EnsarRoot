@@ -122,8 +122,8 @@ void simall_Cherry(Int_t nEvents = 1,
   boxGen->SetThetaRange (theta1,theta2);
   boxGen->SetCosTheta();
   boxGen->SetPRange     (0.01049,0.01049);// momentum of the beam GeV/c 
-																						// 0.01049 ->Energy_electrons=10MeV 
-																						// 0.4443  ->Energy_protons=100MeV
+					  // 0.01049 ->Energy_electrons=10MeV 
+					  // 0.4443  ->Energy_protons=100MeV
   boxGen->SetPhiRange   (0.0,360.0);    // azimuthal angle (degrees)
   boxGen->SetXYZ        (0.,0.,0.);     // origin of the beam in the center
   
